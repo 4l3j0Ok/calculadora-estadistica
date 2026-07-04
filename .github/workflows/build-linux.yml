@@ -2,9 +2,18 @@ name: Build Linux
 
 on:
   workflow_dispatch: {}
-  push:
-    tags:
-      - "*"
+  workflow_call:
+    inputs:
+      app_version:
+        description: >-
+          Version a compilar y, si se informa, tag del GitHub Release al
+          que se le adjunta el artefacto (la crea/gestiona
+          release.yml via semantic-release). Si se omite (build manual
+          via workflow_dispatch), no se adjunta a ningun release y
+          scripts/build-linux.sh resuelve la version por su cuenta
+          (APP_VERSION > pyproject.toml > fallback).
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -58,6 +67,8 @@ jobs:
         run: uv sync --group dev
 
       - name: Run build script
+        env:
+          APP_VERSION: ${{ inputs.app_version }}
         run: |
           chmod +x scripts/build-linux.sh
           ./scripts/build-linux.sh
@@ -81,8 +92,9 @@ jobs:
           if-no-files-found: error
 
       - name: Attach asset to GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: inputs.app_version != ''
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ inputs.app_version }}
           files: ${{ steps.artifact.outputs.path }}
           fail_on_unmatched_files: true

@@ -1,5 +1,8 @@
 history.db
 
+# Node (solo usado para ejecutar semantic-release, ver package.json)
+node_modules/
+
 # Nuitka build artifacts (see scripts/build-windows.ps1 / build-linux.sh)
 *.build/
 *.dist/

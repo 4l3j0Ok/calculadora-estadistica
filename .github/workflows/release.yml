@@ -1,0 +1,87 @@
+name: Release
+
+# semantic-release analiza los commits de `main` (Conventional Commits),
+# decide la proxima version, genera el CHANGELOG, taggea (formato "X.Y.Z",
+# ver .releaserc.json) y crea el GitHub Release. Si hubo release nuevo,
+# dispara los builds de Windows y Linux para adjuntar sus artefactos a
+# ese release.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+# Evita corridas de release solapadas sobre la misma rama.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  release:
+    name: semantic-release
+    runs-on: ubuntu-22.04
+    # No correr sobre el commit de release generado por semantic-release
+    # (evita loops; el mensaje de commit incluye "[skip ci]").
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    outputs:
+      released: ${{ steps.detect.outputs.released }}
+      version: ${{ steps.detect.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install uv (usado por el plugin @semantic-release/exec)
+        uses: astral-sh/setup-uv@v8
+
+      - name: Install release tooling (semantic-release + plugins)
+        run: npm install
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
+
+      - name: Detectar si se publico una release
+        id: detect
+        run: |
+          if version="$(git describe --tags --exact-match HEAD 2>/dev/null)"; then
+            echo "==> Nueva release: ${version}"
+            echo "released=true" >> "$GITHUB_OUTPUT"
+            echo "version=${version}" >> "$GITHUB_OUTPUT"
+          else
+            echo "==> No hubo cambios que ameriten una nueva release."
+            echo "released=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build-windows:
+    name: Build Windows (release)
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build-windows.yml
+    with:
+      app_version: ${{ needs.release.outputs.version }}
+
+  build-linux:
+    name: Build Linux (release)
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/build-linux.yml
+    with:
+      app_version: ${{ needs.release.outputs.version }}
