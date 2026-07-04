@@ -9,8 +9,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from schemas.history import HistoryEntry, HistoryModule
+from services.runtime_paths import app_base_dir
 
-DB_PATH = Path(__file__).resolve().parent.parent / "history.db"
+DB_PATH = Path(app_base_dir()) / "history.db"
 
 _CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS history (
