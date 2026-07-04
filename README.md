@@ -120,6 +120,6 @@ compilan su plataforma, suben el artefacto (`actions/upload-artifact`) y
 lo adjuntan al GitHub Release asociado a ese tag:
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+git tag 1.0.0
+git push origin 1.0.0
 ```
