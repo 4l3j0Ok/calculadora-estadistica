@@ -1,0 +1,7 @@
+module components
+singleton Theme 1.0 Theme.qml
+Input 1.0 Input.qml
+NavBar 1.0 NavBar.qml
+Table 1.0 Table.qml
+DispersionTable 1.0 DispersionTable.qml
+HistoryTable 1.0 HistoryTable.qml

@@ -1,0 +1,198 @@
+pragma ComponentBehavior: Bound
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+// Tabla de frecuencias responsive. Se adapta según dataType:
+//   "no_agrupados" / "agrupados_valor" → Xi | f | fr | F | f% | fa%
+//   "agrupados_intervalo"              → Intervalo | Xi | f | fr | F | f% | fa%
+//
+// model: lista de objetos con:
+//   xi, frecuencia, frecuenciaRelativa, frecuenciaAcumulada,
+//   frecuenciaPorcentual, frecuenciaPorcentualAcumulada
+//   (y para intervalos: intervalo, lower, upper)
+
+Item {
+    id: root
+
+    property string dataType: "agrupados_valor"
+    property var model: []
+
+    readonly property bool showIntervalColumn: root.dataType === "agrupados_intervalo"
+
+    readonly property int totalF: {
+        var s = 0;
+        for (var i = 0; i < model.length; i++) s += model[i].frecuencia;
+        return s;
+    }
+
+    function fmtNum(v: real): string {
+        return (v % 1 === 0) ? v.toFixed(0) : parseFloat(v.toFixed(4)).toString();
+    }
+
+    readonly property var headers: root.showIntervalColumn
+        ? ["Intervalo", "Xi", "f", "fr", "F", "f%", "fa%"]
+        : ["Xi", "f", "fr", "F", "f%", "fa%"]
+
+    readonly property var totalsRow: root.showIntervalColumn
+        ? ["Totales", "", root.totalF.toString(), "1", root.totalF.toString(), "100%", "100%"]
+        : ["Totales", root.totalF.toString(), "1", root.totalF.toString(), "100%", "100%"]
+
+    function rowValues(modelData) {
+        var base = root.showIntervalColumn ? [modelData.intervalo, root.fmtNum(modelData.xi)] : [root.fmtNum(modelData.xi)];
+        return base.concat([
+            modelData.frecuencia.toString(),
+            modelData.frecuenciaRelativa.toFixed(2),
+            modelData.frecuenciaAcumulada.toString(),
+            modelData.frecuenciaPorcentual.toFixed(2) + "%",
+            modelData.frecuenciaPorcentualAcumulada.toFixed(2) + "%"
+        ]);
+    }
+
+    readonly property var rowsData: {
+        var out = [];
+        for (var i = 0; i < root.model.length; i++)
+            out.push(root.rowValues(root.model[i]));
+        return out;
+    }
+
+    readonly property int minColWidth: 70
+    readonly property int minTotalWidth: minColWidth * headers.length
+
+    ScrollView {
+        anchors.fill: parent
+        contentWidth: Math.max(root.width, root.minTotalWidth)
+        contentHeight: tableCol.implicitHeight
+        clip: true
+
+        ColumnLayout {
+            id: tableCol
+            width: Math.max(root.width, root.minTotalWidth)
+            spacing: 0
+
+            // ── Encabezado ────────────────────────────────────────────────
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 1
+
+                Repeater {
+                    model: root.headers
+                    delegate: HeaderCell {
+                        required property string modelData
+                        cellText: modelData
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 2
+                color: Theme.table_divider
+            }
+
+            // ── Filas de datos ────────────────────────────────────────────
+            Repeater {
+                model: root.rowsData
+
+                delegate: RowLayout {
+                    id: rowDelegate
+                    Layout.fillWidth: true
+                    spacing: 1
+
+                    required property var modelData
+                    required property int index
+
+                    readonly property color rowBg: index % 2 === 0
+                        ? Theme.table_row_base
+                        : Theme.table_row_alt
+
+                    Repeater {
+                        model: rowDelegate.modelData
+                        delegate: DataCell {
+                            required property string modelData
+                            cellText: modelData
+                            bgColor: rowDelegate.rowBg
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 2
+                color: Theme.table_divider
+            }
+
+            // ── Fila de totales ───────────────────────────────────────────
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 1
+
+                Repeater {
+                    model: root.totalsRow
+                    delegate: TotalCell {
+                        required property string modelData
+                        cellText: modelData
+                    }
+                }
+            }
+        }
+    }
+
+    // ── Componentes internos ──────────────────────────────────────────────
+
+    component HeaderCell: Rectangle {
+        property string cellText
+
+        Layout.fillWidth: true
+        Layout.minimumWidth: root.minColWidth
+        implicitHeight: 38
+        color: Theme.table_header_bg
+
+        Text {
+            anchors.centerIn: parent
+            text: parent.cellText
+            color: Theme.table_header_text
+            font.bold: true
+            font.pixelSize: 13
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+
+    component DataCell: Rectangle {
+        property var cellText
+        property color bgColor: Theme.table_row_base
+
+        Layout.fillWidth: true
+        Layout.minimumWidth: root.minColWidth
+        implicitHeight: 34
+        color: bgColor
+
+        Text {
+            anchors.centerIn: parent
+            text: parent.cellText
+            color: Theme.table_cell_text
+            font.pixelSize: 12
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+
+    component TotalCell: Rectangle {
+        property var cellText
+
+        Layout.fillWidth: true
+        Layout.minimumWidth: root.minColWidth
+        implicitHeight: 36
+        color: Theme.table_totals_bg
+
+        Text {
+            anchors.centerIn: parent
+            text: parent.cellText
+            color: Theme.table_totals_text
+            font.bold: true
+            font.pixelSize: 12
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+}

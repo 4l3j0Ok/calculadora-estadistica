@@ -1,0 +1,176 @@
+import json
+
+from PySide6.QtCore import Property, QObject, Signal, Slot
+
+from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
+from schemas.history import HistoryModule
+from services import history_service
+from services.calculator import DispersionCalculator
+from services.parser import (
+    DispersionParseError,
+    parse_agrupados_intervalo,
+    parse_agrupados_valor,
+    parse_no_agrupados,
+)
+
+
+class DispersionController(QObject):
+    """Controller para el módulo de dispersión estadística.
+
+    Soporta tres tipos de datos de entrada: no agrupados, agrupados por
+    valor y agrupados por intervalos. Toda la lógica de parsing/cálculo
+    vive en services/parser.py y services/calculator.py; este controller
+    solo orquesta y formatea la salida para QML.
+    """
+
+    tableModelChanged = Signal()
+    resultChanged = Signal()
+    errorChanged = Signal()
+
+    def __init__(self, parent: QObject | None = None) -> None:
+        super().__init__(parent)
+        self._table_model: list[dict] = []
+        self._result: dict = {}
+        self._error: str = ""
+        self._calculator = DispersionCalculator()
+
+    # --- Propiedades expuestas a QML ---
+
+    @Property(list, notify=tableModelChanged)
+    def tableModel(self) -> list[dict]:
+        return self._table_model
+
+    @Property("QVariantMap", notify=resultChanged)
+    def result(self) -> dict:
+        return self._result
+
+    @Property(str, notify=errorChanged)
+    def error(self) -> str:
+        return self._error
+
+    # --- Slots públicos, uno por tipo de datos ---
+
+    @Slot(str, bool)
+    def calcularNoAgrupados(self, valores_str: str, poblacional: bool) -> None:
+        """Recibe una lista de valores separados por coma (sin agrupar)."""
+        try:
+            items = parse_no_agrupados(valores_str)
+        except DispersionParseError as exc:
+            self._set_error(str(exc))
+            return
+
+        self._calcular(items, DispersionType.NO_AGRUPADOS, poblacional, valores_str)
+
+    @Slot(str, bool)
+    def calcularAgrupadosPorValor(self, filas_json: str, poblacional: bool) -> None:
+        """Recibe JSON con filas [{xi, frecuencia}, ...]."""
+        filas = self._decode_json(filas_json)
+        if filas is None:
+            return
+
+        try:
+            items = parse_agrupados_valor(filas)
+        except DispersionParseError as exc:
+            self._set_error(str(exc))
+            return
+
+        self._calcular(items, DispersionType.AGRUPADOS_VALOR, poblacional, filas_json)
+
+    @Slot(str, bool)
+    def calcularAgrupadosPorIntervalo(self, filas_json: str, poblacional: bool) -> None:
+        """Recibe JSON con filas [{lower, upper, frecuencia}, ...]."""
+        filas = self._decode_json(filas_json)
+        if filas is None:
+            return
+
+        try:
+            items = parse_agrupados_intervalo(filas)
+        except DispersionParseError as exc:
+            self._set_error(str(exc))
+            return
+
+        self._calcular(items, DispersionType.AGRUPADOS_INTERVALO, poblacional, filas_json)
+
+    @Slot()
+    def limpiar(self) -> None:
+        self._table_model = []
+        self._result = {}
+        self._error = ""
+        self.tableModelChanged.emit()
+        self.resultChanged.emit()
+        self.errorChanged.emit()
+
+    # --- Helpers privados ---
+
+    def _decode_json(self, filas_json: str) -> list[dict] | None:
+        try:
+            filas = json.loads(filas_json)
+        except (json.JSONDecodeError, ValueError):
+            self._set_error("Error interno: formato de datos inválido.")
+            return None
+        return filas
+
+    def _calcular(
+        self,
+        items: list[DispersionItem],
+        data_type: DispersionType,
+        poblacional: bool,
+        input_payload: str,
+    ) -> None:
+        self._error = ""
+        res = self._calculator.calculate(items, data_type=data_type, poblacional=poblacional)
+        self._table_model = self._build_table_model(res)
+        self._result = self._build_result(res)
+
+        self.tableModelChanged.emit()
+        self.resultChanged.emit()
+
+        history_service.insert_entry(
+            module=HistoryModule.DISPERSION,
+            data_type=data_type.value,
+            poblacional=poblacional,
+            input_payload=input_payload,
+            result_summary=json.dumps(self._result),
+        )
+
+    def _build_table_model(self, res: DispersionResult) -> list[dict]:
+        rows: list[dict] = []
+        for item in res.items:
+            row = {
+                "xi": item.xi,
+                "f": item.f,
+                "diff": item.diff or 0.0,
+                "diffSq": item.diff_sq or 0.0,
+                "fDiffSq": round(item.f_diff_sq or 0.0, 4),
+            }
+            if res.data_type == DispersionType.AGRUPADOS_INTERVALO:
+                row["lower"] = item.lower
+                row["upper"] = item.upper
+            rows.append(row)
+        return rows
+
+    def _build_result(self, res: DispersionResult) -> dict:
+        def fmt_optional(v: float | None) -> str:
+            if v is None:
+                return "—"
+            return f"{v:.2f}"
+
+        return {
+            "dataType": res.data_type.value,
+            "n": res.n,
+            "mean": f"{res.mean:.2f}",
+            "rango": f"{res.rango:.2f}",
+            "varianza": fmt_optional(res.varianza),
+            "desvio": fmt_optional(res.desvio),
+            "cv": "No definido" if res.cv_undefined else fmt_optional(res.cv),
+            "sumFDiffSq": f"{res.sum_f_diff_sq:.2f}",
+            "statsUndefined": res.stats_undefined,
+        }
+
+    def _set_error(self, mensaje: str) -> None:
+        self._error = mensaje
+        self._table_model = []
+        self._result = {}
+        self.tableModelChanged.emit()
+        self.resultChanged.emit()
+        self.errorChanged.emit()
