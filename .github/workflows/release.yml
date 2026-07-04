@@ -44,7 +44,7 @@ jobs:
           node-version: "22"
 
       - name: Install uv (usado por el plugin @semantic-release/exec)
-        uses: astral-sh/setup-uv@v8
+        uses: astral-sh/setup-uv@v8.2.0
 
       - name: Install release tooling (semantic-release + plugins)
         run: npm install
