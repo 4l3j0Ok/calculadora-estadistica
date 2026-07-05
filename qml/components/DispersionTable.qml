@@ -52,12 +52,53 @@ Item {
         ];
     }
 
-    readonly property var headers: {
-        if (root.dataType === "no_agrupados")
-            return ["Xi", "Xi − x̄", "(Xi − x̄)²"];
-        if (root.dataType === "agrupados_intervalo")
-            return ["Intervalo", "Xi", "fi", "Xi − x̄", "(Xi − x̄)²", "fi · (Xi − x̄)²"];
-        return ["Xi", "fi", "Xi − x̄", "(Xi − x̄)²", "fi · (Xi − x̄)²"];
+    readonly property bool isIntervalo: root.dataType === "agrupados_intervalo"
+    readonly property bool isNoAgrupados: root.dataType === "no_agrupados"
+
+    // ── Definición de encabezados ────────────────────────────────────────
+    // Cada uno tiene: abreviatura (short), qué representa (long) y la
+    // fórmula para calcularlo a mano en hoja (formula). Al hacer click en
+    // un header, se alterna entre "short" y "long"; el tooltip siempre
+    // muestra "long" + "formula".
+    readonly property var headerIntervalo: ({
+        short: "Intervalo",
+        long: "Intervalo de clase",
+        formula: "[Límite inferior, Límite superior)"
+    })
+    readonly property var headerXi: ({
+        short: "Xi",
+        long: root.isIntervalo ? "Marca de clase" : "Valor de la variable",
+        formula: root.isIntervalo ? "Xi = (Li + Ls) / 2" : "Valor observado de la variable"
+    })
+    readonly property var headerFi: ({
+        short: "fi",
+        long: "Frecuencia absoluta",
+        formula: root.isIntervalo
+            ? "Cantidad de datos que caen dentro del intervalo"
+            : "Cantidad de veces que se repite el valor"
+    })
+    readonly property var headerDiff: ({
+        short: "Xi − x̄",
+        long: "Desviación respecto a la media",
+        formula: "Xi − x̄"
+    })
+    readonly property var headerDiffSq: ({
+        short: "(Xi − x̄)²",
+        long: "Desviación al cuadrado",
+        formula: "(Xi − x̄)²"
+    })
+    readonly property var headerFDiffSq: ({
+        short: "fi · (Xi − x̄)²",
+        long: "Desviación cuadrática ponderada",
+        formula: "fi × (Xi − x̄)²"
+    })
+
+    readonly property var headerDefs: {
+        if (root.isNoAgrupados)
+            return [headerXi, headerDiff, headerDiffSq];
+        if (root.isIntervalo)
+            return [headerIntervalo, headerXi, headerFi, headerDiff, headerDiffSq, headerFDiffSq];
+        return [headerXi, headerFi, headerDiff, headerDiffSq, headerFDiffSq];
     }
 
     readonly property var totalsRow: {
@@ -76,7 +117,7 @@ Item {
     }
 
     readonly property int minColWidth: 90
-    readonly property int minTotalWidth: minColWidth * headers.length
+    readonly property int minTotalWidth: minColWidth * headerDefs.length
 
     ScrollView {
         anchors.fill: parent
@@ -95,10 +136,10 @@ Item {
                 spacing: 1
 
                 Repeater {
-                    model: root.headers
+                    model: root.headerDefs
                     delegate: HeaderCell {
-                        required property string modelData
-                        cellText: modelData
+                        required property var modelData
+                        headerDef: modelData
                     }
                 }
             }
@@ -160,22 +201,48 @@ Item {
 
     // ── Sub-componentes ───────────────────────────────────────────────────
 
+    // Header clickeable: alterna entre abreviatura y descripción, y
+    // muestra en tooltip (hover) la descripción completa + la fórmula
+    // para calcularlo a mano.
     component HeaderCell: Rectangle {
-        property string cellText
+        id: headerCell
+
+        property var headerDef: ({ short: "", long: "", formula: "" })
+        property bool expanded: false
 
         Layout.fillWidth: true
         Layout.minimumWidth: root.minColWidth
-        implicitHeight: 38
-        color: Theme.table_header_bg
+        implicitHeight: 44
+        color: headerHover.hovered ? Qt.darker(Theme.table_header_bg, 1.1) : Theme.table_header_bg
+
+        Behavior on color {
+            ColorAnimation { duration: 100 }
+        }
+
+        HoverHandler {
+            id: headerHover
+        }
+        TapHandler {
+            onTapped: headerCell.expanded = !headerCell.expanded
+        }
 
         Text {
-            anchors.centerIn: parent
-            text: parent.cellText
+            anchors.fill: parent
+            anchors.margins: 4
+            text: headerCell.expanded ? headerCell.headerDef.long : headerCell.headerDef.short
             color: Theme.table_header_text
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: headerCell.expanded ? 10 : 12
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
+            maximumLineCount: 2
         }
+
+        ToolTip.visible: headerHover.hovered
+        ToolTip.delay: 350
+        ToolTip.text: headerCell.headerDef.long + "\n" + headerCell.headerDef.formula
     }
 
     component DataCell: Rectangle {

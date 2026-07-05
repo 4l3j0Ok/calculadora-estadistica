@@ -896,40 +896,4 @@ Item {
             }
         }
     }
-
-    // ── ResultCard ────────────────────────────────────────────────────────
-    component ResultCard: Rectangle {
-        property string label: ""
-        property string value: "—"
-        property bool undefined_value: false
-
-        Layout.fillWidth: true
-        implicitHeight: 56
-        radius: 6
-        color: Theme.panel_background
-        border.color: Theme.divider
-        border.width: 1
-
-        ColumnLayout {
-            anchors.fill: parent
-            anchors.margins: 8
-            spacing: 2
-
-            Text {
-                text: parent.parent.label
-                color: Theme.muted_text
-                font.pixelSize: 10
-                Layout.fillWidth: true
-            }
-            Text {
-                text: parent.parent.value
-                color: parent.parent.undefined_value
-                    ? Theme.error_text
-                    : Theme.accent
-                font.bold: true
-                font.pixelSize: 14
-                Layout.fillWidth: true
-            }
-        }
-    }
 }

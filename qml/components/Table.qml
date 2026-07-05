@@ -31,9 +31,59 @@ Item {
         return (v % 1 === 0) ? v.toFixed(0) : parseFloat(v.toFixed(4)).toString();
     }
 
-    readonly property var headers: root.showIntervalColumn
-        ? ["Intervalo", "Xi", "f", "fr", "F", "f%", "fa%"]
-        : ["Xi", "f", "fr", "F", "f%", "fa%"]
+    // ── Definición de encabezados ────────────────────────────────────────
+    // Cada uno tiene: abreviatura (short), qué representa (long) y la
+    // fórmula para calcularlo a mano en hoja (formula). Al hacer click en
+    // un header, se alterna entre "short" y "long"; el tooltip siempre
+    // muestra "long" + "formula".
+    readonly property var headerIntervalo: ({
+        short: "Intervalo",
+        long: "Intervalo de clase",
+        formula: "[Límite inferior, Límite superior)"
+    })
+    readonly property var headerXi: ({
+        short: "Xi",
+        long: root.showIntervalColumn ? "Marca de clase" : "Valor de la variable",
+        formula: root.showIntervalColumn ? "Xi = (Li + Ls) / 2" : "Valor observado de la variable"
+    })
+    readonly property var headerF: ({
+        short: "f",
+        long: "Frecuencia absoluta",
+        formula: root.showIntervalColumn
+            ? "Cantidad de datos que caen dentro del intervalo"
+            : "Cantidad de veces que se repite el valor"
+    })
+    readonly property var headerFr: ({
+        short: "fr",
+        long: "Frecuencia relativa",
+        formula: "fr = f / n"
+    })
+    readonly property var headerFA: ({
+        short: "F",
+        long: "Frecuencia acumulada",
+        formula: "Fi = F(i-1) + fi   (F1 = f1)"
+    })
+    readonly property var headerFPercent: ({
+        short: "f%",
+        long: "Frecuencia porcentual",
+        formula: "f% = fr × 100"
+    })
+    readonly property var headerFaPercent: ({
+        short: "fa%",
+        long: "Frecuencia porcentual acumulada",
+        formula: "fa%i = fa%(i-1) + f%i   (fa%1 = f%1)"
+    })
+
+    readonly property var headerDefs: root.showIntervalColumn
+        ? [headerIntervalo, headerXi, headerF, headerFr, headerFA, headerFPercent, headerFaPercent]
+        : [headerXi, headerF, headerFr, headerFA, headerFPercent, headerFaPercent]
+
+    readonly property var headers: {
+        var out = [];
+        for (var i = 0; i < headerDefs.length; i++)
+            out.push(headerDefs[i].short);
+        return out;
+    }
 
     readonly property var totalsRow: root.showIntervalColumn
         ? ["Totales", "", root.totalF.toString(), "1", root.totalF.toString(), "100%", "100%"]
@@ -58,7 +108,7 @@ Item {
     }
 
     readonly property int minColWidth: 70
-    readonly property int minTotalWidth: minColWidth * headers.length
+    readonly property int minTotalWidth: minColWidth * headerDefs.length
 
     ScrollView {
         anchors.fill: parent
@@ -77,10 +127,10 @@ Item {
                 spacing: 1
 
                 Repeater {
-                    model: root.headers
+                    model: root.headerDefs
                     delegate: HeaderCell {
-                        required property string modelData
-                        cellText: modelData
+                        required property var modelData
+                        headerDef: modelData
                     }
                 }
             }
@@ -142,22 +192,48 @@ Item {
 
     // ── Componentes internos ──────────────────────────────────────────────
 
+    // Header clickeable: alterna entre abreviatura y descripción, y
+    // muestra en tooltip (hover) la descripción completa + la fórmula
+    // para calcularlo a mano.
     component HeaderCell: Rectangle {
-        property string cellText
+        id: headerCell
+
+        property var headerDef: ({ short: "", long: "", formula: "" })
+        property bool expanded: false
 
         Layout.fillWidth: true
         Layout.minimumWidth: root.minColWidth
-        implicitHeight: 38
-        color: Theme.table_header_bg
+        implicitHeight: 44
+        color: headerHover.hovered ? Qt.darker(Theme.table_header_bg, 1.1) : Theme.table_header_bg
+
+        Behavior on color {
+            ColorAnimation { duration: 100 }
+        }
+
+        HoverHandler {
+            id: headerHover
+        }
+        TapHandler {
+            onTapped: headerCell.expanded = !headerCell.expanded
+        }
 
         Text {
-            anchors.centerIn: parent
-            text: parent.cellText
+            anchors.fill: parent
+            anchors.margins: 4
+            text: headerCell.expanded ? headerCell.headerDef.long : headerCell.headerDef.short
             color: Theme.table_header_text
             font.bold: true
-            font.pixelSize: 13
+            font.pixelSize: headerCell.expanded ? 10 : 13
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
+            maximumLineCount: 2
         }
+
+        ToolTip.visible: headerHover.hovered
+        ToolTip.delay: 350
+        ToolTip.text: headerCell.headerDef.long + "\n" + headerCell.headerDef.formula
     }
 
     component DataCell: Rectangle {

@@ -717,6 +717,45 @@ Item {
                     }
                 }
 
+                // ── Tarjetas de resultados ──────────────────────────────
+                GridLayout {
+                    columns: 3
+                    rowSpacing: 8
+                    columnSpacing: 8
+                    Layout.fillWidth: true
+                    visible: calculadoraController.tableModel.length > 0
+
+                    ResultCard {
+                        label: "n"
+                        value: calculadoraController.result["n"] !== undefined
+                            ? calculadoraController.result["n"].toString()
+                            : "—"
+                    }
+                    ResultCard {
+                        label: "Media (x̄)"
+                        value: calculadoraController.result["mean"] ?? "—"
+                    }
+                    ResultCard {
+                        label: "Rango"
+                        value: calculadoraController.result["rango"] ?? "—"
+                    }
+                    ResultCard {
+                        label: "Varianza (σ²)"
+                        value: calculadoraController.result["varianza"] ?? "—"
+                        undefined_value: calculadoraController.result["statsUndefined"] === true
+                    }
+                    ResultCard {
+                        label: "Desvío (σ)"
+                        value: calculadoraController.result["desvio"] ?? "—"
+                        undefined_value: calculadoraController.result["statsUndefined"] === true
+                    }
+                    ResultCard {
+                        label: "CV (%)"
+                        value: calculadoraController.result["cv"] ?? "—"
+                        undefined_value: calculadoraController.result["statsUndefined"] === true
+                    }
+                }
+
                 Table {
                     Layout.fillWidth: true
                     Layout.fillHeight: true

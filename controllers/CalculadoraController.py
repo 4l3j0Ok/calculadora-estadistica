@@ -2,10 +2,11 @@ import json
 
 from PySide6.QtCore import Property, QObject, Signal, Slot
 
+from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
 from schemas.history import HistoryModule
 from schemas.table import Table, TableItem, TableType
 from services import history_service
-from services.calculator import TableCalculator
+from services.calculator import DispersionCalculator, TableCalculator
 from services.parser import (
     TableParseError,
     parse_table_agrupados_intervalo,
@@ -29,13 +30,16 @@ class CalculadoraController(QObject):
     """
 
     tableModelChanged = Signal()
+    resultChanged = Signal()
     errorChanged = Signal()
 
     def __init__(self, parent: QObject | None = None) -> None:
         super().__init__(parent)
         self._table_model: list[dict] = []
+        self._result: dict = {}
         self._error: str = ""
         self._calculator = TableCalculator()
+        self._dispersion_calculator = DispersionCalculator()
 
     # --- Propiedades expuestas a QML ---
 
@@ -43,6 +47,12 @@ class CalculadoraController(QObject):
     def tableModel(self) -> list[dict]:
         """Retorna los datos de la tabla calculada para QML."""
         return self._table_model
+
+    @Property("QVariantMap", notify=resultChanged)
+    def result(self) -> dict:
+        """Tarjetas de resumen (n, media, rango, varianza, desvío, CV),
+        calculadas en base poblacional a partir de la misma tabla."""
+        return self._result
 
     @Property(str, notify=errorChanged)
     def error(self) -> str:
@@ -101,10 +111,12 @@ class CalculadoraController(QObject):
 
     @Slot()
     def limpiar(self) -> None:
-        """Limpia la tabla y el mensaje de error."""
+        """Limpia la tabla, las tarjetas de resumen y el mensaje de error."""
         self._table_model = []
+        self._result = {}
         self._error = ""
         self.tableModelChanged.emit()
+        self.resultChanged.emit()
         self.errorChanged.emit()
 
     # --- Helpers privados ---
@@ -124,7 +136,9 @@ class CalculadoraController(QObject):
         table = Table(data_type=data_type, items=items)
         self._calculator.calculate(table)
         self._table_model = self._build_table_model(table)
+        self._result = self._build_result(table)
         self.tableModelChanged.emit()
+        self.resultChanged.emit()
 
         history_service.insert_entry(
             module=HistoryModule.FRECUENCIAS,
@@ -151,8 +165,39 @@ class CalculadoraController(QObject):
             rows.append(row)
         return rows
 
+    def _build_result(self, table: Table) -> dict:
+        """Reutiliza DispersionCalculator (base poblacional) sobre los
+        mismos items ya mergeados/ordenados por TableCalculator, para
+        mostrar las mismas tarjetas de resumen que el módulo de Dispersión."""
+        dispersion_items = [
+            DispersionItem(xi=item.xi, f=item.f, lower=item.lower, upper=item.upper)
+            for item in table.items
+        ]
+        res: DispersionResult = self._dispersion_calculator.calculate(
+            dispersion_items,
+            data_type=DispersionType(table.data_type.value),
+            poblacional=True,
+        )
+
+        def fmt_optional(v: float | None) -> str:
+            if v is None:
+                return "—"
+            return f"{v:.2f}"
+
+        return {
+            "n": res.n,
+            "mean": f"{res.mean:.2f}",
+            "rango": f"{res.rango:.2f}",
+            "varianza": fmt_optional(res.varianza),
+            "desvio": fmt_optional(res.desvio),
+            "cv": "No definido" if res.cv_undefined else fmt_optional(res.cv),
+            "statsUndefined": res.stats_undefined,
+        }
+
     def _set_error(self, mensaje: str) -> None:
         self._error = mensaje
         self._table_model = []
+        self._result = {}
         self.tableModelChanged.emit()
+        self.resultChanged.emit()
         self.errorChanged.emit()
