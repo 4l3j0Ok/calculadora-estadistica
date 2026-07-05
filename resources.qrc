@@ -4,5 +4,10 @@
         <file>assets/github.svg</file>
         <file>assets/linkedin.svg</file>
         <file>assets/mail.svg</file>
+        <file>assets/templates/no_agrupados.md.j2</file>
+        <file>assets/templates/agrupados_valor.md.j2</file>
+        <file>assets/templates/agrupados_intervalos.md.j2</file>
+        <file>assets/templates/resultado_frecuencias.md.j2</file>
+        <file>assets/templates/resultado_dispersion.md.j2</file>
     </qresource>
 </RCC>

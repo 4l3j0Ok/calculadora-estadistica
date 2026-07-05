@@ -38,6 +38,7 @@ import resources_rc  # noqa: F401  (registra los recursos embebidos, p. ej. el Ã
 from controllers.CalculadoraController import CalculadoraController
 from controllers.DispersionController import DispersionController
 from controllers.HistoryController import HistoryController
+from controllers.MarkdownController import MarkdownController
 from services.runtime_paths import app_base_dir, app_version
 
 
@@ -51,6 +52,7 @@ def main():
     calculadora_controller = CalculadoraController()
     dispersion_controller = DispersionController()
     history_controller = HistoryController()
+    markdown_controller = MarkdownController()
 
     engine.rootContext().setContextProperty(
         "calculadoraController", calculadora_controller
@@ -61,12 +63,16 @@ def main():
     engine.rootContext().setContextProperty(
         "historyController", history_controller
     )
+    engine.rootContext().setContextProperty(
+        "markdownController", markdown_controller
+    )
     engine.rootContext().setContextProperty("appVersion", app_version())
 
     # Mantener referencias para evitar garbage collection
     app._calculadora_controller = calculadora_controller
     app._dispersion_controller = dispersion_controller
     app._history_controller = history_controller
+    app._markdown_controller = markdown_controller
 
     qml_path = os.path.join(app_base_dir(), "qml", "Main.qml")
     engine.load(QUrl.fromLocalFile(qml_path))

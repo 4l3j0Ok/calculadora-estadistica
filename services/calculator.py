@@ -2,6 +2,17 @@ import math
 
 from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
 from schemas.table import Table, TableItem, TableType
+from services import descriptive_stats
+
+
+def format_number(v: float) -> str:
+    """Formatea un número sin decimales innecesarios (ej: 5.0 -> '5')."""
+    v = round(v, 2)
+    return f"{v:.0f}" if v == int(v) else f"{v:g}"
+
+
+# Alias privado retrocompatible, usado dentro de este módulo.
+_fmt_num = format_number
 
 # - Frecuencia absoluta (f): Es la cantidad de veces que se repite cada valor
 # de la variable
@@ -114,6 +125,96 @@ class TableCalculator:
         self.calculate_percentage_frequency(table)
         self.calculate_cumulative_percentage_frequency(table)
 
+    # ── Medidas de resumen (media, mediana, moda, rango) ───────────────────
+    # Deben llamarse después de `calculate()`, ya que usan los items
+    # mergeados/ordenados (y, para la mediana, la frecuencia acumulada `fa`
+    # ya calculada).
+
+    def calculate_mean(self, table: Table) -> float:
+        """Media aritmética Σ(Xi·fi) / n."""
+        return descriptive_stats.mean(table.items)
+
+    def calculate_rango(self, table: Table) -> float:
+        """Rango (máximo - mínimo, o límite superior - límite inferior)."""
+        return descriptive_stats.rango(table.items, table.data_type)
+
+    def calculate_median(self, table: Table) -> float:
+        """
+        Mediana.
+
+        - No agrupados / agrupados por valor: mediana clásica sobre los
+          datos expandidos según su frecuencia.
+        - Agrupados por intervalos: fórmula de interpolación
+          Me = Li + ((n/2 - Fa_ant) / fi) · a, usando la clase donde la
+          frecuencia acumulada alcanza o supera n/2.
+        """
+        items = table.items
+        n = sum(item.f for item in items)
+        if n == 0:
+            return 0.0
+
+        if table.data_type == TableType.AGRUPADOS_INTERVALO:
+            mitad = n / 2
+            acumulada_anterior = 0
+            for item in items:
+                acumulada_actual = item.fa if item.fa is not None else 0
+                if acumulada_actual >= mitad:
+                    amplitud = item.upper - item.lower
+                    if item.f == 0:
+                        return round(item.lower, 2)
+                    return round(
+                        item.lower + ((mitad - acumulada_anterior) / item.f) * amplitud,
+                        2,
+                    )
+                acumulada_anterior = acumulada_actual
+            return 0.0
+
+        expandido: list[float] = []
+        for item in items:
+            expandido.extend([item.xi] * item.f)
+        expandido.sort()
+
+        medio = len(expandido) // 2
+        if len(expandido) % 2 == 1:
+            return round(expandido[medio], 2)
+        return round((expandido[medio - 1] + expandido[medio]) / 2, 2)
+
+    def calculate_mode(self, table: Table) -> str:
+        """
+        Moda, formateada como string.
+
+        - No agrupados / agrupados por valor: valor(es) con mayor
+          frecuencia; si hay empate, se listan todos separados por coma
+          (multimodal). Si todos los valores tienen la misma frecuencia
+          (y hay más de uno), se considera "No definida" (amodal).
+        - Agrupados por intervalos: fórmula de interpolación de la clase
+          modal, Mo = Li + (d1 / (d1 + d2)) · a, con d1 = fi - f_anterior
+          y d2 = fi - f_siguiente.
+        """
+        items = table.items
+        if not items:
+            return "—"
+
+        max_f = max(item.f for item in items)
+
+        if table.data_type == TableType.AGRUPADOS_INTERVALO:
+            idx = next(i for i, item in enumerate(items) if item.f == max_f)
+            item = items[idx]
+            f_anterior = items[idx - 1].f if idx > 0 else 0
+            f_siguiente = items[idx + 1].f if idx < len(items) - 1 else 0
+            amplitud = item.upper - item.lower
+            d1 = item.f - f_anterior
+            d2 = item.f - f_siguiente
+            if d1 + d2 == 0:
+                return _fmt_num((item.lower + item.upper) / 2)
+            moda = item.lower + (d1 / (d1 + d2)) * amplitud
+            return _fmt_num(moda)
+
+        modas = [item.xi for item in items if item.f == max_f]
+        if len(modas) == len(items) and len(items) > 1:
+            return "No definida"
+        return ", ".join(_fmt_num(v) for v in modas)
+
 
 class DispersionCalculator:
     """
@@ -166,15 +267,8 @@ class DispersionCalculator:
             items = self._sort_no_agrupados(items)
 
         n = sum(i.f for i in items)
-        mean = round(sum(i.xi * i.f for i in items) / n, 2) if n > 0 else 0.0
-
-        if data_type == DispersionType.AGRUPADOS_INTERVALO:
-            rango = max(i.upper for i in items if i.upper is not None) - min(
-                i.lower for i in items if i.lower is not None
-            )
-        else:
-            rango = max(i.xi for i in items) - min(i.xi for i in items)
-        rango = round(rango, 2)
+        mean = descriptive_stats.mean(items)
+        rango = descriptive_stats.rango(items, data_type)
 
         for item in items:
             item.diff = round(item.xi - mean, 2)

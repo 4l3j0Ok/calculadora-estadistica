@@ -1,0 +1,9 @@
+---
+type: agrupados-intervalos
+module: {{ module }}
+---
+| límite inferior | límite superior | fi |
+|---:|---:|---:|
+{% for row in rows -%}
+| {{ row.lower }} | {{ row.upper }} | {{ row.frecuencia }} |
+{% endfor -%}

@@ -1,0 +1,9 @@
+---
+type: agrupados-valor
+module: {{ module }}
+---
+| xi | fi |
+|---:|---:|
+{% for row in rows -%}
+| {{ row.xi }} | {{ row.frecuencia }} |
+{% endfor -%}

@@ -4,8 +4,8 @@ from PySide6.QtCore import Property, QObject, Signal, Slot
 
 from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
 from schemas.history import HistoryModule
-from services import history_service
-from services.calculator import DispersionCalculator
+from services import history_service, markdown_io
+from services.calculator import DispersionCalculator, format_number
 from services.parser import (
     DispersionParseError,
     parse_agrupados_intervalo,
@@ -32,6 +32,8 @@ class DispersionController(QObject):
         self._table_model: list[dict] = []
         self._result: dict = {}
         self._error: str = ""
+        self._data_type: DispersionType | None = None
+        self._poblacional: bool = True
         self._calculator = DispersionCalculator()
 
     # --- Propiedades expuestas a QML ---
@@ -96,9 +98,47 @@ class DispersionController(QObject):
         self._table_model = []
         self._result = {}
         self._error = ""
+        self._data_type = None
         self.tableModelChanged.emit()
         self.resultChanged.emit()
         self.errorChanged.emit()
+
+    @Slot(result=str)
+    def copiarResultadoMarkdown(self) -> str:
+        """Renderiza la tabla de dispersión y las tarjetas de resumen
+        actuales en Markdown, listas para copiar al portapapeles."""
+        if not self._table_model or self._data_type is None:
+            return ""
+
+        intervalos = self._data_type == DispersionType.AGRUPADOS_INTERVALO
+        rows = []
+        for row in self._table_model:
+            if intervalos:
+                label = f"{format_number(row['lower'])} - {format_number(row['upper'])}"
+            else:
+                label = format_number(row["xi"])
+            rows.append(
+                {
+                    "label": label,
+                    "f": row["f"],
+                    "diff": row["diff"],
+                    "diffSq": row["diffSq"],
+                    "fDiffSq": row["fDiffSq"],
+                }
+            )
+
+        context = {
+            "intervalos": intervalos,
+            "poblacional": self._poblacional,
+            "rows": rows,
+            "n": self._result.get("n", ""),
+            "mean": self._result.get("mean", ""),
+            "rango": self._result.get("rango", ""),
+            "varianza": self._result.get("varianza", ""),
+            "desvio": self._result.get("desvio", ""),
+            "cv": self._result.get("cv", ""),
+        }
+        return markdown_io.render_resultado_dispersion(context)
 
     # --- Helpers privados ---
 
@@ -118,6 +158,8 @@ class DispersionController(QObject):
         input_payload: str,
     ) -> None:
         self._error = ""
+        self._data_type = data_type
+        self._poblacional = poblacional
         res = self._calculator.calculate(items, data_type=data_type, poblacional=poblacional)
         self._table_model = self._build_table_model(res)
         self._result = self._build_result(res)
@@ -171,6 +213,7 @@ class DispersionController(QObject):
         self._error = mensaje
         self._table_model = []
         self._result = {}
+        self._data_type = None
         self.tableModelChanged.emit()
         self.resultChanged.emit()
         self.errorChanged.emit()

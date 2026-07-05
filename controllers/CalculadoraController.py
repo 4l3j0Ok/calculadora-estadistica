@@ -2,11 +2,10 @@ import json
 
 from PySide6.QtCore import Property, QObject, Signal, Slot
 
-from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
 from schemas.history import HistoryModule
 from schemas.table import Table, TableItem, TableType
-from services import history_service
-from services.calculator import DispersionCalculator, TableCalculator
+from services import history_service, markdown_io
+from services.calculator import TableCalculator, format_number
 from services.parser import (
     TableParseError,
     parse_table_agrupados_intervalo,
@@ -38,8 +37,8 @@ class CalculadoraController(QObject):
         self._table_model: list[dict] = []
         self._result: dict = {}
         self._error: str = ""
+        self._data_type: TableType | None = None
         self._calculator = TableCalculator()
-        self._dispersion_calculator = DispersionCalculator()
 
     # --- Propiedades expuestas a QML ---
 
@@ -50,8 +49,8 @@ class CalculadoraController(QObject):
 
     @Property("QVariantMap", notify=resultChanged)
     def result(self) -> dict:
-        """Tarjetas de resumen (n, media, rango, varianza, desvío, CV),
-        calculadas en base poblacional a partir de la misma tabla."""
+        """Tarjetas de resumen (n, media, mediana, moda, rango),
+        calculadas a partir de la misma tabla de frecuencias."""
         return self._result
 
     @Property(str, notify=errorChanged)
@@ -115,9 +114,42 @@ class CalculadoraController(QObject):
         self._table_model = []
         self._result = {}
         self._error = ""
+        self._data_type = None
         self.tableModelChanged.emit()
         self.resultChanged.emit()
         self.errorChanged.emit()
+
+    @Slot(result=str)
+    def copiarResultadoMarkdown(self) -> str:
+        """Renderiza la tabla de frecuencias y las tarjetas de resumen
+        actuales en Markdown, listas para copiar al portapapeles."""
+        if not self._table_model or self._data_type is None:
+            return ""
+
+        intervalos = self._data_type == TableType.AGRUPADOS_INTERVALO
+        rows = []
+        for row in self._table_model:
+            rows.append(
+                {
+                    "label": row["intervalo"] if intervalos else format_number(row["xi"]),
+                    "f": row["frecuencia"],
+                    "fr": row["frecuenciaRelativa"],
+                    "fa": row["frecuenciaAcumulada"],
+                    "f_percent": row["frecuenciaPorcentual"],
+                    "fa_percent": row["frecuenciaPorcentualAcumulada"],
+                }
+            )
+
+        context = {
+            "intervalos": intervalos,
+            "rows": rows,
+            "n": self._result.get("n", ""),
+            "mean": self._result.get("mean", ""),
+            "mediana": self._result.get("mediana", ""),
+            "moda": self._result.get("moda", ""),
+            "rango": self._result.get("rango", ""),
+        }
+        return markdown_io.render_resultado_frecuencias(context)
 
     # --- Helpers privados ---
 
@@ -133,6 +165,7 @@ class CalculadoraController(QObject):
         self, items: list[TableItem], data_type: TableType, input_payload: str
     ) -> None:
         self._error = ""
+        self._data_type = data_type
         table = Table(data_type=data_type, items=items)
         self._calculator.calculate(table)
         self._table_model = self._build_table_model(table)
@@ -166,38 +199,27 @@ class CalculadoraController(QObject):
         return rows
 
     def _build_result(self, table: Table) -> dict:
-        """Reutiliza DispersionCalculator (base poblacional) sobre los
-        mismos items ya mergeados/ordenados por TableCalculator, para
-        mostrar las mismas tarjetas de resumen que el módulo de Dispersión."""
-        dispersion_items = [
-            DispersionItem(xi=item.xi, f=item.f, lower=item.lower, upper=item.upper)
-            for item in table.items
-        ]
-        res: DispersionResult = self._dispersion_calculator.calculate(
-            dispersion_items,
-            data_type=DispersionType(table.data_type.value),
-            poblacional=True,
-        )
-
-        def fmt_optional(v: float | None) -> str:
-            if v is None:
-                return "—"
-            return f"{v:.2f}"
+        """Calcula n, media, mediana, moda y rango a partir de los items
+        ya mergeados/ordenados por TableCalculator.calculate()."""
+        n = sum(item.f for item in table.items)
+        mean = self._calculator.calculate_mean(table)
+        mediana = self._calculator.calculate_median(table)
+        moda = self._calculator.calculate_mode(table)
+        rango = self._calculator.calculate_rango(table)
 
         return {
-            "n": res.n,
-            "mean": f"{res.mean:.2f}",
-            "rango": f"{res.rango:.2f}",
-            "varianza": fmt_optional(res.varianza),
-            "desvio": fmt_optional(res.desvio),
-            "cv": "No definido" if res.cv_undefined else fmt_optional(res.cv),
-            "statsUndefined": res.stats_undefined,
+            "n": n,
+            "mean": f"{mean:.2f}",
+            "mediana": f"{mediana:.2f}",
+            "moda": moda,
+            "rango": f"{rango:.2f}",
         }
 
     def _set_error(self, mensaje: str) -> None:
         self._error = mensaje
         self._table_model = []
         self._result = {}
+        self._data_type = None
         self.tableModelChanged.emit()
         self.resultChanged.emit()
         self.errorChanged.emit()

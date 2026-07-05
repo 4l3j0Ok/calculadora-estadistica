@@ -15,11 +15,21 @@ Item {
 
     property bool poblacional: true   // true = población, false = muestra
     property string dataType: "agrupados_valor"
+    property string pasteError: ""
 
     readonly property var tiposDeDatos: [
-        { value: "no_agrupados", label: "No agrupados" },
-        { value: "agrupados_valor", label: "Agrupados por valor" },
-        { value: "agrupados_intervalo", label: "Agrupados por intervalos" }
+        {
+            value: "no_agrupados",
+            label: "No agrupados"
+        },
+        {
+            value: "agrupados_valor",
+            label: "Agrupados por valor"
+        },
+        {
+            value: "agrupados_intervalo",
+            label: "Agrupados por intervalos"
+        }
     ]
 
     // ── Modelos de entrada, uno por tipo (nunca se mezclan) ────────────────
@@ -27,12 +37,19 @@ Item {
 
     ListModel {
         id: valorModel
-        ListElement { xi: ""; frecuencia: "" }
+        ListElement {
+            xi: ""
+            frecuencia: ""
+        }
     }
 
     ListModel {
         id: intervaloModel
-        ListElement { lower: ""; upper: ""; frecuencia: "" }
+        ListElement {
+            lower: ""
+            upper: ""
+            frecuencia: ""
+        }
     }
 
     function setDataType(nuevoTipo) {
@@ -74,10 +91,93 @@ Item {
     function limpiar() {
         dispersionController.limpiar();
         root.valoresText = "";
+        root.pasteError = "";
         valorModel.clear();
-        valorModel.append({ xi: "", frecuencia: "" });
+        valorModel.append({
+            xi: "",
+            frecuencia: ""
+        });
         intervaloModel.clear();
-        intervaloModel.append({ lower: "", upper: "", frecuencia: "" });
+        intervaloModel.append({
+            lower: "",
+            upper: "",
+            frecuencia: ""
+        });
+    }
+
+    // ── Copiar / Pegar datos en Markdown ────────────────────────────────
+    function copiarDatos() {
+        var md;
+        if (root.dataType === "no_agrupados") {
+            md = markdownController.renderNoAgrupados("dispersion", root.valoresText);
+        } else if (root.dataType === "agrupados_valor") {
+            var filasValor = [];
+            for (var i = 0; i < valorModel.count; i++)
+                filasValor.push({
+                    xi: valorModel.get(i).xi,
+                    frecuencia: valorModel.get(i).frecuencia
+                });
+            md = markdownController.renderAgrupadosValor("dispersion", JSON.stringify(filasValor));
+        } else {
+            var filasIntervalo = [];
+            for (var j = 0; j < intervaloModel.count; j++)
+                filasIntervalo.push({
+                    lower: intervaloModel.get(j).lower,
+                    upper: intervaloModel.get(j).upper,
+                    frecuencia: intervaloModel.get(j).frecuencia
+                });
+            md = markdownController.renderAgrupadosIntervalo("dispersion", JSON.stringify(filasIntervalo));
+        }
+        markdownController.setClipboardText(md);
+    }
+
+    function cargarDesdeMarkdown(nuevoTipo, payload) {
+        root.pasteError = "";
+        root.dataType = nuevoTipo;
+
+        if (nuevoTipo === "no_agrupados") {
+            root.valoresText = payload.text;
+        } else if (nuevoTipo === "agrupados_valor") {
+            valorModel.clear();
+            for (var i = 0; i < payload.rows.length; i++)
+                valorModel.append({
+                    xi: payload.rows[i].xi.toString(),
+                    frecuencia: payload.rows[i].frecuencia.toString()
+                });
+        } else {
+            intervaloModel.clear();
+            for (var j = 0; j < payload.rows.length; j++)
+                intervaloModel.append({
+                    lower: payload.rows[j].lower.toString(),
+                    upper: payload.rows[j].upper.toString(),
+                    frecuencia: payload.rows[j].frecuencia.toString()
+                });
+        }
+        root.calcular();
+    }
+
+    function pegarDatos() {
+        // El pegado es cross-módulo: el tipo de dato (no agrupados /
+        // agrupados por valor / agrupados por intervalos) es el mismo
+        // formato en ambos módulos, así que los datos se cargan siempre
+        // en la página donde el usuario está parado, sin importar desde
+        // qué módulo se hayan copiado originalmente.
+        var respuesta = JSON.parse(markdownController.parseMarkdown(markdownController.clipboardText()));
+        if (!respuesta.ok) {
+            root.pasteError = respuesta.error;
+            return;
+        }
+        root.pasteError = "";
+        root.cargarDesdeMarkdown(respuesta.dataType, {
+            text: respuesta.text,
+            rows: respuesta.rows
+        });
+    }
+
+    function copiarTabla() {
+        var md = dispersionController.copiarResultadoMarkdown();
+        if (md)
+            markdownController.setClipboardText(md);
     }
 
     // ── Historial ───────────────────────────────────────────────────────
@@ -122,18 +222,12 @@ Item {
     }
 
     function formulaMedia() {
-        return root.dataType === "no_agrupados"
-            ? "x̄ = ΣXi / n"
-            : "x̄ = Σ(Xi · fi) / n";
+        return root.dataType === "no_agrupados" ? "x̄ = ΣXi / n" : "x̄ = Σ(Xi · fi) / n";
     }
 
     function formulaVarianza() {
-        var num = root.dataType === "no_agrupados"
-            ? "Σ(Xi - x̄)²"
-            : "Σ[fi · (Xi - x̄)²]";
-        return root.poblacional
-            ? "σ² = " + num + " / N"
-            : "s² = " + num + " / (n - 1)";
+        var num = root.dataType === "no_agrupados" ? "Σ(Xi - x̄)²" : "Σ[fi · (Xi - x̄)²]";
+        return root.poblacional ? "σ² = " + num + " / N" : "s² = " + num + " / (n - 1)";
     }
 
     RowLayout {
@@ -153,15 +247,57 @@ Item {
                 anchors.margins: 16
                 spacing: 10
 
-                RowLayout {
-                    Layout.fillWidth: true
-
+                Rectangle {
                     Label {
-                        text: "Carga de datos"
+                        text: "Dispersión"
                         color: Theme.primary_text
                         font.bold: true
                         font.pixelSize: 15
-                        Layout.fillWidth: true
+                    }
+                    Layout.bottomMargin: 15
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Button {
+                        text: "Copiar"
+                        implicitHeight: 28
+                        onClicked: root.copiarDatos()
+
+                        background: Rectangle {
+                            radius: 4
+                            color: parent.hovered ? Theme.accent_hover : Theme.accent_subtle
+                            border.color: Theme.accent
+                            border.width: 1
+                        }
+                        contentItem: Text {
+                            text: "Copiar"
+                            color: Theme.accent
+                            font.pixelSize: 11
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                    }
+
+                    Button {
+                        text: "Pegar"
+                        implicitHeight: 28
+                        onClicked: root.pegarDatos()
+
+                        background: Rectangle {
+                            radius: 4
+                            color: parent.hovered ? Theme.accent_hover : Theme.accent_subtle
+                            border.color: Theme.accent
+                            border.width: 1
+                        }
+                        contentItem: Text {
+                            text: "Pegar"
+                            color: Theme.accent
+                            font.pixelSize: 11
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
                     }
 
                     Button {
@@ -179,13 +315,22 @@ Item {
                             border.width: 1
                         }
                         contentItem: Text {
-                            text: parent.text
+                            text: "Historial"
                             color: Theme.accent
                             font.pixelSize: 11
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }
                     }
+                }
+
+                Label {
+                    text: root.pasteError
+                    color: Theme.error_text
+                    visible: root.pasteError !== ""
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    font.pixelSize: 11
                 }
 
                 // ── Selector de tipo de datos ─────────────────────────────
@@ -214,7 +359,11 @@ Item {
                             color: selected ? Theme.accent_subtle : Theme.button_background
                             border.color: selected ? Theme.border_focus : Theme.border_color
                             border.width: selected ? 2 : 1
-                            Behavior on color { ColorAnimation { duration: 120 } }
+                            Behavior on color {
+                                ColorAnimation {
+                                    duration: 120
+                                }
+                            }
 
                             Text {
                                 anchors.centerIn: parent
@@ -223,7 +372,9 @@ Item {
                                 font.pixelSize: 12
                                 font.bold: tipoBtn.selected
                             }
-                            TapHandler { onTapped: root.setDataType(tipoBtn.modelData.value) }
+                            TapHandler {
+                                onTapped: root.setDataType(tipoBtn.modelData.value)
+                            }
                         }
                     }
                 }
@@ -246,7 +397,11 @@ Item {
                         color: root.poblacional ? Theme.accent_subtle : Theme.button_background
                         border.color: root.poblacional ? Theme.border_focus : Theme.border_color
                         border.width: root.poblacional ? 2 : 1
-                        Behavior on color { ColorAnimation { duration: 120 } }
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 120
+                            }
+                        }
 
                         Text {
                             anchors.centerIn: parent
@@ -255,8 +410,10 @@ Item {
                             font.pixelSize: 11
                             font.bold: root.poblacional
                         }
-                        HoverHandler { }
-                        TapHandler { onTapped: root.poblacional = true }
+                        HoverHandler {}
+                        TapHandler {
+                            onTapped: root.poblacional = true
+                        }
                     }
 
                     Rectangle {
@@ -266,7 +423,11 @@ Item {
                         color: !root.poblacional ? Theme.accent_subtle : Theme.button_background
                         border.color: !root.poblacional ? Theme.border_focus : Theme.border_color
                         border.width: !root.poblacional ? 2 : 1
-                        Behavior on color { ColorAnimation { duration: 120 } }
+                        Behavior on color {
+                            ColorAnimation {
+                                duration: 120
+                            }
+                        }
 
                         Text {
                             anchors.centerIn: parent
@@ -275,8 +436,10 @@ Item {
                             font.pixelSize: 11
                             font.bold: !root.poblacional
                         }
-                        HoverHandler { }
-                        TapHandler { onTapped: root.poblacional = false }
+                        HoverHandler {}
+                        TapHandler {
+                            onTapped: root.poblacional = false
+                        }
                     }
                 }
 
@@ -332,8 +495,7 @@ Item {
                                     if (!m)
                                         return token;
                                     var idx = token.indexOf(m[0]);
-                                    return token.slice(0, idx + 1)
-                                        + token.slice(idx + 1).replace(/[.,]/g, "");
+                                    return token.slice(0, idx + 1) + token.slice(idx + 1).replace(/[.,]/g, "");
                                 }).join(";");
 
                                 if (procesado !== original) {
@@ -360,9 +522,23 @@ Item {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        Label { text: "Xi"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
-                        Label { text: "Frecuencia"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
-                        Item { implicitWidth: 30 }
+                        Label {
+                            text: "Xi"
+                            color: Theme.muted_text
+                            font.pixelSize: 11
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                        }
+                        Label {
+                            text: "Frecuencia"
+                            color: Theme.muted_text
+                            font.pixelSize: 11
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                        }
+                        Item {
+                            implicitWidth: 30
+                        }
                     }
 
                     ScrollView {
@@ -459,7 +635,10 @@ Item {
                         Layout.fillWidth: true
                         implicitHeight: 34
                         text: "+ Agregar fila"
-                        onClicked: valorModel.append({ xi: "", frecuencia: "" })
+                        onClicked: valorModel.append({
+                            xi: "",
+                            frecuencia: ""
+                        })
 
                         background: Rectangle {
                             radius: 4
@@ -488,10 +667,30 @@ Item {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        Label { text: "Lím. inf."; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
-                        Label { text: "Lím. sup."; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
-                        Label { text: "fi"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
-                        Item { implicitWidth: 30 }
+                        Label {
+                            text: "Lím. inf."
+                            color: Theme.muted_text
+                            font.pixelSize: 11
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                        }
+                        Label {
+                            text: "Lím. sup."
+                            color: Theme.muted_text
+                            font.pixelSize: 11
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                        }
+                        Label {
+                            text: "fi"
+                            color: Theme.muted_text
+                            font.pixelSize: 11
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 0
+                        }
+                        Item {
+                            implicitWidth: 30
+                        }
                     }
 
                     ScrollView {
@@ -610,7 +809,11 @@ Item {
                         Layout.fillWidth: true
                         implicitHeight: 34
                         text: "+ Agregar intervalo"
-                        onClicked: intervaloModel.append({ lower: "", upper: "", frecuencia: "" })
+                        onClicked: intervaloModel.append({
+                            lower: "",
+                            upper: "",
+                            frecuencia: ""
+                        })
 
                         background: Rectangle {
                             radius: 4
@@ -708,11 +911,37 @@ Item {
                 anchors.margins: 16
                 spacing: 10
 
-                Label {
-                    text: "Tabla de dispersión"
-                    color: Theme.primary_text
-                    font.bold: true
-                    font.pixelSize: 15
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Label {
+                        text: "Tabla de dispersión"
+                        color: Theme.primary_text
+                        font.bold: true
+                        font.pixelSize: 15
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        text: "Copiar tabla"
+                        implicitHeight: 28
+                        visible: dispersionController.tableModel.length > 0
+                        onClicked: root.copiarTabla()
+
+                        background: Rectangle {
+                            radius: 4
+                            color: parent.hovered ? Theme.accent_hover : Theme.accent_subtle
+                            border.color: Theme.accent
+                            border.width: 1
+                        }
+                        contentItem: Text {
+                            text: "Copiar tabla"
+                            color: Theme.accent
+                            font.pixelSize: 11
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                    }
                 }
 
                 // Estado vacío
@@ -771,9 +1000,7 @@ Item {
 
                         ResultCard {
                             label: "n"
-                            value: dispersionController.result["n"] !== undefined
-                                ? dispersionController.result["n"].toString()
-                                : "—"
+                            value: dispersionController.result["n"] !== undefined ? dispersionController.result["n"].toString() : "—"
                         }
                         ResultCard {
                             label: "Media (x̄)"
@@ -806,9 +1033,7 @@ Item {
                         dataType: dispersionController.result["dataType"] ?? root.dataType
                         model: dispersionController.tableModel
                         sumValue: dispersionController.result["sumFDiffSq"] ?? "—"
-                        totalN: dispersionController.result["n"] !== undefined
-                            ? dispersionController.result["n"]
-                            : 0
+                        totalN: dispersionController.result["n"] !== undefined ? dispersionController.result["n"] : 0
                     }
                 }
             }
@@ -890,8 +1115,8 @@ Item {
                     anchors.fill: parent
                     anchors.margins: 1
                     model: root.historyEntries
-                    onDeleteRequested: (entryId) => historyController.eliminarEntrada(entryId)
-                    onLoadRequested: (entry) => root.cargarDesdeHistorial(entry)
+                    onDeleteRequested: entryId => historyController.eliminarEntrada(entryId)
+                    onLoadRequested: entry => root.cargarDesdeHistorial(entry)
                 }
             }
         }
