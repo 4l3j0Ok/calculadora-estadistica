@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.3...1.1.4) (2026-07-05)
+
+
+### Bug Fixes
+
+* **history:** guardar SQLite en el directorio de datos del usuario ([dddb777](https://github.com/4l3j0Ok/calculadora-estadistica/commit/dddb777ef5c296aae3c7b3ceff428adb5d67020d))
+
 ## [1.1.3](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.2...1.1.3) (2026-07-05)
 
 
