@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.4...1.1.5) (2026-07-05)
+
+
+### Bug Fixes
+
+* update build for AppImage deployment ([282fd23](https://github.com/4l3j0Ok/calculadora-estadistica/commit/282fd23b678c369b5113081f9649382fe9332dcc))
+
 ## [1.1.4](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.3...1.1.4) (2026-07-05)
 
 
