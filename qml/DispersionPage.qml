@@ -360,8 +360,8 @@ Item {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        Label { text: "Xi"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true }
-                        Label { text: "Frecuencia"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true }
+                        Label { text: "Xi"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
+                        Label { text: "Frecuencia"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
                         Item { implicitWidth: 30 }
                     }
 
@@ -391,6 +391,7 @@ Item {
                                         placeholderText: "Ej: 5"
                                         text: xi
                                         Layout.fillWidth: true
+                                        Layout.preferredWidth: 0
                                         color: Theme.input_text
                                         placeholderTextColor: Theme.placeholder_text
                                         inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -411,6 +412,7 @@ Item {
                                         placeholderText: "Ej: 3"
                                         text: frecuencia
                                         Layout.fillWidth: true
+                                        Layout.preferredWidth: 0
                                         color: Theme.input_text
                                         placeholderTextColor: Theme.placeholder_text
                                         inputMethodHints: Qt.ImhDigitsOnly
@@ -486,9 +488,9 @@ Item {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        Label { text: "Lím. inf."; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true }
-                        Label { text: "Lím. sup."; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true }
-                        Label { text: "fi"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true }
+                        Label { text: "Lím. inf."; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
+                        Label { text: "Lím. sup."; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
+                        Label { text: "fi"; color: Theme.muted_text; font.pixelSize: 11; Layout.fillWidth: true; Layout.preferredWidth: 0 }
                         Item { implicitWidth: 30 }
                     }
 
@@ -519,6 +521,7 @@ Item {
                                         placeholderText: "10"
                                         text: lower
                                         Layout.fillWidth: true
+                                        Layout.preferredWidth: 0
                                         color: Theme.input_text
                                         placeholderTextColor: Theme.placeholder_text
                                         inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -539,6 +542,7 @@ Item {
                                         placeholderText: "19"
                                         text: upper
                                         Layout.fillWidth: true
+                                        Layout.preferredWidth: 0
                                         color: Theme.input_text
                                         placeholderTextColor: Theme.placeholder_text
                                         inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -559,6 +563,7 @@ Item {
                                         placeholderText: "3"
                                         text: frecuencia
                                         Layout.fillWidth: true
+                                        Layout.preferredWidth: 0
                                         color: Theme.input_text
                                         placeholderTextColor: Theme.placeholder_text
                                         inputMethodHints: Qt.ImhDigitsOnly
