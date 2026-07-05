@@ -7,7 +7,6 @@
 # nuitka-project: --assume-yes-for-downloads
 # nuitka-project: --remove-output
 # nuitka-project: --include-data-dir=qml=qml
-# nuitka-project: --include-data-dir=assets=assets
 # nuitka-project: --report=nuitka-report.xml
 #
 # Incluye los módulos QML runtime de Qt (QtQuick, QtQuick.Controls,

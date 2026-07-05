@@ -110,21 +110,13 @@ fi
 
 EXECUTABLE_NAME="${APP_NAME}"
 BINARY_PATH="${DIST_DIR}/${EXECUTABLE_NAME}"
-if [[ ! -f "${BINARY_PATH}" ]]; then
-    # Nuitka nombra el binario según --output-filename; si no se aplicó,
-    # cae de vuelta al nombre del entrypoint sin extensión.
-    EXECUTABLE_NAME="main"
-    BINARY_PATH="${DIST_DIR}/${EXECUTABLE_NAME}"
-fi
 
-if [[ -f "${BINARY_PATH}" ]]; then
-    echo "==> Marcando el binario principal como ejecutable: ${BINARY_PATH}"
-    chmod +x "${BINARY_PATH}"
-else
-    echo "ERROR: no se encontró el binario principal dentro de ${DIST_DIR}" >&2
+if [[ ! -f "${BINARY_PATH}" ]]; then
+    echo "ERROR: no se encontró el ejecutable esperado: ${BINARY_PATH}" >&2
     exit 1
 fi
-echo "==> Nombre del ejecutable detectado: ${EXECUTABLE_NAME}"
+
+chmod +x "${BINARY_PATH}"
 
 # ── Renombrar carpeta final ───────────────────────────────────────────────
 FINAL_DIR_NAME="${APP_NAME}-${VERSION}-Linux-x86_64"
@@ -250,7 +242,6 @@ rm -rf "${APPDIR}"
 APP_ROOT="${APPDIR}/usr/share/calculadora-estadistica"
 mkdir -p \
     "${APP_ROOT}" \
-    "${APPDIR}/usr/bin" \
     "${APPDIR}/usr/lib/x86_64-linux-gnu" \
     "${APPDIR}/usr/share/applications" \
     "${APPDIR}/usr/share/icons/hicolor/256x256/apps" \
@@ -260,9 +251,6 @@ mkdir -p \
 # archivos individualmente (.so, plugins Qt, .pyc, recursos de Nuitka
 # quedan tal como los dejó Nuitka, junto al ejecutable).
 cp -a "${NUITKA_DIST}/." "${APP_ROOT}/"
-
-# ── Enlace del ejecutable en usr/bin ──────────────────────────────────────
-ln -rs "${APP_ROOT}/${EXECUTABLE_NAME}" "${APPDIR}/usr/bin/${EXECUTABLE_NAME}"
 
 # ── AppRun ────────────────────────────────────────────────────────────────
 install -m 0755 "${DEPLOYMENT_DIR}/AppRun" "${APPDIR}/AppRun"

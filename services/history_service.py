@@ -56,17 +56,10 @@ def _migrate_legacy_db_if_needed(db_path: Path) -> None:
 
 def _connect() -> sqlite3.Connection:
     db_path = get_history_db_path()
-    try:
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-    except OSError as exc:
-        raise RuntimeError(
-            f"No se pudo crear el directorio de la base de historial: {db_path.parent}"
-        ) from exc
-
     _migrate_legacy_db_if_needed(db_path)
 
     try:
-        conn = sqlite3.connect(str(db_path))
+        conn = sqlite3.connect(db_path)
     except sqlite3.OperationalError as exc:
         raise RuntimeError(
             f"No se pudo abrir la base de historial en: {db_path}"

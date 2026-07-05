@@ -6,16 +6,20 @@ Verifica que la base se cree en el directorio de datos del usuario (según
 
 from __future__ import annotations
 
-import importlib
 from pathlib import Path
 
 import pytest
 
+from services import history_service, runtime_paths
+
 
 @pytest.fixture
 def history_service_module(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
-    """Recarga `services.history_service` con `XDG_DATA_HOME` apuntando a
-    un directorio temporal, para no tocar datos reales del usuario/runner.
+    """Aísla `XDG_DATA_HOME` en un directorio temporal, para no tocar
+    datos reales del usuario/runner.
+
+    `runtime_paths` consulta las variables de entorno en cada invocación,
+    por lo que no hace falta recargar módulos: basta con `monkeypatch`.
 
     También aísla la ruta "heredada" (`legacy_history_db_path`) a un
     archivo inexistente dentro de `tmp_path`, para que estos tests no
@@ -26,14 +30,6 @@ def history_service_module(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path))
     monkeypatch.delenv("LOCALAPPDATA", raising=False)
 
-    from services import runtime_paths
-
-    importlib.reload(runtime_paths)
-
-    from services import history_service
-
-    importlib.reload(history_service)
-
     fake_legacy_path = tmp_path / "legacy-no-existe" / "history.db"
     monkeypatch.setattr(
         history_service, "legacy_history_db_path", lambda: fake_legacy_path
@@ -41,11 +37,8 @@ def history_service_module(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
 
     yield history_service, tmp_path
 
-    importlib.reload(runtime_paths)
-    importlib.reload(history_service)
 
-
-def test_init_db_crea_la_base_en_el_directorio_xdg(history_service_module, tmp_path: Path) -> None:
+def test_init_db_crea_la_base_en_el_directorio_xdg(history_service_module) -> None:
     history_service, xdg_data_home = history_service_module
 
     history_service.init_db()
@@ -55,7 +48,7 @@ def test_init_db_crea_la_base_en_el_directorio_xdg(history_service_module, tmp_p
 
 
 def test_insertar_y_listar_entradas_persiste_en_la_base_xdg(
-    history_service_module, tmp_path: Path
+    history_service_module,
 ) -> None:
     from schemas.history import HistoryModule
 
@@ -78,13 +71,11 @@ def test_insertar_y_listar_entradas_persiste_en_la_base_xdg(
 
 
 def test_no_se_crea_ninguna_base_junto_al_proyecto_o_ejecutable(
-    history_service_module, tmp_path: Path
+    history_service_module,
 ) -> None:
     history_service, _xdg_data_home = history_service_module
 
-    from services.runtime_paths import app_base_dir
-
-    legacy_db = Path(app_base_dir()) / "history.db"
+    legacy_db = Path(runtime_paths.app_base_dir()) / "history.db"
     legacy_existia_antes = legacy_db.exists()
     legacy_mtime_antes = legacy_db.stat().st_mtime if legacy_existia_antes else None
 
