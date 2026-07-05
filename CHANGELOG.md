@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.0...1.1.1) (2026-07-05)
+
+
+### Bug Fixes
+
+* **linux:** asegurar que el .zsync del AppImage quede junto al .AppImage ([dd001d8](https://github.com/4l3j0Ok/calculadora-estadistica/commit/dd001d8596b23a07f8c293754914efa7a889a2d0))
+
 # [1.1.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.0.1...1.1.0) (2026-07-05)
 
 
