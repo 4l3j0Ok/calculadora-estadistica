@@ -393,8 +393,14 @@ done
 echo "==> Smoke test del AppImage OK (código de salida: ${appimage_smoke_status})."
 
 # ── Verificar la update information embebida ──────────────────────────────
+# Nota: --appimage-updateinfo lo resuelve el runtime del AppImage sin
+# necesidad de FUSE ni de montar/extraer nada. No debe usarse
+# APPIMAGE_EXTRACT_AND_RUN=1 acá: ese flag hace que el runtime salte el
+# manejo de argumentos especiales y termine ejecutando AppRun con
+# "--appimage-updateinfo" como argumento de la aplicación (que no lo
+# entiende y falla).
 echo "==> Verificando --appimage-updateinfo..."
-ACTUAL_UPDATE_INFO="$(APPIMAGE_EXTRACT_AND_RUN=1 "${APPIMAGE_PATH}" --appimage-updateinfo)"
+ACTUAL_UPDATE_INFO="$("${APPIMAGE_PATH}" --appimage-updateinfo)"
 if [[ "${ACTUAL_UPDATE_INFO}" != "${UPDATE_INFO}" ]]; then
     echo "ERROR: update information inesperada." >&2
     echo "  esperado: ${UPDATE_INFO}" >&2
