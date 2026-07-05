@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install system dependencies (Nuitka + PySide6/Qt runtime deps)
+      - name: Install system dependencies (Nuitka + PySide6/Qt runtime deps + AppImage)
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
@@ -49,10 +49,12 @@ jobs:
             libxcb-sync1 \
             libxcb-xfixes0 \
             libxcb-xinerama0 \
+            libxcb-util1 \
             libxkbcommon0 \
             libxkbcommon-x11-0 \
             libfontconfig1 \
-            libdbus-1-3
+            libdbus-1-3 \
+            xvfb
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -73,7 +75,7 @@ jobs:
           chmod +x scripts/build-linux.sh
           ./scripts/build-linux.sh
 
-      - name: Locate release artifact
+      - name: Locate release artifacts
         id: artifact
         run: |
           archive="$(ls dist/releases/*.tar.gz | head -n1)"
@@ -81,20 +83,43 @@ jobs:
             echo "No se encontro ningun .tar.gz en dist/releases" >&2
             exit 1
           fi
+          appimage="$(ls dist/releases/*.AppImage | head -n1)"
+          if [[ -z "${appimage}" ]]; then
+            echo "No se encontro ningun .AppImage en dist/releases" >&2
+            exit 1
+          fi
+          zsync="${appimage}.zsync"
+          if [[ ! -f "${zsync}" ]]; then
+            echo "No se encontro ${zsync}" >&2
+            exit 1
+          fi
           echo "path=${archive}" >> "$GITHUB_OUTPUT"
-          echo "name=$(basename "${archive}")" >> "$GITHUB_OUTPUT"
+          echo "appimage_path=${appimage}" >> "$GITHUB_OUTPUT"
+          echo "zsync_path=${zsync}" >> "$GITHUB_OUTPUT"
 
-      - name: Upload artifact
+      - name: Upload artifact (tar.gz)
         uses: actions/upload-artifact@v4
         with:
           name: CalculadoraEstadistica-Linux-x86_64
           path: ${{ steps.artifact.outputs.path }}
           if-no-files-found: error
 
-      - name: Attach asset to GitHub Release
+      - name: Upload artifact (AppImage)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CalculadoraEstadistica-Linux-x86_64-AppImage
+          path: |
+            ${{ steps.artifact.outputs.appimage_path }}
+            ${{ steps.artifact.outputs.zsync_path }}
+          if-no-files-found: error
+
+      - name: Attach assets to GitHub Release
         if: inputs.app_version != ''
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.app_version }}
-          files: ${{ steps.artifact.outputs.path }}
+          files: |
+            ${{ steps.artifact.outputs.path }}
+            ${{ steps.artifact.outputs.appimage_path }}
+            ${{ steps.artifact.outputs.zsync_path }}
           fail_on_unmatched_files: true

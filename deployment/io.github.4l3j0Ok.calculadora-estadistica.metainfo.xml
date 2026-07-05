@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.4l3j0Ok.calculadora-estadistica</id>
+  <name>Calculadora Estadística</name>
+  <summary>Calculadora de probabilidad y estadística</summary>
+  <metadata_license>MIT</metadata_license>
+  <project_license>Proprietary</project_license>
+  <description>
+    <p>
+      Aplicación de escritorio (PySide6 + QML) para calcular medidas de
+      frecuencia y dispersión estadística a partir de datos no agrupados
+      o agrupados (por valor o por intervalos).
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.4l3j0Ok.calculadora-estadistica.desktop</launchable>
+  <url type="homepage">https://github.com/4l3j0Ok/calculadora-estadistica</url>
+  <provides>
+    <binary>CalculadoraEstadistica</binary>
+  </provides>
+  <content_rating type="oars-1.1" />
+</component>

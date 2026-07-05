@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Calculadora Estadística
+GenericName=Calculadora de Probabilidad y Estadística
+Comment=Calculadora de medidas de frecuencia y dispersión estadística
+Exec=CalculadoraEstadistica
+Icon=io.github.4l3j0Ok.calculadora-estadistica
+Terminal=false
+Categories=Education;Utility;

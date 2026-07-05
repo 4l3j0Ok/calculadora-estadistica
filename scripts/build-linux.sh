@@ -108,19 +108,23 @@ if [[ ! -d "${DIST_DIR}" ]]; then
     exit 1
 fi
 
-BINARY_PATH="${DIST_DIR}/${APP_NAME}"
+EXECUTABLE_NAME="${APP_NAME}"
+BINARY_PATH="${DIST_DIR}/${EXECUTABLE_NAME}"
 if [[ ! -f "${BINARY_PATH}" ]]; then
     # Nuitka nombra el binario según --output-filename; si no se aplicó,
     # cae de vuelta al nombre del entrypoint sin extensión.
-    BINARY_PATH="${DIST_DIR}/main"
+    EXECUTABLE_NAME="main"
+    BINARY_PATH="${DIST_DIR}/${EXECUTABLE_NAME}"
 fi
 
 if [[ -f "${BINARY_PATH}" ]]; then
     echo "==> Marcando el binario principal como ejecutable: ${BINARY_PATH}"
     chmod +x "${BINARY_PATH}"
 else
-    echo "ADVERTENCIA: no se encontró el binario principal dentro de ${DIST_DIR}" >&2
+    echo "ERROR: no se encontró el binario principal dentro de ${DIST_DIR}" >&2
+    exit 1
 fi
+echo "==> Nombre del ejecutable detectado: ${EXECUTABLE_NAME}"
 
 # ── Renombrar carpeta final ───────────────────────────────────────────────
 FINAL_DIR_NAME="${APP_NAME}-${VERSION}-Linux-x86_64"
@@ -138,3 +142,259 @@ echo ""
 echo "==> Build de Linux completado."
 echo "    Carpeta standalone: ${FINAL_DIR}"
 echo "    Archivo comprimido: ${ARCHIVE_PATH}"
+
+# ═══════════════════════════════════════════════════════════════════════
+# AppImage
+#
+# A partir de acá, el pipeline es:
+#   FINAL_DIR (standalone de Nuitka, ya validado arriba)
+#   → AppDir (deployment/AppRun + .desktop + .metainfo.xml + bibliotecas
+#     XCB/XKB del sistema)
+#   → appimagetool
+#   → AppImage + AppImage.zsync
+#
+# No se usa linuxdeploy/appimage-builder/pkg2appimage ni se corre patchelf
+# sobre el standalone: el contenido de FINAL_DIR se copia tal cual.
+# ═══════════════════════════════════════════════════════════════════════
+
+NUITKA_DIST="${FINAL_DIR}"
+DEPLOYMENT_DIR="${REPO_ROOT}/deployment"
+APP_ID="io.github.4l3j0Ok.calculadora-estadistica"
+SYSTEM_LIB_DIR="/usr/lib/x86_64-linux-gnu"
+
+echo ""
+echo "==> Iniciando empaquetado en AppImage..."
+
+# ── Validar el standalone fuera del repo ─────────────────────────────────
+# Corre el ejecutable copiado a una carpeta temporal ajena al repositorio,
+# para confirmar que QML/assets están realmente embebidos en el standalone
+# (--include-data-dir en main.py) y no se están leyendo por accidente
+# desde el árbol fuente.
+echo "==> Validando el standalone de Nuitka fuera del repositorio..."
+TEMP_TEST_DIR="$(mktemp -d)"
+trap 'rm -rf "${TEMP_TEST_DIR}"' EXIT
+
+cp -a "${NUITKA_DIST}" "${TEMP_TEST_DIR}/app.dist"
+
+NUITKA_SMOKE_LOG="${OUTPUT_DIR}/nuitka-smoke.log"
+set +e
+timeout 15s \
+    xvfb-run -a \
+    "${TEMP_TEST_DIR}/app.dist/${EXECUTABLE_NAME}" \
+    >"${NUITKA_SMOKE_LOG}" 2>&1
+nuitka_smoke_status=$?
+set -e
+
+if [[ ${nuitka_smoke_status} -ne 0 && ${nuitka_smoke_status} -ne 124 ]]; then
+    echo "ERROR: el standalone de Nuitka terminó con código ${nuitka_smoke_status}." >&2
+    cat "${NUITKA_SMOKE_LOG}" >&2
+    exit 1
+fi
+
+FORBIDDEN_PATTERNS=(
+    "Could not load the Qt platform plugin"
+    "QQmlApplicationEngine failed"
+    "ModuleNotFoundError"
+    "ImportError"
+    "cannot open shared object file"
+    "No such file or directory"
+    "[Ss]egmentation fault"
+    "Aborted"
+)
+for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
+    if grep -qE "${pattern}" "${NUITKA_SMOKE_LOG}"; then
+        echo "ERROR: se encontró '${pattern}' en ${NUITKA_SMOKE_LOG}:" >&2
+        cat "${NUITKA_SMOKE_LOG}" >&2
+        exit 1
+    fi
+done
+echo "==> Standalone validado correctamente (código de salida: ${nuitka_smoke_status})."
+
+# ── Localizar libqxcb.so dentro del standalone ───────────────────────────
+LIBQXCB="$(find "${NUITKA_DIST}" -type f -name libqxcb.so -print -quit)"
+if [[ -z "${LIBQXCB}" ]]; then
+    echo "ERROR: no se encontró libqxcb.so dentro de ${NUITKA_DIST}." >&2
+    exit 1
+fi
+echo "==> libqxcb.so encontrado: ${LIBQXCB}"
+
+# ── Preparar el AppDir ────────────────────────────────────────────────────
+APPDIR="${OUTPUT_DIR}/${APP_NAME}.AppDir"
+echo "==> Preparando AppDir: ${APPDIR}"
+rm -rf "${APPDIR}"
+APP_ROOT="${APPDIR}/usr/share/calculadora-estadistica"
+mkdir -p \
+    "${APP_ROOT}" \
+    "${APPDIR}/usr/bin" \
+    "${APPDIR}/usr/lib/x86_64-linux-gnu" \
+    "${APPDIR}/usr/share/applications" \
+    "${APPDIR}/usr/share/icons/hicolor/256x256/apps" \
+    "${APPDIR}/usr/share/metainfo"
+
+# Copia íntegra del standalone de Nuitka: no se reorganiza ni se mueven
+# archivos individualmente (.so, plugins Qt, .pyc, recursos de Nuitka
+# quedan tal como los dejó Nuitka, junto al ejecutable).
+cp -a "${NUITKA_DIST}/." "${APP_ROOT}/"
+
+# ── Enlace del ejecutable en usr/bin ──────────────────────────────────────
+ln -rs "${APP_ROOT}/${EXECUTABLE_NAME}" "${APPDIR}/usr/bin/${EXECUTABLE_NAME}"
+
+# ── AppRun ────────────────────────────────────────────────────────────────
+install -m 0755 "${DEPLOYMENT_DIR}/AppRun" "${APPDIR}/AppRun"
+
+# ── Bibliotecas XCB/XKB del sistema ───────────────────────────────────────
+# Solo se copian estas bibliotecas (y opcionalmente libX11-xcb/libXau/
+# libXdmcp). Qt, Python, PySide6 y Shiboken siguen viniendo del standalone
+# de Nuitka; no se tocan libc/libstdc++/libGL/libwayland/etc. del sistema.
+echo "==> Copiando bibliotecas XCB/XKB del sistema (${SYSTEM_LIB_DIR})..."
+APP_LIB_DIR="${APPDIR}/usr/lib/x86_64-linux-gnu"
+shopt -s nullglob
+
+xcb_libs=("${SYSTEM_LIB_DIR}"/libxcb-*.so*)
+xkb_libs=(
+    "${SYSTEM_LIB_DIR}"/libxkbcommon.so*
+    "${SYSTEM_LIB_DIR}"/libxkbcommon-x11.so*
+)
+
+if (( ${#xcb_libs[@]} == 0 )); then
+    echo "ERROR: no se encontraron libxcb-*.so* en ${SYSTEM_LIB_DIR}." >&2
+    exit 1
+fi
+if (( ${#xkb_libs[@]} == 0 )); then
+    echo "ERROR: no se encontraron bibliotecas libxkbcommon en ${SYSTEM_LIB_DIR}." >&2
+    exit 1
+fi
+
+cp -aL "${xcb_libs[@]}" "${APP_LIB_DIR}/"
+cp -aL "${xkb_libs[@]}" "${APP_LIB_DIR}/"
+
+optional_libs=(
+    "${SYSTEM_LIB_DIR}"/libX11-xcb.so*
+    "${SYSTEM_LIB_DIR}"/libXau.so*
+    "${SYSTEM_LIB_DIR}"/libXdmcp.so*
+)
+if (( ${#optional_libs[@]} > 0 )); then
+    cp -aL "${optional_libs[@]}" "${APP_LIB_DIR}/"
+fi
+shopt -u nullglob
+
+# ── Validar libqxcb.so con las bibliotecas copiadas ───────────────────────
+LIBQXCB_LDD_LOG="${OUTPUT_DIR}/libqxcb-ldd.log"
+LD_LIBRARY_PATH="${APP_LIB_DIR}:${NUITKA_DIST}" \
+    ldd "${LIBQXCB}" >"${LIBQXCB_LDD_LOG}"
+if grep -q "not found" "${LIBQXCB_LDD_LOG}"; then
+    echo "ERROR: libqxcb.so tiene dependencias sin resolver:" >&2
+    cat "${LIBQXCB_LDD_LOG}" >&2
+    exit 1
+fi
+echo "==> libqxcb.so resuelve correctamente todas sus dependencias."
+
+# ── Integración de escritorio (.desktop, metainfo, ícono) ─────────────────
+install -m 0644 \
+    "${DEPLOYMENT_DIR}/${APP_ID}.desktop" \
+    "${APPDIR}/usr/share/applications/${APP_ID}.desktop"
+install -m 0644 \
+    "${DEPLOYMENT_DIR}/${APP_ID}.metainfo.xml" \
+    "${APPDIR}/usr/share/metainfo/${APP_ID}.metainfo.xml"
+install -m 0644 \
+    "${REPO_ROOT}/assets/calculator.png" \
+    "${APPDIR}/usr/share/icons/hicolor/256x256/apps/${APP_ID}.png"
+
+ln -sf \
+    "usr/share/applications/${APP_ID}.desktop" \
+    "${APPDIR}/${APP_ID}.desktop"
+ln -sf \
+    "usr/share/icons/hicolor/256x256/apps/${APP_ID}.png" \
+    "${APPDIR}/${APP_ID}.png"
+cp "${REPO_ROOT}/assets/calculator.png" "${APPDIR}/.DirIcon"
+
+echo "==> AppDir preparado."
+
+# ── Descargar y verificar appimagetool ────────────────────────────────────
+APPIMAGETOOL_VERSION="1.9.1"
+APPIMAGETOOL_URL="https://github.com/AppImage/appimagetool/releases/download/${APPIMAGETOOL_VERSION}/appimagetool-x86_64.AppImage"
+APPIMAGETOOL_SHA256="ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0"
+APPIMAGETOOL="${OUTPUT_DIR}/.build-tools/appimagetool-x86_64.AppImage"
+
+mkdir -p "$(dirname "${APPIMAGETOOL}")"
+if [[ ! -f "${APPIMAGETOOL}" ]]; then
+    echo "==> Descargando appimagetool ${APPIMAGETOOL_VERSION}..."
+    curl -sL -o "${APPIMAGETOOL}" "${APPIMAGETOOL_URL}"
+fi
+
+echo "==> Verificando SHA-256 de appimagetool..."
+echo "${APPIMAGETOOL_SHA256}  ${APPIMAGETOOL}" | sha256sum -c -
+chmod +x "${APPIMAGETOOL}"
+
+# ── Construir el AppImage ─────────────────────────────────────────────────
+mkdir -p "${RELEASES_DIR}"
+APPIMAGE_NAME="${APP_NAME}-${VERSION}-x86_64.AppImage"
+APPIMAGE_PATH="${RELEASES_DIR}/${APPIMAGE_NAME}"
+UPDATE_INFO='gh-releases-zsync|4l3j0Ok|calculadora-estadistica|latest|CalculadoraEstadistica-*-x86_64.AppImage.zsync'
+
+rm -f "${APPIMAGE_PATH}" "${APPIMAGE_PATH}.zsync"
+
+echo "==> Ejecutando appimagetool..."
+export APPIMAGE_EXTRACT_AND_RUN=1
+export ARCH=x86_64
+export VERSION
+
+"${APPIMAGETOOL}" \
+    -u "${UPDATE_INFO}" \
+    "${APPDIR}" \
+    "${APPIMAGE_PATH}"
+
+if [[ ! -f "${APPIMAGE_PATH}" ]]; then
+    echo "ERROR: appimagetool no generó ${APPIMAGE_PATH}." >&2
+    exit 1
+fi
+if [[ ! -f "${APPIMAGE_PATH}.zsync" ]]; then
+    echo "ERROR: appimagetool no generó ${APPIMAGE_PATH}.zsync." >&2
+    exit 1
+fi
+chmod +x "${APPIMAGE_PATH}"
+echo "==> AppImage generado: ${APPIMAGE_PATH}"
+echo "==> zsync generado: ${APPIMAGE_PATH}.zsync"
+
+# ── Smoke test del AppImage ────────────────────────────────────────────────
+echo "==> Ejecutando smoke test del AppImage..."
+APPIMAGE_SMOKE_LOG="${OUTPUT_DIR}/appimage-smoke.log"
+set +e
+timeout 15s env \
+    APPIMAGE_EXTRACT_AND_RUN=1 \
+    xvfb-run -a \
+    "${APPIMAGE_PATH}" \
+    >"${APPIMAGE_SMOKE_LOG}" 2>&1
+appimage_smoke_status=$?
+set -e
+
+if [[ ${appimage_smoke_status} -ne 0 && ${appimage_smoke_status} -ne 124 ]]; then
+    echo "ERROR: el AppImage terminó con código ${appimage_smoke_status}." >&2
+    cat "${APPIMAGE_SMOKE_LOG}" >&2
+    exit 1
+fi
+for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
+    if grep -qE "${pattern}" "${APPIMAGE_SMOKE_LOG}"; then
+        echo "ERROR: se encontró '${pattern}' en ${APPIMAGE_SMOKE_LOG}:" >&2
+        cat "${APPIMAGE_SMOKE_LOG}" >&2
+        exit 1
+    fi
+done
+echo "==> Smoke test del AppImage OK (código de salida: ${appimage_smoke_status})."
+
+# ── Verificar la update information embebida ──────────────────────────────
+echo "==> Verificando --appimage-updateinfo..."
+ACTUAL_UPDATE_INFO="$(APPIMAGE_EXTRACT_AND_RUN=1 "${APPIMAGE_PATH}" --appimage-updateinfo)"
+if [[ "${ACTUAL_UPDATE_INFO}" != "${UPDATE_INFO}" ]]; then
+    echo "ERROR: update information inesperada." >&2
+    echo "  esperado: ${UPDATE_INFO}" >&2
+    echo "  obtenido: ${ACTUAL_UPDATE_INFO}" >&2
+    exit 1
+fi
+echo "==> Update information OK: ${ACTUAL_UPDATE_INFO}"
+
+echo ""
+echo "==> Empaquetado en AppImage completado."
+echo "    AppDir:   ${APPDIR}"
+echo "    AppImage: ${APPIMAGE_PATH}"
+echo "    zsync:    ${APPIMAGE_PATH}.zsync"

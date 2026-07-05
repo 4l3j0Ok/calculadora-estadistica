@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# AppRun del AppImage de Calculadora Estadística.
+#
+# Arranca el ejecutable standalone generado por Nuitka (copiado intacto en
+# usr/share/calculadora-estadistica/), exponiendo únicamente las
+# bibliotecas XCB/XKB adicionales que agrega el AppImage. El resto de las
+# bibliotecas (Qt, Python, PySide6, Shiboken) ya viven junto al ejecutable
+# porque provienen del build standalone y no deben tocarse.
+#
+# No fuerza QT_QPA_PLATFORM: se deja que Qt seleccione automáticamente el
+# backend (X11/xcb, Wayland, etc.) según el entorno de la sesión.
+
+set -euo pipefail
+
+SELF="$(readlink -f "${BASH_SOURCE[0]}")"
+APPDIR="${SELF%/*}"
+APP_ROOT="${APPDIR}/usr/share/calculadora-estadistica"
+
+export LD_LIBRARY_PATH="${APPDIR}/usr/lib/x86_64-linux-gnu:${APP_ROOT}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+
+cd "${APP_ROOT}"
+
+exec "${APP_ROOT}/CalculadoraEstadistica" "$@"

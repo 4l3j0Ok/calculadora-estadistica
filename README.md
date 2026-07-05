@@ -79,14 +79,24 @@ Genera:
 
 - Carpeta standalone: `dist/linux/CalculadoraEstadistica-<version>-Linux-x86_64/`
 - Archivo listo para distribuir: `dist/releases/CalculadoraEstadistica-<version>-Linux-x86_64.tar.gz`
+- AppImage listo para distribuir: `dist/releases/CalculadoraEstadistica-<version>-x86_64.AppImage`
+  (+ `.AppImage.zsync` para actualizaciones incrementales)
+
+El AppImage se arma a partir del mismo standalone de Nuitka (sin
+`linuxdeploy`/`appimage-builder`): copia el `.dist` completo a un `AppDir`
+(ver `deployment/AppRun`, `deployment/*.desktop`, `deployment/*.metainfo.xml`),
+le agrega únicamente las bibliotecas XCB/XKB del sistema que Qt necesita
+para el plugin `xcb`, y usa `appimagetool` para generar el `.AppImage`.
+Requiere `xvfb-run` (paquete `xvfb`) para los smoke tests que corre el
+propio script.
 
 ### Ubicación de los artefactos
 
 ```text
 dist/
 ├── windows/    # salida cruda de Nuitka + carpeta final renombrada (Windows)
-├── linux/      # salida cruda de Nuitka + carpeta final renombrada (Linux)
-└── releases/   # .zip / .tar.gz listos para distribuir/adjuntar a un Release
+├── linux/      # salida cruda de Nuitka + AppDir (Linux)
+└── releases/   # .zip / .tar.gz / .AppImage(.zsync) listos para distribuir
 ```
 
 `dist/` no se versiona (ver `.gitignore`).
