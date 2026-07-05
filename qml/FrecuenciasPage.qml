@@ -261,12 +261,11 @@ Item {
                             border.color: Theme.accent
                             border.width: 1
                         }
-                        contentItem: Text {
-                            text: "Copiar"
-                            color: Theme.accent
-                            font.pixelSize: 11
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        contentItem: IconLabel {
+                            iconSource: "qrc:/assets/markdown.svg"
+                            label: "Copiar"
+                            tintColor: Theme.accent
+                            fontPixelSize: 11
                         }
                     }
 
@@ -281,12 +280,11 @@ Item {
                             border.color: Theme.accent
                             border.width: 1
                         }
-                        contentItem: Text {
-                            text: "Pegar"
-                            color: Theme.accent
-                            font.pixelSize: 11
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        contentItem: IconLabel {
+                            iconSource: "qrc:/assets/paste.svg"
+                            label: "Pegar"
+                            tintColor: Theme.accent
+                            fontPixelSize: 11
                         }
                     }
 
@@ -304,12 +302,11 @@ Item {
                             border.color: Theme.accent
                             border.width: 1
                         }
-                        contentItem: Text {
-                            text: "Historial"
-                            color: Theme.accent
-                            font.pixelSize: 11
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        contentItem: IconLabel {
+                            iconSource: "qrc:/assets/history.svg"
+                            label: "Historial"
+                            tintColor: Theme.accent
+                            fontPixelSize: 11
                         }
                     }
                 }
@@ -944,12 +941,11 @@ Item {
                             border.color: Theme.accent
                             border.width: 1
                         }
-                        contentItem: Text {
-                            text: "Copiar tabla"
-                            color: Theme.accent
-                            font.pixelSize: 11
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        contentItem: IconLabel {
+                            iconSource: "qrc:/assets/markdown.svg"
+                            label: "Copiar tabla"
+                            tintColor: Theme.accent
+                            fontPixelSize: 11
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 import "components"
 
 ApplicationWindow {
@@ -73,23 +74,45 @@ ApplicationWindow {
                             onTapped: root.sidebarExpanded = !root.sidebarExpanded
                         }
 
-                        RowLayout {
-                            anchors.fill: parent
+                        Row {
+                            anchors.left: parent.left
+                            anchors.top: parent.top
+                            anchors.bottom: parent.bottom
                             anchors.leftMargin: 13
-                            anchors.rightMargin: 8
                             spacing: 8
 
-                            Text {
-                                text: root.sidebarExpanded ? "◀" : "▶"
-                                color: Theme.muted_text
-                                font.pixelSize: 12
+                            Item {
+                                width: 20
+                                height: 16
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Image {
+                                    id: sidebarToggleIcon
+                                    anchors.centerIn: parent
+                                    width: 16
+                                    height: 16
+                                    source: root.sidebarExpanded ? "qrc:/assets/close-sidebar.svg" : "qrc:/assets/open-sidebar.svg"
+                                    sourceSize: Qt.size(16, 16)
+                                    fillMode: Image.PreserveAspectFit
+                                    visible: false
+                                }
+
+                                MultiEffect {
+                                    anchors.fill: sidebarToggleIcon
+                                    source: sidebarToggleIcon
+                                    colorization: 1.0
+                                    colorizationColor: Theme.muted_text
+                                    brightness: 1.0
+                                }
                             }
                             Text {
                                 text: "Menú"
                                 color: Theme.muted_text
                                 font.pixelSize: 12
                                 visible: root.sidebarExpanded
-                                Layout.fillWidth: true
+                                height: 16
+                                verticalAlignment: Text.AlignVCenter
+                                anchors.verticalCenter: parent.verticalCenter
                             }
                         }
                     }
@@ -101,7 +124,7 @@ ApplicationWindow {
                     }
 
                     NavItem {
-                        icon: "f(x)"
+                        iconSource: "qrc:/assets/chart-historgram.svg"
                         label: "Frecuencias"
                         active: root.currentPage === 0
                         expanded: root.sidebarExpanded
@@ -109,7 +132,7 @@ ApplicationWindow {
                     }
 
                     NavItem {
-                        icon: "σ"
+                        iconSource: "qrc:/assets/chart-scatter.svg"
                         label: "Dispersión"
                         active: root.currentPage === 1
                         expanded: root.sidebarExpanded
@@ -127,7 +150,7 @@ ApplicationWindow {
                     }
 
                     NavItem {
-                        icon: "ⓘ"
+                        iconSource: "qrc:/assets/info.svg"
                         label: "Acerca de"
                         active: root.currentPage === 2
                         expanded: root.sidebarExpanded
@@ -149,11 +172,13 @@ ApplicationWindow {
                 Layout.fillHeight: true
 
                 FrecuenciasPage {
+                    id: frecuenciasPage
                     anchors.fill: parent
                     visible: root.currentPage === 0
                 }
 
                 DispersionPage {
+                    id: dispersionPage
                     anchors.fill: parent
                     visible: root.currentPage === 1
                 }
@@ -170,7 +195,7 @@ ApplicationWindow {
     component NavItem: Rectangle {
         id: navItem
 
-        property string icon: ""
+        property string iconSource: ""
         property string label: ""
         property bool active: false
         property bool expanded: true
@@ -204,19 +229,40 @@ ApplicationWindow {
             onTapped: navItem.activated()
         }
 
-        RowLayout {
-            anchors.fill: parent
+        Row {
+            id: navRow
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             anchors.leftMargin: 13
             anchors.rightMargin: 8
             spacing: 10
 
-            Text {
-                text: navItem.icon
-                color: navItem.active ? Theme.accent : Theme.muted_text
-                font.pixelSize: 14
-                font.bold: navItem.active
-                Layout.minimumWidth: 20
-                horizontalAlignment: Text.AlignHCenter
+            Item {
+                id: navIconWrap
+                width: 20
+                height: 16
+                anchors.verticalCenter: parent.verticalCenter
+
+                Image {
+                    id: navIconImg
+                    anchors.centerIn: parent
+                    width: 16
+                    height: 16
+                    source: navItem.iconSource
+                    sourceSize: Qt.size(16, 16)
+                    fillMode: Image.PreserveAspectFit
+                    visible: false
+                }
+
+                MultiEffect {
+                    anchors.fill: navIconImg
+                    source: navIconImg
+                    colorization: 1.0
+                    colorizationColor: navItem.active ? Theme.accent : Theme.muted_text
+                    brightness: 1.0
+                }
             }
 
             Text {
@@ -225,7 +271,10 @@ ApplicationWindow {
                 font.pixelSize: 13
                 font.bold: navItem.active
                 visible: navItem.expanded
-                Layout.fillWidth: true
+                width: navRow.width - navIconWrap.width - navRow.spacing
+                height: navIconWrap.height
+                verticalAlignment: Text.AlignVCenter
+                anchors.verticalCenter: parent.verticalCenter
                 elide: Text.ElideRight
             }
         }

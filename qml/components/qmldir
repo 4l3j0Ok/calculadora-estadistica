@@ -1,5 +1,6 @@
 module components
 singleton Theme 1.0 Theme.qml
+IconLabel 1.0 IconLabel.qml
 Input 1.0 Input.qml
 NavBar 1.0 NavBar.qml
 Table 1.0 Table.qml
