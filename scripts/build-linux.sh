@@ -393,14 +393,21 @@ done
 echo "==> Smoke test del AppImage OK (código de salida: ${appimage_smoke_status})."
 
 # ── Verificar la update information embebida ──────────────────────────────
-# Nota: --appimage-updateinfo lo resuelve el runtime del AppImage sin
-# necesidad de FUSE ni de montar/extraer nada. No debe usarse
-# APPIMAGE_EXTRACT_AND_RUN=1 acá: ese flag hace que el runtime salte el
-# manejo de argumentos especiales y termine ejecutando AppRun con
-# "--appimage-updateinfo" como argumento de la aplicación (que no lo
-# entiende y falla).
+# Nota: NO se invoca "${APPIMAGE_PATH} --appimage-updateinfo". Ese flag
+# solo lo intercepta el runtime cuando puede montar el AppImage con FUSE
+# (sin APPIMAGE_EXTRACT_AND_RUN); en runners sin FUSE (p. ej. GitHub
+# Actions) el mount falla, el runtime cae automáticamente al modo
+# "extraer y ejecutar" y ahí ya no reintercepta argumentos especiales:
+# termina ejecutando AppRun con "--appimage-updateinfo" como argumento
+# de la aplicación, que falla (Qt platform plugin, exit 127).
+#
+# La update information vive embebida en una sección ELF ".upd_info"
+# del propio AppImage, así que se lee directo con objcopy, sin ejecutar
+# nada.
 echo "==> Verificando --appimage-updateinfo..."
-ACTUAL_UPDATE_INFO="$("${APPIMAGE_PATH}" --appimage-updateinfo)"
+UPDATE_INFO_BIN="${OUTPUT_DIR}/appimage-updateinfo.bin"
+objcopy -O binary --only-section=.upd_info "${APPIMAGE_PATH}" "${UPDATE_INFO_BIN}"
+ACTUAL_UPDATE_INFO="$(tr -d '\0' <"${UPDATE_INFO_BIN}")"
 if [[ "${ACTUAL_UPDATE_INFO}" != "${UPDATE_INFO}" ]]; then
     echo "ERROR: update information inesperada." >&2
     echo "  esperado: ${UPDATE_INFO}" >&2
