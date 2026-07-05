@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.3.0...1.4.0) (2026-07-05)
+
+
+### Features
+
+* **ui:** tarjetas de resumen en Frecuencias y headers interactivos en tablas ([b1a7d28](https://github.com/4l3j0Ok/calculadora-estadistica/commit/b1a7d282cf7f7f46652e3e0d515a3ace18cdafd0))
+
 # [1.3.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.2.0...1.3.0) (2026-07-05)
 
 
