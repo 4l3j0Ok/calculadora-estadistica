@@ -2,16 +2,24 @@
 
 Usa sqlite3 (stdlib) directamente, sin ORM, siguiendo el estilo del resto
 del proyecto (funciones simples, sin capas de abstracción innecesarias).
+
+La base vive en el directorio de datos del usuario (XDG en Linux,
+`LOCALAPPDATA` en Windows; ver `services/runtime_paths.py`), nunca junto al
+ejecutable/directorio de instalación: en un AppImage ese filesystem está
+montado de solo lectura y `sqlite3.connect()` falla con
+`OperationalError: unable to open database file`.
 """
 
+import logging
+import shutil
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
 from schemas.history import HistoryEntry, HistoryModule
-from services.runtime_paths import app_base_dir
+from services.runtime_paths import get_history_db_path, legacy_history_db_path
 
-DB_PATH = Path(app_base_dir()) / "history.db"
+logger = logging.getLogger(__name__)
 
 _CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS history (
@@ -26,8 +34,44 @@ CREATE TABLE IF NOT EXISTS history (
 """
 
 
+def _migrate_legacy_db_if_needed(db_path: Path) -> None:
+    """Copia (no mueve) una base heredada de versiones anteriores, que
+    guardaban `history.db` junto al ejecutable/fuente (`app_base_dir()`).
+
+    Solo migra si: la base nueva todavía no existe, la base heredada sí
+    existe, y son rutas distintas. Nunca sobrescribe la base nueva.
+    """
+    if db_path.exists():
+        return
+
+    legacy_path = legacy_history_db_path()
+    if legacy_path == db_path or not legacy_path.is_file():
+        return
+
+    logger.info(
+        "Migrando historial heredado de %s a %s", legacy_path, db_path
+    )
+    shutil.copy2(legacy_path, db_path)
+
+
 def _connect() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
+    db_path = get_history_db_path()
+    try:
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise RuntimeError(
+            f"No se pudo crear el directorio de la base de historial: {db_path.parent}"
+        ) from exc
+
+    _migrate_legacy_db_if_needed(db_path)
+
+    try:
+        conn = sqlite3.connect(str(db_path))
+    except sqlite3.OperationalError as exc:
+        raise RuntimeError(
+            f"No se pudo abrir la base de historial en: {db_path}"
+        ) from exc
+
     conn.row_factory = sqlite3.Row
     return conn
 

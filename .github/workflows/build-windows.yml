@@ -40,6 +40,9 @@ jobs:
       - name: Install project dependencies (incl. dev group)
         run: uv sync --group dev
 
+      - name: Run unit/integration tests
+        run: uv run pytest
+
       - name: Run build script
         shell: pwsh
         env:

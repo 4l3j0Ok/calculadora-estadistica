@@ -170,15 +170,25 @@ echo "==> Iniciando empaquetado en AppImage..."
 # para confirmar que QML/assets están realmente embebidos en el standalone
 # (--include-data-dir en main.py) y no se están leyendo por accidente
 # desde el árbol fuente.
+#
+# Se aísla también el directorio de datos del usuario (XDG_DATA_HOME) en
+# una carpeta temporal propia, para que el smoke test no toque
+# ~/.local/share/calculadora-estadistica/history.db (u otra ruta real del
+# runner), y para poder validar más abajo que la app efectivamente crea
+# la base ahí (y no junto al ejecutable/AppImage montado).
 echo "==> Validando el standalone de Nuitka fuera del repositorio..."
 TEMP_TEST_DIR="$(mktemp -d)"
 trap 'rm -rf "${TEMP_TEST_DIR}"' EXIT
 
 cp -a "${NUITKA_DIST}" "${TEMP_TEST_DIR}/app.dist"
 
+NUITKA_TEST_DATA_DIR="${TEMP_TEST_DIR}/xdg-data"
+mkdir -p "${NUITKA_TEST_DATA_DIR}"
+
 NUITKA_SMOKE_LOG="${OUTPUT_DIR}/nuitka-smoke.log"
 set +e
-timeout 15s \
+timeout 15s env \
+    XDG_DATA_HOME="${NUITKA_TEST_DATA_DIR}" \
     xvfb-run -a \
     "${TEMP_TEST_DIR}/app.dist/${EXECUTABLE_NAME}" \
     >"${NUITKA_SMOKE_LOG}" 2>&1
@@ -198,6 +208,9 @@ FORBIDDEN_PATTERNS=(
     "ImportError"
     "cannot open shared object file"
     "No such file or directory"
+    "sqlite3\.OperationalError"
+    "unable to open database file"
+    "Traceback \(most recent call last\)"
     "[Ss]egmentation fault"
     "Aborted"
 )
@@ -209,6 +222,18 @@ for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
     fi
 done
 echo "==> Standalone validado correctamente (código de salida: ${nuitka_smoke_status})."
+
+# ── Validar que la base SQLite se creó en el directorio XDG temporal ─────
+# Si el nombre real del archivo cambia, ajustar HISTORY_DB_FILENAME acá y
+# en services/runtime_paths.py.
+HISTORY_DB_FILENAME="history.db"
+NUITKA_EXPECTED_DB="${NUITKA_TEST_DATA_DIR}/calculadora-estadistica/${HISTORY_DB_FILENAME}"
+if [[ ! -f "${NUITKA_EXPECTED_DB}" ]]; then
+    echo "ERROR: el standalone no creó la base de historial en ${NUITKA_EXPECTED_DB}." >&2
+    cat "${NUITKA_SMOKE_LOG}" >&2
+    exit 1
+fi
+echo "==> Base de historial creada correctamente en ${NUITKA_EXPECTED_DB}."
 
 # ── Localizar libqxcb.so dentro del standalone ───────────────────────────
 LIBQXCB="$(find "${NUITKA_DIST}" -type f -name libqxcb.so -print -quit)"
@@ -367,11 +392,20 @@ echo "==> AppImage generado: ${APPIMAGE_PATH}"
 echo "==> zsync generado: ${APPIMAGE_PATH}.zsync"
 
 # ── Smoke test del AppImage ────────────────────────────────────────────────
+# Igual que con el standalone: se aísla XDG_DATA_HOME en un directorio
+# temporal propio (distinto del usado para el standalone), para no tocar
+# datos reales del runner y para poder verificar que la app no intenta
+# escribir la base dentro de /tmp/.mount_*/usr/share/calculadora-estadistica
+# (el AppImage montado, de solo lectura).
 echo "==> Ejecutando smoke test del AppImage..."
+APPIMAGE_TEST_DATA_DIR="$(mktemp -d)"
+mkdir -p "${APPIMAGE_TEST_DATA_DIR}"
+
 APPIMAGE_SMOKE_LOG="${OUTPUT_DIR}/appimage-smoke.log"
 set +e
 timeout 15s env \
     APPIMAGE_EXTRACT_AND_RUN=1 \
+    XDG_DATA_HOME="${APPIMAGE_TEST_DATA_DIR}" \
     xvfb-run -a \
     "${APPIMAGE_PATH}" \
     >"${APPIMAGE_SMOKE_LOG}" 2>&1
@@ -381,16 +415,32 @@ set -e
 if [[ ${appimage_smoke_status} -ne 0 && ${appimage_smoke_status} -ne 124 ]]; then
     echo "ERROR: el AppImage terminó con código ${appimage_smoke_status}." >&2
     cat "${APPIMAGE_SMOKE_LOG}" >&2
+    rm -rf "${APPIMAGE_TEST_DATA_DIR}"
     exit 1
 fi
 for pattern in "${FORBIDDEN_PATTERNS[@]}"; do
     if grep -qE "${pattern}" "${APPIMAGE_SMOKE_LOG}"; then
         echo "ERROR: se encontró '${pattern}' en ${APPIMAGE_SMOKE_LOG}:" >&2
         cat "${APPIMAGE_SMOKE_LOG}" >&2
+        rm -rf "${APPIMAGE_TEST_DATA_DIR}"
         exit 1
     fi
 done
 echo "==> Smoke test del AppImage OK (código de salida: ${appimage_smoke_status})."
+
+# ── Validar que la base SQLite se creó en el directorio XDG temporal ─────
+# Confirma que la app escribió en XDG_DATA_HOME y no en el filesystem de
+# solo lectura montado por el AppImage
+# (/tmp/.mount_*/usr/share/calculadora-estadistica/).
+APPIMAGE_EXPECTED_DB="${APPIMAGE_TEST_DATA_DIR}/calculadora-estadistica/${HISTORY_DB_FILENAME}"
+if [[ ! -f "${APPIMAGE_EXPECTED_DB}" ]]; then
+    echo "ERROR: el AppImage no creó la base de historial en ${APPIMAGE_EXPECTED_DB}." >&2
+    cat "${APPIMAGE_SMOKE_LOG}" >&2
+    rm -rf "${APPIMAGE_TEST_DATA_DIR}"
+    exit 1
+fi
+echo "==> Base de historial creada correctamente en ${APPIMAGE_EXPECTED_DB}."
+rm -rf "${APPIMAGE_TEST_DATA_DIR}"
 
 # ── Verificar la update information embebida ──────────────────────────────
 # Nota: NO se invoca "${APPIMAGE_PATH} --appimage-updateinfo". Ese flag

@@ -41,6 +41,32 @@ uv run python main.py
 python main.py
 ```
 
+## Datos del usuario (historial)
+
+El historial de operaciones se guarda en SQLite (`services/history_service.py`),
+en el directorio de datos del usuario, **nunca** junto al ejecutable ni al
+proyecto (ver `services/runtime_paths.py`):
+
+- Linux/macOS: `${XDG_DATA_HOME:-~/.local/share}/calculadora-estadistica/history.db`
+- Windows: `%LOCALAPPDATA%\calculadora-estadistica\history.db`
+
+Esto es necesario porque en el AppImage (y en general en cualquier
+instalación de solo lectura) el directorio del ejecutable no es escribible.
+Si existe una base heredada de una versión anterior (junto al
+ejecutable/proyecto), se migra automáticamente por copia la primera vez que
+corre la app, sin sobrescribir una base nueva que ya exista.
+
+## Tests
+
+```bash
+uv run pytest
+```
+
+Cubre `services/runtime_paths.py` (resolución de rutas XDG/`LOCALAPPDATA`,
+con `monkeypatch`/`tmp_path`, sin tocar el `HOME` real) y un test de
+integración de `services/history_service.py` que confirma que la base se
+crea en el directorio XDG temporal y no junto al proyecto/ejecutable.
+
 ## Build de distribución (Nuitka)
 
 El proyecto se empaqueta como ejecutable **standalone** (no `onefile`) con
