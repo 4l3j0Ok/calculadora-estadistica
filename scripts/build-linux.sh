@@ -339,10 +339,20 @@ export APPIMAGE_EXTRACT_AND_RUN=1
 export ARCH=x86_64
 export VERSION
 
-"${APPIMAGETOOL}" \
-    -u "${UPDATE_INFO}" \
-    "${APPDIR}" \
-    "${APPIMAGE_PATH}"
+APPIMAGETOOL_ABS="$(cd "$(dirname "${APPIMAGETOOL}")" && pwd)/$(basename "${APPIMAGETOOL}")"
+APPDIR_ABS="$(cd "${APPDIR}" && pwd)"
+APPIMAGE_PATH_ABS="${REPO_ROOT}/${APPIMAGE_PATH}"
+
+# appimagetool (vía zsyncmake) escribe el .zsync en el directorio de
+# trabajo actual, no junto al AppImage generado; por eso se ejecuta con
+# cwd = RELEASES_DIR para que ambos archivos queden en el mismo lugar.
+(
+    cd "${RELEASES_DIR}"
+    "${APPIMAGETOOL_ABS}" \
+        -u "${UPDATE_INFO}" \
+        "${APPDIR_ABS}" \
+        "${APPIMAGE_PATH_ABS}"
+)
 
 if [[ ! -f "${APPIMAGE_PATH}" ]]; then
     echo "ERROR: appimagetool no generó ${APPIMAGE_PATH}." >&2
