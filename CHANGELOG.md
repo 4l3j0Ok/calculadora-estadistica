@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.2.0...1.3.0) (2026-07-05)
+
+
+### Features
+
+* add tooltips and interactive header for short description ([efe86af](https://github.com/4l3j0Ok/calculadora-estadistica/commit/efe86af41c79ea972baa8c4e67613d8612457977))
+
 # [1.2.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.5...1.2.0) (2026-07-05)
 
 
