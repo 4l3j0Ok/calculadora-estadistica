@@ -119,6 +119,20 @@ ApplicationWindow {
                     Item {
                         Layout.fillHeight: true
                     }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height: 1
+                        color: Theme.divider
+                    }
+
+                    NavItem {
+                        icon: "ⓘ"
+                        label: "Acerca de"
+                        active: root.currentPage === 2
+                        expanded: root.sidebarExpanded
+                        onActivated: root.currentPage = 2
+                    }
                 }
             }
 
@@ -142,6 +156,11 @@ ApplicationWindow {
                 DispersionPage {
                     anchors.fill: parent
                     visible: root.currentPage === 1
+                }
+
+                AcercaPage {
+                    anchors.fill: parent
+                    visible: root.currentPage === 2
                 }
             }
         }

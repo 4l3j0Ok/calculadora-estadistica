@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>assets/calculator.png</file>
+        <file>assets/github.svg</file>
+        <file>assets/linkedin.svg</file>
+        <file>assets/mail.svg</file>
     </qresource>
 </RCC>

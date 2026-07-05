@@ -16,10 +16,13 @@ from __future__ import annotations
 
 import os
 import sys
+import tomllib
 from pathlib import Path
 
 APP_DATA_DIR_NAME = "calculadora-estadistica"
 HISTORY_DB_FILENAME = "history.db"
+PYPROJECT_FILENAME = "pyproject.toml"
+FALLBACK_VERSION = "0.0.0-dev"
 
 
 def app_base_dir() -> str:
@@ -39,6 +42,24 @@ def app_base_dir() -> str:
     if is_compiled:
         return os.path.dirname(os.path.abspath(sys.argv[0]))
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def app_version() -> str:
+    """Versión de la app, leída del `[project].version` de `pyproject.toml`.
+
+    El archivo se busca junto a `app_base_dir()`: en desarrollo es la raíz
+    del repo; en un build de Nuitka, debe embeberse explícitamente (ver
+    `--include-data-files=pyproject.toml=pyproject.toml` en `main.py`) para
+    que exista junto al ejecutable. Si no se encuentra o no se puede leer
+    el campo `version`, se devuelve `FALLBACK_VERSION` (nunca lanza).
+    """
+    pyproject_path = Path(app_base_dir()) / PYPROJECT_FILENAME
+    try:
+        with pyproject_path.open("rb") as f:
+            data = tomllib.load(f)
+        return data["project"]["version"]
+    except (OSError, tomllib.TOMLDecodeError, KeyError, TypeError):
+        return FALLBACK_VERSION
 
 
 def get_user_data_dir() -> Path:

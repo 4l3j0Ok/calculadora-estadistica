@@ -7,6 +7,7 @@
 # nuitka-project: --assume-yes-for-downloads
 # nuitka-project: --remove-output
 # nuitka-project: --include-data-dir=qml=qml
+# nuitka-project: --include-data-files=pyproject.toml=pyproject.toml
 # nuitka-project: --report=nuitka-report.xml
 #
 # Incluye los m√≥dulos QML runtime de Qt (QtQuick, QtQuick.Controls,
@@ -37,7 +38,7 @@ import resources_rc  # noqa: F401  (registra los recursos embebidos, p. ej. el √
 from controllers.CalculadoraController import CalculadoraController
 from controllers.DispersionController import DispersionController
 from controllers.HistoryController import HistoryController
-from services.runtime_paths import app_base_dir
+from services.runtime_paths import app_base_dir, app_version
 
 
 def main():
@@ -60,6 +61,7 @@ def main():
     engine.rootContext().setContextProperty(
         "historyController", history_controller
     )
+    engine.rootContext().setContextProperty("appVersion", app_version())
 
     # Mantener referencias para evitar garbage collection
     app._calculadora_controller = calculadora_controller
