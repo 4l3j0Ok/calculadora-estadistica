@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.5...1.2.0) (2026-07-05)
+
+
+### Bug Fixes
+
+* **build:** resolver versión de release aunque el tag no tenga prefijo v ([0369a26](https://github.com/4l3j0Ok/calculadora-estadistica/commit/0369a26b03e5b0e79deca4b1585f82f131bc276f))
+* **ui:** corregir ancho de columnas en filas de tablas de entrada ([0d0fffa](https://github.com/4l3j0Ok/calculadora-estadistica/commit/0d0fffa6a3284b815e469956d9e956b8c262bb1b))
+
+
+### Features
+
+* **ui:** agregar sección Acerca de con enlaces a GitHub, LinkedIn y mail ([9800f36](https://github.com/4l3j0Ok/calculadora-estadistica/commit/9800f36a81f58e9e00894d97ace2f3d3b48eeceb))
+* **ui:** Tab agrega fila en tabla de Frecuencias (agrupados) ([ad4ca69](https://github.com/4l3j0Ok/calculadora-estadistica/commit/ad4ca69bd370b5a74b011ee993506d36be525755))
+
 ## [1.1.5](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.4...1.1.5) (2026-07-05)
 
 
