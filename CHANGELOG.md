@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.4.0...1.5.0) (2026-07-05)
+
+
+### Features
+
+* estadística descriptiva y exportación de resultados a Markdown ([8dd9735](https://github.com/4l3j0Ok/calculadora-estadistica/commit/8dd9735be52fd088503c0972533425bd2fed72e6))
+* **ui:** agregar iconos SVG a la sidebar y botones de acción ([b1a7c58](https://github.com/4l3j0Ok/calculadora-estadistica/commit/b1a7c589229e6de363309a1d8d1061004daa7367))
+
 # [1.4.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.3.0...1.4.0) (2026-07-05)
 
 
