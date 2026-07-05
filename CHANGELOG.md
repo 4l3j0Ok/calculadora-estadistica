@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.1...1.1.2) (2026-07-05)
+
+
+### Bug Fixes
+
+* **linux:** no forzar APPIMAGE_EXTRACT_AND_RUN al leer --appimage-updateinfo ([d1ee599](https://github.com/4l3j0Ok/calculadora-estadistica/commit/d1ee5991c905a21c2e10ffc9bfdbc2eea8910c03))
+
 ## [1.1.1](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.0...1.1.1) (2026-07-05)
 
 
