@@ -75,7 +75,7 @@ if ($UvCmd) {
 # Orden: 1) tag de git/GitHub  2) variable de entorno APP_VERSION
 #        3) version en pyproject.toml  4) fallback 0.0.0-dev
 function Resolve-AppVersion {
-    if ($env:GITHUB_REF_NAME -and $env:GITHUB_REF_NAME.StartsWith("v")) {
+    if ($env:GITHUB_REF_NAME) {
         return $env:GITHUB_REF_NAME.Substring(1)
     }
     try {

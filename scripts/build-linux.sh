@@ -64,7 +64,7 @@ fi
 # Orden: 1) tag de git/GitHub  2) variable de entorno APP_VERSION
 #        3) versión en pyproject.toml  4) fallback 0.0.0-dev
 resolve_version() {
-    if [[ -n "${GITHUB_REF_NAME:-}" && "${GITHUB_REF_NAME}" == v* ]]; then
+    if [[ -n "${GITHUB_REF_NAME:-}" ]]; then
         echo "${GITHUB_REF_NAME#v}"
         return
     fi
