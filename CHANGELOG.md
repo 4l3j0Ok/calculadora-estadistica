@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.2...1.1.3) (2026-07-05)
+
+
+### Bug Fixes
+
+* **linux:** leer --appimage-updateinfo via la seccion ELF .upd_info ([f6fc632](https://github.com/4l3j0Ok/calculadora-estadistica/commit/f6fc632644b72989315006d678bb8a20f57b3a57))
+
 ## [1.1.2](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.1.1...1.1.2) (2026-07-05)
 
 
