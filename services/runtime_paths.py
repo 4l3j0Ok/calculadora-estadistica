@@ -10,6 +10,8 @@ Hay dos categorías de rutas, que no deben mezclarse:
   lugares pueden ser de solo lectura o desaparecer al cerrar la app. Deben
   ir al directorio de datos del usuario (XDG en Linux, `LOCALAPPDATA` en
   Windows). Ver `get_user_data_dir()` / `get_history_db_path()`.
+- Caché regenerable (p. ej. imágenes de fórmulas): debe ir al directorio
+  de caché del sistema operativo. Ver `get_user_cache_dir()`.
 """
 
 from __future__ import annotations
@@ -101,6 +103,37 @@ def get_history_db_path() -> Path:
     """Ruta completa a la base SQLite del historial, en el directorio de
     datos del usuario (ver `get_user_data_dir()`)."""
     return get_user_data_dir() / HISTORY_DB_FILENAME
+
+
+def get_user_cache_dir() -> Path:
+    """Directorio de caché regenerable y escribible del usuario.
+
+    - Windows: `%LOCALAPPDATA%/calculadora-estadistica/Cache` (o
+      `~/AppData/Local/calculadora-estadistica/Cache`).
+    - Resto de plataformas (Linux/macOS): respeta XDG,
+      `${XDG_CACHE_HOME:-~/.cache}/calculadora-estadistica`.
+    """
+    if sys.platform == "win32":
+        base_dir = os.environ.get("LOCALAPPDATA")
+        if base_dir:
+            cache_dir = Path(base_dir) / APP_DATA_DIR_NAME / "Cache"
+        else:
+            cache_dir = Path.home() / "AppData" / "Local" / APP_DATA_DIR_NAME / "Cache"
+    else:
+        xdg_cache_home = os.environ.get("XDG_CACHE_HOME")
+        if xdg_cache_home:
+            cache_dir = Path(xdg_cache_home) / APP_DATA_DIR_NAME
+        else:
+            cache_dir = Path.home() / ".cache" / APP_DATA_DIR_NAME
+
+    try:
+        cache_dir.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        raise RuntimeError(
+            f"No se pudo crear el directorio de caché del usuario: {cache_dir}"
+        ) from exc
+
+    return cache_dir
 
 
 def legacy_history_db_path() -> Path:
