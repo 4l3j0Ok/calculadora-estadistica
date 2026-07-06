@@ -20,6 +20,13 @@ Item {
     readonly property var tableModel: root.controllerReady ? calculadoraController.tableModel : []
     readonly property string controllerError: root.controllerReady ? calculadoraController.error : ""
 
+    signal toastRequested(string message, bool error)
+
+    onControllerErrorChanged: {
+        if (root.controllerError !== "")
+            root.toastRequested(root.controllerError, true);
+    }
+
     readonly property var tiposDeDatos: [
         {
             value: "no_agrupados",
@@ -108,10 +115,33 @@ Item {
             upper: "",
             frecuencia: ""
         });
+        root.toastRequested("Formulario limpiado", false);
     }
 
     // ── Copiar / Pegar datos en Markdown ────────────────────────────────
+    function hayDatosParaCopiar() {
+        if (root.dataType === "no_agrupados")
+            return root.valoresText.trim() !== "";
+
+        if (root.dataType === "agrupados_valor") {
+            for (var i = 0; i < valorModel.count; i++)
+                if (valorModel.get(i).xi.trim() !== "" || valorModel.get(i).frecuencia.trim() !== "")
+                    return true;
+            return false;
+        }
+
+        for (var j = 0; j < intervaloModel.count; j++)
+            if (intervaloModel.get(j).lower.trim() !== "" || intervaloModel.get(j).upper.trim() !== "" || intervaloModel.get(j).frecuencia.trim() !== "")
+                return true;
+        return false;
+    }
+
     function copiarDatos() {
+        if (!root.hayDatosParaCopiar()) {
+            root.toastRequested("No hay valores a copiar", true);
+            return;
+        }
+
         var md;
         if (root.dataType === "no_agrupados") {
             md = markdownController.renderNoAgrupados("frecuencias", root.valoresText);
@@ -134,6 +164,7 @@ Item {
             md = markdownController.renderAgrupadosIntervalo("frecuencias", JSON.stringify(filasIntervalo));
         }
         markdownController.setClipboardText(md);
+        root.toastRequested("Datos copiados al portapapeles", false);
     }
 
     function cargarDesdeMarkdown(nuevoTipo, payload) {
@@ -167,9 +198,17 @@ Item {
         // formato en ambos módulos, así que los datos se cargan siempre
         // en la página donde el usuario está parado, sin importar desde
         // qué módulo se hayan copiado originalmente.
-        var respuesta = JSON.parse(markdownController.parseMarkdown(markdownController.clipboardText()));
+        var clipboardText = markdownController.clipboardText();
+        if (clipboardText.trim() === "") {
+            root.pasteError = "No había nada que pegar";
+            root.toastRequested(root.pasteError, true);
+            return;
+        }
+
+        var respuesta = JSON.parse(markdownController.parseMarkdown(clipboardText));
         if (!respuesta.ok) {
             root.pasteError = respuesta.error;
+            root.toastRequested(respuesta.error, true);
             return;
         }
         root.pasteError = "";
@@ -177,12 +216,15 @@ Item {
             text: respuesta.text,
             rows: respuesta.rows
         });
+        root.toastRequested("Datos pegados y calculados", false);
     }
 
     function copiarTabla() {
         var md = calculadoraController.copiarResultadoMarkdown();
-        if (md)
+        if (md) {
             markdownController.setClipboardText(md);
+            root.toastRequested("Tabla copiada al portapapeles", false);
+        }
     }
 
     // ── Historial ───────────────────────────────────────────────────────
@@ -225,6 +267,7 @@ Item {
 
         historyPopup.close();
         root.calcular();
+        root.toastRequested("Entrada cargada desde el historial", false);
     }
 
     RowLayout {
@@ -316,15 +359,6 @@ Item {
                             fontPixelSize: 11
                         }
                     }
-                }
-
-                Label {
-                    text: root.pasteError
-                    color: Theme.error_text
-                    visible: root.pasteError !== ""
-                    wrapMode: Text.Wrap
-                    Layout.fillWidth: true
-                    font.pixelSize: 11
                 }
 
                 // ── Selector de tipo de datos ─────────────────────────────
@@ -839,15 +873,6 @@ Item {
                     Layout.fillWidth: true
                     height: 1
                     color: Theme.divider
-                }
-
-                Label {
-                    text: root.controllerError
-                    color: Theme.error_text
-                    visible: root.controllerError !== ""
-                    wrapMode: Text.Wrap
-                    Layout.fillWidth: true
-                    font.pixelSize: 11
                 }
 
                 RowLayout {

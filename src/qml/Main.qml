@@ -24,11 +24,6 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
 
-        NavBar {
-            Layout.fillWidth: true
-            titleText: "Probabilidad y Estadística x POO"
-        }
-
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -183,12 +178,14 @@ ApplicationWindow {
                     id: frecuenciasPage
                     anchors.fill: parent
                     visible: root.currentPage === 0
+                    onToastRequested: (message, error) => toast.show(message, error)
                 }
 
                 DispersionPage {
                     id: dispersionPage
                     anchors.fill: parent
                     visible: root.currentPage === 1
+                    onToastRequested: (message, error) => toast.show(message, error)
                 }
 
                 FormulasPage {
@@ -202,6 +199,71 @@ ApplicationWindow {
                     visible: root.currentPage === 3
                 }
             }
+        }
+    }
+
+    Rectangle {
+        id: toast
+
+        property string message: ""
+        property bool error: false
+
+        function show(newMessage, isError) {
+            toast.message = newMessage;
+            toast.error = isError;
+            toast.visible = true;
+            toast.y = root.height + 12;
+            toastIn.restart();
+            toastTimer.restart();
+        }
+
+        anchors.right: parent.right
+        anchors.rightMargin: 18
+        width: Math.min(Math.max(toastText.implicitWidth + 36, 260), root.width - 36)
+        height: Math.max(44, toastText.implicitHeight + 22)
+        radius: 8
+        color: toast.error ? Qt.rgba(0.50, 0.11, 0.11, 0.65) : Qt.rgba(0.08, 0.33, 0.18, 0.65)
+        border.color: toast.error ? "#f87171" : "#4ade80"
+        border.width: 1
+        y: root.height + 12
+        visible: false
+        z: 20
+
+        YAnimator {
+            id: toastIn
+            target: toast
+            from: root.height + 12
+            to: root.height - toast.height - 18
+            duration: 220
+            easing.type: Easing.OutCubic
+        }
+
+        YAnimator {
+            id: toastOut
+            target: toast
+            from: toast.y
+            to: root.height + 12
+            duration: 180
+            easing.type: Easing.InCubic
+            onFinished: toast.visible = false
+        }
+
+        Text {
+            id: toastText
+            anchors.fill: parent
+            anchors.margins: 11
+            text: toast.message
+            color: "#ffffff"
+            font.pixelSize: 12
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.Wrap
+        }
+
+        Timer {
+            id: toastTimer
+            interval: toast.error ? 3600 : 2200
+            onTriggered: toastOut.restart()
         }
     }
 

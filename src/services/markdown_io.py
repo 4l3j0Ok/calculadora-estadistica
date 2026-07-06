@@ -149,8 +149,7 @@ def parse_input_markdown(text: str) -> ParsedInput:
     match = _HEADER_RE.match(text.strip())
     if not match:
         raise MarkdownIOError(
-            "El texto pegado no tiene el encabezado esperado "
-            "(---\ntype: ...\nmodule: ...\n---)."
+            "El texto pegado no tiene un formato válido para la aplicación."
         )
 
     header_block, body = match.groups()
