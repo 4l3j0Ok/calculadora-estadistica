@@ -122,7 +122,11 @@ if (-not (Test-Path $IconPath)) {
     exit 1
 }
 
-# ── Ejecutar Nuitka ────────────────────────────────────────────────────────
+# ── Ejecutar Nuitka ─────────────────────────────────────────────────────────
+# El modo standalone, los plugins, los data files/dirs, el icono y el
+# console-mode de Windows se leen de las directivas `# nuitka-project:`
+# en src/main.py. Acá pasamos solo las opciones dinámicas (output-dir,
+# output-filename, report) y las metadata de versión del ejecutable.
 Write-Host "==> Compilando con Nuitka (standalone, Windows)..."
 $NuitkaArgs = @(
     "python", "-m", "nuitka",
@@ -135,8 +139,6 @@ $NuitkaArgs = @(
     "--copyright=$Copyright",
     "--file-version=$WindowsVersion",
     "--product-version=$WindowsVersion",
-    "--windows-console-mode=disable",
-    "--windows-icon-from-ico=$IconPath",
     $Entrypoint
 )
 & $RunCmd @RunCmdArgs @NuitkaArgs

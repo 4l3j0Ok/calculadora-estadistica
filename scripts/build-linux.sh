@@ -94,13 +94,16 @@ echo "==> Limpiando salidas anteriores en ${OUTPUT_DIR}..."
 rm -rf "${OUTPUT_DIR}"
 mkdir -p "${OUTPUT_DIR}" "${RELEASES_DIR}"
 
-# ── Ejecutar Nuitka ───────────────────────────────────────────────────────
+# ── Ejecutar Nuitka ─────────────────────────────────────────────────────────
+# El modo standalone, los plugins, los data files/dirs y el icono de Linux
+# se leen de las directivas `# nuitka-project:` en src/main.py. Acá
+# pasamos solo las opciones dinámicas (output-dir, output-filename,
+# report) y las metadata que varían entre CI y dev.
 echo "==> Compilando con Nuitka (standalone, Linux)..."
 "${RUN_PREFIX[@]}" python -m nuitka \
     --output-dir="${OUTPUT_DIR}" \
     --output-filename="${APP_NAME}" \
     --report="${OUTPUT_DIR}/nuitka-report.xml" \
-    --linux-icon="src/assets/calculator.png" \
     "${ENTRYPOINT}"
 
 DIST_DIR="${OUTPUT_DIR}/main.dist"

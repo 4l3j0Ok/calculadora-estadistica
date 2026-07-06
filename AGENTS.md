@@ -9,7 +9,7 @@
 - Sync runtime deps: `uv sync`.
 - Sync build/test deps too: `uv sync --group dev`.
 - Launch the GUI app: `uv run python src/main.py`.
-- Build configuration for Nuitka lives in `[tool.nuitka]` of `pyproject.toml`; the per-OS bits (icon, console mode) are passed by `scripts/build-linux.sh` / `scripts/build-windows.ps1`.
+- Build configuration for Nuitka lives in directivas `# nuitka-project:` at the top of `src/main.py`; the per-OS bits (icon, console mode) use `# nuitka-project-if: {OS} == ...`. The build scripts (`scripts/build-linux.sh` / `scripts/build-windows.ps1`) only pass dynamic options (output dir, output filename, report) and Windows metadata.
 - Run tests: `uv run pytest`.
 - Run one test file: `uv run pytest tests/test_markdown_io.py`.
 - Fast syntax/import check: `uv run python -m compileall src`.
@@ -30,7 +30,7 @@
 - Read-only app resources live under `src/` (`qml/`, `assets/`, `pyproject.toml`, `resources.qrc`, `resources_rc.py`) and are resolved relative to `app_base_dir()` (which points to `src/` in dev and to the executable's directory in a Nuitka standalone build) so dev and builds work the same way; do not use that path for writable data.
 - History is SQLite via `src/services/history_service.py` and must stay in the user data dir: `${XDG_DATA_HOME:-~/.local/share}/calculadora-estadistica/history.db` on Linux/macOS or `%LOCALAPPDATA%\calculadora-estadistica\history.db` on Windows.
 - `history_service` copies a legacy `history.db` from the app base only when the new user-data DB does not exist; never write new mutable state beside the executable/project.
-- `resources_rc.py` is generated from `resources.qrc`; update it whenever embedded assets or Markdown templates change.
+- `src/resources_rc.py` is generated from `src/resources.qrc`; update it whenever embedded assets or Markdown templates change.
 
 ## Input Quirks
 

@@ -1,3 +1,40 @@
+# Directivas de build de Nuitka (ver scripts/build-windows.ps1 y
+# scripts/build-linux.sh). Se leen como comentarios al compilar con
+# `nuitka src/main.py`; no afectan la ejecución normal en modo desarrollo.
+#
+# nuitka-project: --mode=standalone
+# nuitka-project: --enable-plugin=pyside6
+# nuitka-project: --assume-yes-for-downloads
+# nuitka-project: --remove-output
+# nuitka-project: --include-data-dir=src/qml=qml
+# nuitka-project: --include-data-dir=src/assets=assets
+# nuitka-project: --include-data-files=pyproject.toml=pyproject.toml
+# nuitka-project: --report=nuitka-report.xml
+#
+# Incluye los módulos QML runtime de Qt (QtQuick, QtQuick.Controls,
+# QtQuick.Layouts, etc.) y patchea correctamente el rpath de sus plugins
+# (.so/.dll). Se excluye explícitamente `Qt/labs/assetdownloader`: en
+# algunas versiones de la wheel de PySide6 esa carpeta trae artefactos de
+# build (.a/.o) sueltos -no una librería real- que hacen fallar a
+# `patchelf` durante el link (no se usa esa API QML en la app).
+# nuitka-project: --include-qt-plugins=qml
+# nuitka-project: --noinclude-dlls=PySide6/qml/Qt/labs/assetdownloader/*
+#
+# El visor Markdown es 100% nativo de Qt (TextEdit + QTextDocument, ver
+# src/qml/components/NativeMarkdownView.qml): no usa QtWebEngine ni Chromium.
+# Las fórmulas LaTeX se rasterizan con matplotlib.mathtext; se incluye la
+# data de matplotlib (mpl-data: fuentes, matplotlibrc) para que el motor
+# mathtext funcione en el standalone. Las plantillas Markdown y el
+# documento formulas.md viajan embebidos en src/resources_rc.py (ver
+# src/resources.qrc), no como archivos sueltos.
+# nuitka-project: --include-package-data=matplotlib
+# nuitka-project: --include-module=matplotlib.backends.backend_agg
+# nuitka-project-if: {OS} == "Windows":
+#     nuitka-project: --windows-console-mode=disable
+#     nuitka-project: --windows-icon-from-ico=src/assets/calculator.ico
+# nuitka-project-if: {OS} == "Linux":
+#     nuitka-project: --linux-icon=src/assets/calculator.png
+
 import os
 import sys
 
