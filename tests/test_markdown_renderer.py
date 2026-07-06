@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from PySide6.QtCore import QUrl
+
 from services.markdown_renderer import MarkdownRenderer
 from services.template_loader import load_resource_text
 
@@ -18,7 +20,7 @@ def _html(markdown: str, **kwargs) -> str:
 
 def _path_from_file_url(url: str) -> Path:
     assert url.startswith("file://")
-    return Path(url.removeprefix("file://"))
+    return Path(QUrl(url).toLocalFile())
 
 
 def test_headings() -> None:
