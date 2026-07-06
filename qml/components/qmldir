@@ -7,3 +7,4 @@ Table 1.0 Table.qml
 DispersionTable 1.0 DispersionTable.qml
 HistoryTable 1.0 HistoryTable.qml
 ResultCard 1.0 ResultCard.qml
+NativeMarkdownView 1.0 NativeMarkdownView.qml

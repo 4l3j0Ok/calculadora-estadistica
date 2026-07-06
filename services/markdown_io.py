@@ -5,9 +5,9 @@ Frecuencias y Dispersión.
   (`assets/templates/*.md.j2`, ver `resources.qrc`).
 - Parseo: se detecta el tipo de dato/módulo a través de un encabezado
   fijo (`---\\ntype: ...\\nmodule: ...\\n---`), y las tablas Markdown se
-  extraen con la librería estándar `markdown` (extensión `tables`) +
-  `html.parser.HTMLParser`, en vez de reimplementar un parser de tablas
-  Markdown a mano.
+  extraen convirtiéndolas a HTML con `markdown-it-py` (mismo motor que
+  `services.markdown_renderer`) + `html.parser.HTMLParser`, en vez de
+  reimplementar un parser de tablas Markdown a mano.
 """
 
 from __future__ import annotations
@@ -15,12 +15,12 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from html.parser import HTMLParser
-from pathlib import Path
 
-import markdown as md_lib
-from jinja2 import Template
+from markdown_it import MarkdownIt
 
-from services.runtime_paths import app_base_dir
+from services.template_loader import render_template
+
+_table_md = MarkdownIt("commonmark", {"html": False}).enable(["table"])
 
 # Mapeo entre el valor de "type" usado en el encabezado Markdown (con
 # guiones, legible para humanos) y el valor interno usado por
@@ -58,31 +58,8 @@ class ParsedInput:
     rows: list[dict] | None = None  # para agrupados_valor / agrupados_intervalo
 
 
-def _load_template_text(filename: str) -> str:
-    """Lee el contenido de una plantilla, primero desde el recurso Qt
-    embebido (`:/assets/templates/...`) y, si no está disponible (por
-    ejemplo en tests que no cargan `resources_rc`), desde el filesystem."""
-    try:
-        from PySide6.QtCore import QFile, QIODevice
-
-        qfile = QFile(f":/assets/templates/{filename}")
-        if qfile.open(QIODevice.ReadOnly | QIODevice.Text):
-            try:
-                data = bytes(qfile.readAll()).decode("utf-8")
-            finally:
-                qfile.close()
-            if data:
-                return data
-    except ImportError:
-        pass
-
-    path = Path(app_base_dir()) / "assets" / "templates" / filename
-    return path.read_text(encoding="utf-8")
-
-
 def _render(template_key: str, **context) -> str:
-    template_text = _load_template_text(_TEMPLATE_FILES[template_key])
-    return Template(template_text).render(**context).strip() + "\n"
+    return render_template(_TEMPLATE_FILES[template_key], **context).strip() + "\n"
 
 
 # ── Renderizado de entrada (para "Copiar datos") ────────────────────────────
@@ -150,7 +127,7 @@ class _TableHTMLParser(HTMLParser):
 
 
 def _extract_table_rows(markdown_text: str) -> list[list[str]]:
-    html = md_lib.markdown(markdown_text, extensions=["tables"])
+    html = _table_md.render(markdown_text)
     parser = _TableHTMLParser()
     parser.feed(html)
     return parser.rows

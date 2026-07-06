@@ -32,7 +32,7 @@
 #     nuitka-project: --windows-console-mode=disable
 #     nuitka-project: --windows-icon-from-ico=assets/calculator.ico
 # nuitka-project-if: {OS} == "Linux":
-#     nuitka-project: --linux-icon=assets/git.svg
+#     nuitka-project: --linux-icon=assets/calculator.png
 
 import os
 import sys
@@ -55,7 +55,7 @@ from services.runtime_paths import app_base_dir, app_version
 def main():
     app = QApplication(sys.argv)
     app.setFont(QFont("CaskaydiaCove NFM"))
-    app.setWindowIcon(QIcon(":/assets/git.svg"))
+    app.setWindowIcon(QIcon(":/assets/calculator.png"))
     engine = QQmlApplicationEngine()
 
     # Registrar controllers para QML (guardar referencia para evitar GC)
@@ -70,12 +70,8 @@ def main():
     engine.rootContext().setContextProperty(
         "dispersionController", dispersion_controller
     )
-    engine.rootContext().setContextProperty(
-        "historyController", history_controller
-    )
-    engine.rootContext().setContextProperty(
-        "markdownController", markdown_controller
-    )
+    engine.rootContext().setContextProperty("historyController", history_controller)
+    engine.rootContext().setContextProperty("markdownController", markdown_controller)
     engine.rootContext().setContextProperty("appVersion", app_version())
 
     # Mantener referencias para evitar garbage collection

@@ -139,6 +139,14 @@ ApplicationWindow {
                         onActivated: root.currentPage = 1
                     }
 
+                    NavItem {
+                        iconSource: "qrc:/assets/formula.svg"
+                        label: "Fórmulas"
+                        active: root.currentPage === 2
+                        expanded: root.sidebarExpanded
+                        onActivated: root.currentPage = 2
+                    }
+
                     Item {
                         Layout.fillHeight: true
                     }
@@ -152,9 +160,9 @@ ApplicationWindow {
                     NavItem {
                         iconSource: "qrc:/assets/info.svg"
                         label: "Acerca de"
-                        active: root.currentPage === 2
+                        active: root.currentPage === 3
                         expanded: root.sidebarExpanded
-                        onActivated: root.currentPage = 2
+                        onActivated: root.currentPage = 3
                     }
                 }
             }
@@ -183,9 +191,15 @@ ApplicationWindow {
                     visible: root.currentPage === 1
                 }
 
-                AcercaPage {
+                FormulasPage {
+                    id: formulasPage
                     anchors.fill: parent
                     visible: root.currentPage === 2
+                }
+
+                AcercaPage {
+                    anchors.fill: parent
+                    visible: root.currentPage === 3
                 }
             }
         }
