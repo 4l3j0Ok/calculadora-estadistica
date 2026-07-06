@@ -1,9 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>assets/calculator.png</file>
+        <file>assets/git.svg</file>
         <file>assets/github.svg</file>
         <file>assets/linkedin.svg</file>
         <file>assets/mail.svg</file>
+        <file>assets/www.svg</file>
         <file>assets/chart-scatter.svg</file>
         <file>assets/chart-historgram.svg</file>
         <file>assets/open-sidebar.svg</file>
@@ -12,6 +14,8 @@
         <file>assets/markdown.svg</file>
         <file>assets/paste.svg</file>
         <file>assets/history.svg</file>
+        <file>assets/formula.svg</file>
+        <file>assets/docs/formulas.md</file>
         <file>assets/templates/no_agrupados.md.j2</file>
         <file>assets/templates/agrupados_valor.md.j2</file>
         <file>assets/templates/agrupados_intervalos.md.j2</file>

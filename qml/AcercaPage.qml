@@ -7,13 +7,15 @@ import "components"
 
 // Página: Acerca de
 // Información del repositorio y del creador, con accesos directos a
-// GitHub, LinkedIn y correo. Los íconos SVG se cargan desde recursos
+// web personal, GitHub, LinkedIn y correo. Los íconos SVG se cargan desde recursos
 // embebidos (resources.qrc) y se colorizan con MultiEffect para heredar
 // el color del texto (Theme.primary_text), igual en cualquier paleta.
 Item {
     id: root
 
     readonly property string repoUrl: "https://github.com/4l3j0Ok/calculadora-estadistica"
+    readonly property string personalUrl: "https://www.alejoide.com"
+    readonly property string personalGithubUrl: "https://github.com/4l3j0Ok"
     readonly property string linkedinUrl: "https://www.linkedin.com/in/alejoide"
     readonly property string mailAddress: "contacto@alejoide.com"
 
@@ -133,9 +135,21 @@ Item {
                 }
             }
 
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 12
+
+                IconButton {
+                    iconSource: "qrc:/assets/git.svg"
+                    label: "Repositorio"
+                    implicitWidth: 140
+                    onClicked: Qt.openUrlExternally(root.repoUrl)
+                }
+            }
+
             ColumnLayout {
                 Layout.fillWidth: true
-                spacing: 4
+                spacing: 10
 
                 Text {
                     text: "Creador"
@@ -149,28 +163,34 @@ Item {
                     font.bold: true
                     font.pixelSize: 15
                 }
-            }
 
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 12
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 12
 
-                IconButton {
-                    iconSource: "qrc:/assets/github.svg"
-                    label: "GitHub"
-                    onClicked: Qt.openUrlExternally(root.repoUrl)
-                }
+                    IconButton {
+                        iconSource: "qrc:/assets/www.svg"
+                        label: "Sitio web"
+                        onClicked: Qt.openUrlExternally(root.personalUrl)
+                    }
 
-                IconButton {
-                    iconSource: "qrc:/assets/linkedin.svg"
-                    label: "LinkedIn"
-                    onClicked: Qt.openUrlExternally(root.linkedinUrl)
-                }
+                    IconButton {
+                        iconSource: "qrc:/assets/github.svg"
+                        label: "GitHub"
+                        onClicked: Qt.openUrlExternally(root.personalGithubUrl)
+                    }
 
-                IconButton {
-                    iconSource: "qrc:/assets/mail.svg"
-                    label: "Mail"
-                    onClicked: Qt.openUrlExternally("mailto:" + root.mailAddress)
+                    IconButton {
+                        iconSource: "qrc:/assets/linkedin.svg"
+                        label: "LinkedIn"
+                        onClicked: Qt.openUrlExternally(root.linkedinUrl)
+                    }
+
+                    IconButton {
+                        iconSource: "qrc:/assets/mail.svg"
+                        label: "Mail"
+                        onClicked: Qt.openUrlExternally("mailto:" + root.mailAddress)
+                    }
                 }
             }
         }

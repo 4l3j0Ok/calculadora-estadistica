@@ -18,11 +18,21 @@
 # `patchelf` durante el link (no se usa esa API QML en la app).
 # nuitka-project: --include-qt-plugins=qml
 # nuitka-project: --noinclude-dlls=PySide6/qml/Qt/labs/assetdownloader/*
+#
+# El visor Markdown es 100% nativo de Qt (TextEdit + QTextDocument, ver
+# qml/components/NativeMarkdownView.qml): no usa QtWebEngine ni Chromium.
+# Las fórmulas LaTeX se rasterizan con matplotlib.mathtext; se incluye la
+# data de matplotlib (mpl-data: fuentes, matplotlibrc) para que el motor
+# mathtext funcione en el standalone. Las plantillas Markdown y el
+# documento formulas.md viajan embebidos en resources_rc.py (ver
+# resources.qrc), no como archivos sueltos.
+# nuitka-project: --include-package-data=matplotlib
+# nuitka-project: --include-module=matplotlib.backends.backend_agg
 # nuitka-project-if: {OS} == "Windows":
 #     nuitka-project: --windows-console-mode=disable
 #     nuitka-project: --windows-icon-from-ico=assets/calculator.ico
 # nuitka-project-if: {OS} == "Linux":
-#     nuitka-project: --linux-icon=assets/calculator.png
+#     nuitka-project: --linux-icon=assets/git.svg
 
 import os
 import sys
@@ -45,7 +55,7 @@ from services.runtime_paths import app_base_dir, app_version
 def main():
     app = QApplication(sys.argv)
     app.setFont(QFont("CaskaydiaCove NFM"))
-    app.setWindowIcon(QIcon(":/assets/calculator.png"))
+    app.setWindowIcon(QIcon(":/assets/git.svg"))
     engine = QQmlApplicationEngine()
 
     # Registrar controllers para QML (guardar referencia para evitar GC)
