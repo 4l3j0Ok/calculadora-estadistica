@@ -26,7 +26,7 @@ $Copyright = "Copyright (c) $((Get-Date).Year) $CompanyName"
 $Entrypoint = "src\main.py"
 $OutputDir = "dist\windows"
 $ReleasesDir = "dist\releases"
-$IconPath = "assets\calculator.ico"
+$IconPath = "src\assets\calculator.ico"
 
 Write-Host "==> Raiz del repositorio: $RepoRoot"
 
@@ -142,7 +142,7 @@ $NuitkaArgs = @(
 & $RunCmd @RunCmdArgs @NuitkaArgs
 if ($LASTEXITCODE -ne 0) { throw "La compilacion con Nuitka fallo (codigo $LASTEXITCODE)." }
 
-$DistDir = Join-Path $OutputDir "src\main.dist"
+$DistDir = Join-Path $OutputDir "main.dist"
 if (-not (Test-Path $DistDir)) {
     Write-Error "No se encontro la carpeta de salida esperada: $DistDir"
     exit 1

@@ -47,7 +47,16 @@ noinclude-dlls = ["PySide6/qml/Qt/labs/assetdownloader/*"]
 include-package-data = ["matplotlib"]
 include-module = ["matplotlib.backends.backend_agg"]
 
-# Recursos junto al ejecutable: qml/ y pyproject.toml (para
-# src/services/runtime_paths.app_version()).
+# Recursos junto al ejecutable. Las fuentes viven en `src/` (todo el
+# código y recursos de la app viven en `src/`); Nuitka los copia al
+# directorio del ejecutable con los nombres que el resto del código
+# espera vía `app_base_dir()` / `:/assets/...`.
+#   - src/qml          → ./qml      (cargado por QQmlApplicationEngine)
+#   - src/assets       → ./assets   (íconos, SVG, plantillas Jinja2,
+#                                   formulas.md, fallback filesystem
+#                                   usado por `template_loader.py`)
+# `pyproject.toml` vive en la raíz del repo (lo lee `uv`); en el
+# standalone se copia junto al ejecutable para que
+# `src/services/runtime_paths.app_version()` lo encuentre.
 include-data-files = ["pyproject.toml=pyproject.toml"]
-include-data-dir = ["qml=qml"]
+include-data-dir = ["src/qml=qml", "src/assets=assets"]

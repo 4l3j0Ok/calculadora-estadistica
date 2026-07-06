@@ -44,21 +44,34 @@ def app_base_dir() -> str:
     if is_compiled:
         return os.path.dirname(os.path.abspath(sys.argv[0]))
     # En desarrollo este archivo vive en `<raíz>/src/services/runtime_paths.py`;
-    # subimos tres niveles para llegar a la raíz del repo, donde viven los
-    # recursos de solo lectura (`qml/`, `assets/`, `pyproject.toml`).
+    # subimos dos niveles para llegar a `src/`, donde viven los recursos
+    # de solo lectura (`qml/`, `assets/`, `pyproject.toml`). `pyproject.toml`
+    # vive en la raíz del repo (lo usa `uv`); la copia que se incluye en el
+    # binario se copia vía `--include-data-files=src/pyproject.toml=...` en
+    # `pyproject.toml` y queda junto al ejecutable, por eso el `if` de arriba
+    # es lo que se usa en runtime; esta rama solo aplica a `python src/main.py`.
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def app_version() -> str:
     """Versión de la app, leída del `[project].version` de `pyproject.toml`.
 
-    El archivo se busca junto a `app_base_dir()`: en desarrollo es la raíz
-    del repo; en un build de Nuitka, debe embeberse explícitamente (ver
-    `--include-data-files=pyproject.toml=pyproject.toml` en `main.py`) para
-    que exista junto al ejecutable. Si no se encuentra o no se puede leer
-    el campo `version`, se devuelve `FALLBACK_VERSION` (nunca lanza).
+    El archivo se busca junto a `app_base_dir()`: en un build de Nuitka,
+    debe embeberse explícitamente (ver
+    `--include-data-files=src/pyproject.toml=pyproject.toml` en
+    `pyproject.toml`) para que exista junto al ejecutable. En desarrollo
+    `pyproject.toml` vive en la raíz del repo (lo lee `uv`), así que se
+    busca un nivel arriba de `app_base_dir()`. Si no se encuentra o no
+    se puede leer el campo `version`, se devuelve `FALLBACK_VERSION`
+    (nunca lanza).
     """
+    is_compiled = "__compiled__" in globals() or hasattr(sys, "frozen")
     pyproject_path = Path(app_base_dir()) / PYPROJECT_FILENAME
+    if not is_compiled and not pyproject_path.is_file():
+        # En dev `app_base_dir()` apunta a `src/`; `pyproject.toml` vive en
+        # la raíz del repo (lo usa `uv`).
+        pyproject_path = pyproject_path.parent.parent / PYPROJECT_FILENAME
     try:
         with pyproject_path.open("rb") as f:
             data = tomllib.load(f)

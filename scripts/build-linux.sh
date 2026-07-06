@@ -100,10 +100,10 @@ echo "==> Compilando con Nuitka (standalone, Linux)..."
     --output-dir="${OUTPUT_DIR}" \
     --output-filename="${APP_NAME}" \
     --report="${OUTPUT_DIR}/nuitka-report.xml" \
-    --linux-icon="assets/calculator.png" \
+    --linux-icon="src/assets/calculator.png" \
     "${ENTRYPOINT}"
 
-DIST_DIR="${OUTPUT_DIR}/src/main.dist"
+DIST_DIR="${OUTPUT_DIR}/main.dist"
 if [[ ! -d "${DIST_DIR}" ]]; then
     echo "ERROR: no se encontró la carpeta de salida esperada: ${DIST_DIR}" >&2
     exit 1
@@ -311,7 +311,7 @@ install -m 0644 \
     "${DEPLOYMENT_DIR}/${APP_ID}.metainfo.xml" \
     "${APPDIR}/usr/share/metainfo/${APP_ID}.metainfo.xml"
 install -m 0644 \
-    "${REPO_ROOT}/assets/calculator.png" \
+    "${REPO_ROOT}/src/assets/calculator.png" \
     "${APPDIR}/usr/share/icons/hicolor/256x256/apps/${APP_ID}.png"
 
 ln -sf \
@@ -320,7 +320,7 @@ ln -sf \
 ln -sf \
     "usr/share/icons/hicolor/256x256/apps/${APP_ID}.png" \
     "${APPDIR}/${APP_ID}.png"
-cp "${REPO_ROOT}/assets/calculator.png" "${APPDIR}/.DirIcon"
+cp "${REPO_ROOT}/src/assets/calculator.png" "${APPDIR}/.DirIcon"
 
 echo "==> AppDir preparado."
 

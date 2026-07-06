@@ -81,7 +81,7 @@ class MarkdownController(QObject):
         text_color: str = "",
     ) -> None:
         """Igual que `renderMarkdownText` pero leyendo el Markdown desde
-        un recurso Qt embebido (`:/<relative_path>`, ver `resources.qrc`),
+        un recurso Qt embebido (`:/<relative_path>`, ver `src/resources.qrc`),
         con fallback a filesystem para dev/tests. Usado por el módulo
         Fórmulas para renderizar `assets/docs/formulas.md`."""
         document = quick_document.textDocument()

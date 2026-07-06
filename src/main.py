@@ -16,7 +16,9 @@ from PySide6.QtWidgets import (
     QApplication,  # QApplication (no QGuiApplication) carga los plugins de estilo de KDE/plasma-integration
 )
 
-import resources_rc  # noqa: F401  (registra los recursos embebidos, p. ej. el ícono)
+from src import (
+    resources_rc,  # noqa: F401  (registra los recursos embebidos, p. ej. el ícono)
+)
 from src.controllers.CalculadoraController import CalculadoraController
 from src.controllers.DispersionController import DispersionController
 from src.controllers.HistoryController import HistoryController
