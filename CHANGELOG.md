@@ -1,3 +1,5 @@
+# [1.8.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.7.0...1.8.0) (2026-07-06)
+
 # [1.7.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.6.1...1.7.0) (2026-07-06)
 
 ## [1.6.1](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.6.0...1.6.1) (2026-07-06)
