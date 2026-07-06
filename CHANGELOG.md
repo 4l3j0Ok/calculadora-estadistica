@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.6.0...1.6.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* **tests:** resolver rutas file en windows ([b1633e7](https://github.com/4l3j0Ok/calculadora-estadistica/commit/b1633e70b58f30eb80fe5992cd76fc8aa73d43f8))
+
 # [1.6.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.5.0...1.6.0) (2026-07-06)
 
 
