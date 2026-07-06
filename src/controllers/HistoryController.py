@@ -1,7 +1,7 @@
 from PySide6.QtCore import Property, QObject, Signal, Slot
 
-from schemas.history import HistoryEntry, HistoryModule
-from services import history_service
+from src.schemas.history import HistoryEntry, HistoryModule
+from src.services import history_service
 
 _DATA_TYPE_LABELS = {
     "no_agrupados": "No agrupados",
@@ -22,7 +22,7 @@ def _fmt_fecha(iso: str) -> str:
         anio, mes, dia = fecha.split("-")
         hh_mm = hora[:5]
         return f"{dia}/{mes}/{anio} {hh_mm}"
-    except (ValueError, IndexError):
+    except ValueError, IndexError:
         return iso
 
 

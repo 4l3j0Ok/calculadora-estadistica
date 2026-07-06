@@ -2,10 +2,10 @@
 fallback a filesystem para tests y otros contextos que no cargan
 `resources_rc`.
 
-Único punto de lectura de plantillas Jinja2 (`services.markdown_io`,
-`services.markdown_renderer`) y de otros archivos de texto embebidos
+Único punto de lectura de plantillas Jinja2 (`src.services.markdown_io`,
+`src.services.markdown_renderer`) y de otros archivos de texto embebidos
 como recurso (p. ej. `assets/docs/formulas.md`, ver
-`controllers.MarkdownController.renderFormulas`).
+`src.controllers.MarkdownController.renderFormulas`).
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from pathlib import Path
 
 from jinja2 import Template
 
-from services.runtime_paths import app_base_dir
+from src.services.runtime_paths import app_base_dir
 
 
 def load_resource_text(relative_path: str) -> str:

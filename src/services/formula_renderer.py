@@ -17,7 +17,7 @@ import re
 from hashlib import sha256
 from pathlib import Path
 
-from services.runtime_paths import get_user_cache_dir
+from src.services.runtime_paths import get_user_cache_dir
 
 # matplotlib se importa de forma perezosa dentro de `_render_png` para no
 # penalizar el arranque de la app ni la importación de este módulo.
@@ -26,7 +26,9 @@ from services.runtime_paths import get_user_cache_dir
 # por el parser de mathtext y provocan un ParseFatalException; se
 # eliminan antes de rasterizar (no afectan el resultado, solo el tamaño
 # tipográfico dentro de tablas).
-_UNSUPPORTED_COMMANDS = re.compile(r"\\(?:displaystyle|textstyle|scriptstyle|scriptscriptstyle)\s*")
+_UNSUPPORTED_COMMANDS = re.compile(
+    r"\\(?:displaystyle|textstyle|scriptstyle|scriptscriptstyle)\s*"
+)
 
 
 def _normalize_latex(latex: str) -> str:

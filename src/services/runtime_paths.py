@@ -43,7 +43,10 @@ def app_base_dir() -> str:
     is_compiled = "__compiled__" in globals() or hasattr(sys, "frozen")
     if is_compiled:
         return os.path.dirname(os.path.abspath(sys.argv[0]))
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # En desarrollo este archivo vive en `<raíz>/src/services/runtime_paths.py`;
+    # subimos tres niveles para llegar a la raíz del repo, donde viven los
+    # recursos de solo lectura (`qml/`, `assets/`, `pyproject.toml`).
+    return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def app_version() -> str:
@@ -60,7 +63,7 @@ def app_version() -> str:
         with pyproject_path.open("rb") as f:
             data = tomllib.load(f)
         return data["project"]["version"]
-    except (OSError, tomllib.TOMLDecodeError, KeyError, TypeError):
+    except OSError, tomllib.TOMLDecodeError, KeyError, TypeError:
         return FALLBACK_VERSION
 
 

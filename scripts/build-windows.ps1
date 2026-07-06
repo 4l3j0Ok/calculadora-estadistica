@@ -23,7 +23,7 @@ $ProductName = "Calculadora de Probabilidad y Estadistica"
 $CompanyName = "4l3j0Ok"
 $FileDescription = "Calculadora de Probabilidad y Estadistica (POO)"
 $Copyright = "Copyright (c) $((Get-Date).Year) $CompanyName"
-$Entrypoint = "main.py"
+$Entrypoint = "src\main.py"
 $OutputDir = "dist\windows"
 $ReleasesDir = "dist\releases"
 $IconPath = "assets\calculator.ico"
@@ -135,12 +135,14 @@ $NuitkaArgs = @(
     "--copyright=$Copyright",
     "--file-version=$WindowsVersion",
     "--product-version=$WindowsVersion",
+    "--windows-console-mode=disable",
+    "--windows-icon-from-ico=$IconPath",
     $Entrypoint
 )
 & $RunCmd @RunCmdArgs @NuitkaArgs
 if ($LASTEXITCODE -ne 0) { throw "La compilacion con Nuitka fallo (codigo $LASTEXITCODE)." }
 
-$DistDir = Join-Path $OutputDir "main.dist"
+$DistDir = Join-Path $OutputDir "src\main.dist"
 if (-not (Test-Path $DistDir)) {
     Write-Error "No se encontro la carpeta de salida esperada: $DistDir"
     exit 1

@@ -16,8 +16,8 @@ import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
-from schemas.history import HistoryEntry, HistoryModule
-from services.runtime_paths import get_history_db_path, legacy_history_db_path
+from src.schemas.history import HistoryEntry, HistoryModule
+from src.services.runtime_paths import get_history_db_path, legacy_history_db_path
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +48,7 @@ def _migrate_legacy_db_if_needed(db_path: Path) -> None:
     if legacy_path == db_path or not legacy_path.is_file():
         return
 
-    logger.info(
-        "Migrando historial heredado de %s a %s", legacy_path, db_path
-    )
+    logger.info("Migrando historial heredado de %s a %s", legacy_path, db_path)
     shutil.copy2(legacy_path, db_path)
 
 
@@ -116,16 +114,16 @@ def insert_entry(
 def list_entries() -> list[HistoryEntry]:
     """Retorna todas las entradas, más recientes primero."""
     with _connect() as conn:
-        rows = conn.execute(
-            "SELECT * FROM history ORDER BY id DESC"
-        ).fetchall()
+        rows = conn.execute("SELECT * FROM history ORDER BY id DESC").fetchall()
 
     return [
         HistoryEntry(
             id=row["id"],
             module=HistoryModule(row["module"]),
             data_type=row["data_type"],
-            poblacional=None if row["poblacional"] is None else bool(row["poblacional"]),
+            poblacional=None
+            if row["poblacional"] is None
+            else bool(row["poblacional"]),
             input_payload=row["input_payload"],
             result_summary=row["result_summary"],
             created_at=row["created_at"],

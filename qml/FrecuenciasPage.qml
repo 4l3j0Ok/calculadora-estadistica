@@ -8,7 +8,7 @@ import "components"
 // Página: Tabla de Frecuencias
 // Soporta tres tipos de datos: no agrupados, agrupados por valor y
 // agrupados por intervalos. Toda la lógica de parsing/cálculo vive en
-// Python (services/parser.py + services/calculator.py); este QML solo
+// Python (src/services/parser.py + src/services/calculator.py); este QML solo
 // arma la entrada, la envía al controller y muestra el resultado.
 Item {
     id: root

@@ -1,10 +1,10 @@
-"""Tests de mediana/moda/media/rango (services/calculator.py +
-services/descriptive_stats.py)."""
+"""Tests de mediana/moda/media/rango (src/services/calculator.py +
+src/services/descriptive_stats.py)."""
 
 from __future__ import annotations
 
-from schemas.table import Table, TableItem, TableType
-from services.calculator import TableCalculator
+from src.schemas.table import Table, TableItem, TableType
+from src.services.calculator import TableCalculator
 
 
 def _tabla(data_type: TableType, items: list[TableItem]) -> Table:

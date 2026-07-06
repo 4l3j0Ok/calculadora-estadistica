@@ -2,11 +2,11 @@ import json
 
 from PySide6.QtCore import Property, QObject, Signal, Slot
 
-from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
-from schemas.history import HistoryModule
-from services import history_service, markdown_io
-from services.calculator import DispersionCalculator, format_number
-from services.parser import (
+from src.schemas.dispersion import DispersionItem, DispersionResult, DispersionType
+from src.schemas.history import HistoryModule
+from src.services import history_service, markdown_io
+from src.services.calculator import DispersionCalculator, format_number
+from src.services.parser import (
     DispersionParseError,
     parse_agrupados_intervalo,
     parse_agrupados_valor,
@@ -91,7 +91,9 @@ class DispersionController(QObject):
             self._set_error(str(exc))
             return
 
-        self._calcular(items, DispersionType.AGRUPADOS_INTERVALO, poblacional, filas_json)
+        self._calcular(
+            items, DispersionType.AGRUPADOS_INTERVALO, poblacional, filas_json
+        )
 
     @Slot()
     def limpiar(self) -> None:
@@ -145,7 +147,7 @@ class DispersionController(QObject):
     def _decode_json(self, filas_json: str) -> list[dict] | None:
         try:
             filas = json.loads(filas_json)
-        except (json.JSONDecodeError, ValueError):
+        except json.JSONDecodeError, ValueError:
             self._set_error("Error interno: formato de datos inválido.")
             return None
         return filas
@@ -160,7 +162,9 @@ class DispersionController(QObject):
         self._error = ""
         self._data_type = data_type
         self._poblacional = poblacional
-        res = self._calculator.calculate(items, data_type=data_type, poblacional=poblacional)
+        res = self._calculator.calculate(
+            items, data_type=data_type, poblacional=poblacional
+        )
         self._table_model = self._build_table_model(res)
         self._result = self._build_result(res)
 

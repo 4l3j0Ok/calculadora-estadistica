@@ -5,8 +5,8 @@ from PySide6.QtQuick import QQuickTextDocument
 from PySide6.QtWidgets import QApplication
 from shiboken6 import getCppPointer
 
-from services import markdown_io
-from services.markdown_renderer import MarkdownRenderer
+from src.services import markdown_io
+from src.services.markdown_renderer import MarkdownRenderer
 
 
 class MarkdownController(QObject):
@@ -99,7 +99,9 @@ class MarkdownController(QObject):
         encuentra el destino, devuelve -1 para que QML no haga scroll.
         """
         document = quick_document.textDocument()
-        title = self._document_anchors.get(self._document_key(quick_document), {}).get(anchor.lstrip("#"))
+        title = self._document_anchors.get(self._document_key(quick_document), {}).get(
+            anchor.lstrip("#")
+        )
         if not title:
             return -1.0
         cursor = document.find(title)

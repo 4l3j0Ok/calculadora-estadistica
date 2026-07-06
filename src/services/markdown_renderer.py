@@ -8,7 +8,7 @@ recursos remotos):
   tablas + task lists vía `mdit-py-plugins`) para generar HTML del
   subconjunto de rich text que entiende `QTextDocument`.
 - Las fórmulas LaTeX `\\( ... \\)` (inline) y `\\[ ... \\]` (bloque) se
-  rasterizan con `matplotlib.mathtext` (ver `services.formula_renderer`)
+  rasterizan con `matplotlib.mathtext` (ver `src.services.formula_renderer`)
   y se insertan como `<img>` que apuntan a PNG cacheados en el directorio
   de caché del sistema operativo.
 
@@ -29,8 +29,8 @@ from mdit_py_plugins.tasklists import tasklists_plugin
 from PySide6.QtCore import QUrl
 from PySide6.QtGui import QTextDocument
 
-from services.formula_renderer import FormulaRenderer
-from services.template_loader import load_resource_text
+from src.services.formula_renderer import FormulaRenderer
+from src.services.template_loader import load_resource_text
 
 # Placeholders únicos (alfanuméricos, sin sintaxis Markdown) usados para
 # proteger las fórmulas LaTeX del procesamiento de markdown-it, y
@@ -198,7 +198,12 @@ class MarkdownRenderer:
         body_html = self._md.render(protected_text)
         anchors = _extract_heading_anchors(body_html)
         body_html, resources = self._replace_math_with_images(
-            body_html, block_formulas, inline_formulas, theme, device_pixel_ratio, text_color
+            body_html,
+            block_formulas,
+            inline_formulas,
+            theme,
+            device_pixel_ratio,
+            text_color,
         )
         body_html = _decorate_tables(body_html)
         return RenderedMarkdown(

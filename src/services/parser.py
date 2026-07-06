@@ -12,8 +12,8 @@ La lógica de parsing/validación es genérica: se parametriza con un
 código entre los dos módulos.
 """
 
-from schemas.dispersion import DispersionItem
-from schemas.table import TableItem
+from src.schemas.dispersion import DispersionItem
+from src.schemas.table import TableItem
 
 
 class ParseError(ValueError):
@@ -30,9 +30,7 @@ def _parse_float(valor: str, campo: str, fila_idx: int) -> float:
     try:
         return float(valor.replace(",", "."))
     except ValueError:
-        raise ParseError(
-            f"Fila {fila_idx}: {campo} «{valor}» no es un número válido."
-        )
+        raise ParseError(f"Fila {fila_idx}: {campo} «{valor}» no es un número válido.")
 
 
 def _parse_frecuencia(valor: str, fila_idx: int) -> int:
@@ -89,7 +87,8 @@ def _parse_valor_filas(filas: list[dict], item_factory) -> list:
     filas_con_datos = [
         f
         for f in filas
-        if str(f.get("xi", "")).strip() != "" or str(f.get("frecuencia", "")).strip() != ""
+        if str(f.get("xi", "")).strip() != ""
+        or str(f.get("frecuencia", "")).strip() != ""
     ]
 
     if not filas_con_datos:
@@ -122,7 +121,9 @@ def _parse_intervalo_filas(filas: list[dict], item_factory) -> list:
     filas_con_datos = [
         f
         for f in filas
-        if any(str(f.get(k, "")).strip() != "" for k in ("lower", "upper", "frecuencia"))
+        if any(
+            str(f.get(k, "")).strip() != "" for k in ("lower", "upper", "frecuencia")
+        )
     ]
 
     if not filas_con_datos:

@@ -6,7 +6,7 @@ import "components"
 // Renderiza assets/docs/formulas.md (fórmulas prácticas de Estadística,
 // con notación LaTeX) usando el componente reutilizable
 // NativeMarkdownView (markdown-it-py + matplotlib.mathtext, 100% nativo
-// de Qt, ver services/markdown_renderer.py).
+// de Qt, ver src/services/markdown_renderer.py).
 Item {
     id: root
 

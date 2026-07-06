@@ -1,8 +1,8 @@
 import math
 
-from schemas.dispersion import DispersionItem, DispersionResult, DispersionType
-from schemas.table import Table, TableItem, TableType
-from services import descriptive_stats
+from src.schemas.dispersion import DispersionItem, DispersionResult, DispersionType
+from src.schemas.table import Table, TableItem, TableType
+from src.services import descriptive_stats
 
 
 def format_number(v: float) -> str:
@@ -49,18 +49,13 @@ class TableCalculator:
         Retorna una nueva lista de TableItem.
         """
         if data_type == TableType.AGRUPADOS_INTERVALO:
-            return sorted(
-                items, key=lambda i: i.lower if i.lower is not None else i.xi
-            )
+            return sorted(items, key=lambda i: i.lower if i.lower is not None else i.xi)
 
         merged: dict[float, int] = {}
         for item in items:
             merged[item.xi] = merged.get(item.xi, 0) + item.f
 
-        return [
-            TableItem(xi=xi, f=f)
-            for xi, f in sorted(merged.items())
-        ]
+        return [TableItem(xi=xi, f=f) for xi, f in sorted(merged.items())]
 
     def calculate_relative_frequency(self, table: Table) -> None:
         """
@@ -226,7 +221,9 @@ class DispersionCalculator:
     fórmula fi · (Xi - x̄)² es válida en los tres casos.
     """
 
-    def _merge_and_sort_valor(self, items: list[DispersionItem]) -> list[DispersionItem]:
+    def _merge_and_sort_valor(
+        self, items: list[DispersionItem]
+    ) -> list[DispersionItem]:
         """Unifica Xi repetidos sumando frecuencias y ordena ascendente."""
         merged: dict[float, int] = {}
         for item in items:
@@ -272,7 +269,7 @@ class DispersionCalculator:
 
         for item in items:
             item.diff = round(item.xi - mean, 2)
-            item.diff_sq = round(item.diff ** 2, 2)
+            item.diff_sq = round(item.diff**2, 2)
             item.f_diff_sq = round(item.f * item.diff_sq, 2)
 
         sum_f_diff_sq = round(sum(i.f_diff_sq or 0.0 for i in items), 2)

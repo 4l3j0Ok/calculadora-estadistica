@@ -16,7 +16,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${REPO_ROOT}"
 
 APP_NAME="CalculadoraEstadistica"
-ENTRYPOINT="main.py"
+ENTRYPOINT="src/main.py"
 OUTPUT_DIR="dist/linux"
 RELEASES_DIR="dist/releases"
 
@@ -100,9 +100,10 @@ echo "==> Compilando con Nuitka (standalone, Linux)..."
     --output-dir="${OUTPUT_DIR}" \
     --output-filename="${APP_NAME}" \
     --report="${OUTPUT_DIR}/nuitka-report.xml" \
+    --linux-icon="assets/calculator.png" \
     "${ENTRYPOINT}"
 
-DIST_DIR="${OUTPUT_DIR}/main.dist"
+DIST_DIR="${OUTPUT_DIR}/src/main.dist"
 if [[ ! -d "${DIST_DIR}" ]]; then
     echo "ERROR: no se encontró la carpeta de salida esperada: ${DIST_DIR}" >&2
     exit 1
@@ -217,7 +218,7 @@ echo "==> Standalone validado correctamente (código de salida: ${nuitka_smoke_s
 
 # ── Validar que la base SQLite se creó en el directorio XDG temporal ─────
 # Si el nombre real del archivo cambia, ajustar HISTORY_DB_FILENAME acá y
-# en services/runtime_paths.py.
+# en src/services/runtime_paths.py.
 HISTORY_DB_FILENAME="history.db"
 NUITKA_EXPECTED_DB="${NUITKA_TEST_DATA_DIR}/calculadora-estadistica/${HISTORY_DB_FILENAME}"
 if [[ ! -f "${NUITKA_EXPECTED_DB}" ]]; then

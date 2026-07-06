@@ -20,3 +20,34 @@ dev = [
     "zstandard>=0.25.0",
     "pytest>=8.0.0",
 ]
+
+# Configuración de Nuitka. Ver scripts/build-linux.sh y
+# scripts/build-windows.ps1. Las opciones condicionales por OS (icono,
+# console-mode) se pasan en los scripts de build, ya que TOML no soporta
+# `if {OS}` como las directivas `# nuitka-project-if:`. Las rutas de
+# data files/dirs son relativas al CWD al invocar Nuitka, que en los
+# scripts siempre es la raíz del repo.
+[tool.nuitka]
+mode = "standalone"
+enable-plugin = "pyside6"
+assume-yes-for-downloads = true
+remove-output = true
+report = "nuitka-report.xml"
+
+# Plugins Qt: incluye los módulos QML runtime (QtQuick, QtQuick.Controls,
+# QtQuick.Layouts, etc.) y parchea el rpath de sus plugins. Se excluye
+# `Qt/labs/assetdownloader` que en algunas wheels trae artefactos de
+# build sueltos (.a/.o) que rompen patchelf (no se usa esa API QML).
+include-qt-plugins = "qml"
+noinclude-dlls = ["PySide6/qml/Qt/labs/assetdownloader/*"]
+
+# matplotlib: el visor Markdown usa mathtext para rasterizar fórmulas
+# LaTeX (ver src/services/formula_renderer.py); embebemos su data para
+# que funcione en el standalone.
+include-package-data = ["matplotlib"]
+include-module = ["matplotlib.backends.backend_agg"]
+
+# Recursos junto al ejecutable: qml/ y pyproject.toml (para
+# src/services/runtime_paths.app_version()).
+include-data-files = ["pyproject.toml=pyproject.toml"]
+include-data-dir = ["qml=qml"]

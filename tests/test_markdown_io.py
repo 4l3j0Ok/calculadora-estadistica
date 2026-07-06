@@ -1,11 +1,11 @@
-"""Tests de services/markdown_io.py: render y parse de datos de entrada
+"""Tests de src/services/markdown_io.py: render y parse de datos de entrada
 en formato Markdown, para los 3 tipos de dato y ambos módulos."""
 
 from __future__ import annotations
 
 import pytest
 
-from services import markdown_io
+from src.services import markdown_io
 
 
 def test_render_parse_no_agrupados_round_trip() -> None:
@@ -20,7 +20,11 @@ def test_render_parse_no_agrupados_round_trip() -> None:
 
 
 def test_render_parse_agrupados_valor_round_trip() -> None:
-    rows = [{"xi": 700, "frecuencia": 5}, {"xi": 800, "frecuencia": 5}, {"xi": 1200, "frecuencia": 4}]
+    rows = [
+        {"xi": 700, "frecuencia": 5},
+        {"xi": 800, "frecuencia": 5},
+        {"xi": 1200, "frecuencia": 4},
+    ]
     md = markdown_io.render_agrupados_valor("dispersion", rows)
     assert "type: agrupados-valor" in md
     assert "module: dispersion" in md
@@ -74,7 +78,16 @@ def test_parse_modulo_desconocido_lanza_error() -> None:
 def test_render_resultado_frecuencias() -> None:
     context = {
         "intervalos": False,
-        "rows": [{"label": 5, "f": 3, "fr": 0.3, "fa": 3, "f_percent": 30.0, "fa_percent": 30.0}],
+        "rows": [
+            {
+                "label": 5,
+                "f": 3,
+                "fr": 0.3,
+                "fa": 3,
+                "f_percent": 30.0,
+                "fa_percent": 30.0,
+            }
+        ],
         "n": 10,
         "mean": "5.00",
         "mediana": "5.00",

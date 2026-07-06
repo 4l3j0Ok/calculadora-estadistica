@@ -6,7 +6,7 @@ Frecuencias y Dispersión.
 - Parseo: se detecta el tipo de dato/módulo a través de un encabezado
   fijo (`---\\ntype: ...\\nmodule: ...\\n---`), y las tablas Markdown se
   extraen convirtiéndolas a HTML con `markdown-it-py` (mismo motor que
-  `services.markdown_renderer`) + `html.parser.HTMLParser`, en vez de
+  `src.services.markdown_renderer`) + `html.parser.HTMLParser`, en vez de
   reimplementar un parser de tablas Markdown a mano.
 """
 
@@ -18,7 +18,7 @@ from html.parser import HTMLParser
 
 from markdown_it import MarkdownIt
 
-from services.template_loader import render_template
+from src.services.template_loader import render_template
 
 _table_md = MarkdownIt("commonmark", {"html": False}).enable(["table"])
 
@@ -185,9 +185,7 @@ def parse_input_markdown(text: str) -> ParsedInput:
 
     if data_type == "agrupados_valor":
         rows = [
-            {"xi": row[0], "frecuencia": row[1]}
-            for row in table_rows
-            if len(row) >= 2
+            {"xi": row[0], "frecuencia": row[1]} for row in table_rows if len(row) >= 2
         ]
     else:
         rows = [

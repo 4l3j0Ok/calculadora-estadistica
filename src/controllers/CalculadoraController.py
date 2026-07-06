@@ -2,11 +2,11 @@ import json
 
 from PySide6.QtCore import Property, QObject, Signal, Slot
 
-from schemas.history import HistoryModule
-from schemas.table import Table, TableItem, TableType
-from services import history_service, markdown_io
-from services.calculator import TableCalculator, format_number
-from services.parser import (
+from src.schemas.history import HistoryModule
+from src.schemas.table import Table, TableItem, TableType
+from src.services import history_service, markdown_io
+from src.services.calculator import TableCalculator, format_number
+from src.services.parser import (
     TableParseError,
     parse_table_agrupados_intervalo,
     parse_table_agrupados_valor,
@@ -131,7 +131,9 @@ class CalculadoraController(QObject):
         for row in self._table_model:
             rows.append(
                 {
-                    "label": row["intervalo"] if intervalos else format_number(row["xi"]),
+                    "label": row["intervalo"]
+                    if intervalos
+                    else format_number(row["xi"]),
                     "f": row["frecuencia"],
                     "fr": row["frecuenciaRelativa"],
                     "fa": row["frecuenciaAcumulada"],
@@ -156,7 +158,7 @@ class CalculadoraController(QObject):
     def _decode_json(self, filas_json: str) -> list[dict] | None:
         try:
             filas = json.loads(filas_json)
-        except (json.JSONDecodeError, ValueError):
+        except json.JSONDecodeError, ValueError:
             self._set_error("Error interno: formato de datos inválido.")
             return None
         return filas
@@ -194,7 +196,9 @@ class CalculadoraController(QObject):
             if table.data_type == TableType.AGRUPADOS_INTERVALO:
                 row["lower"] = item.lower
                 row["upper"] = item.upper
-                row["intervalo"] = f"{_fmt_bound(item.lower)} - {_fmt_bound(item.upper)}"
+                row["intervalo"] = (
+                    f"{_fmt_bound(item.lower)} - {_fmt_bound(item.upper)}"
+                )
             rows.append(row)
         return rows
 

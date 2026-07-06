@@ -8,8 +8,8 @@ import QtQuick.Window
 //
 // El Markdown se convierte a rich text con markdown-it-py y las fórmulas
 // se rasterizan con matplotlib.mathtext (ver
-// services/markdown_renderer.py, services/formula_renderer.py,
-// controllers/MarkdownController.py::renderMarkdown*). El resultado se
+// src/services/markdown_renderer.py, src/services/formula_renderer.py,
+// src/controllers/MarkdownController.py::renderMarkdown*). El resultado se
 // vuelca en el QTextDocument de un TextEdit nativo dentro de un
 // ScrollView, conservando selección, copiado (Ctrl+C) y scroll nativo.
 //

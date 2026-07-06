@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from services import history_service, runtime_paths
+from src.services import history_service, runtime_paths
 
 
 @pytest.fixture
@@ -50,7 +50,7 @@ def test_init_db_crea_la_base_en_el_directorio_xdg(history_service_module) -> No
 def test_insertar_y_listar_entradas_persiste_en_la_base_xdg(
     history_service_module,
 ) -> None:
-    from schemas.history import HistoryModule
+    from src.schemas.history import HistoryModule
 
     history_service, xdg_data_home = history_service_module
 

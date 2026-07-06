@@ -1,4 +1,4 @@
-"""Tests de services/markdown_renderer.py: conversión Markdown -> rich
+"""Tests de src/services/markdown_renderer.py: conversión Markdown -> rich
 text de Qt con markdown-it-py, fórmulas LaTeX rasterizadas con
 matplotlib.mathtext (PNG cacheados) y soporte de temas.
 
@@ -10,8 +10,8 @@ from pathlib import Path
 
 from PySide6.QtCore import QUrl
 
-from services.markdown_renderer import MarkdownRenderer
-from services.template_loader import load_resource_text
+from src.services.markdown_renderer import MarkdownRenderer
+from src.services.template_loader import load_resource_text
 
 
 def _html(markdown: str, **kwargs) -> str:

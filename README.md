@@ -43,9 +43,9 @@ python main.py
 
 ## Datos del usuario (historial)
 
-El historial de operaciones se guarda en SQLite (`services/history_service.py`),
+El historial de operaciones se guarda en SQLite (`src/services/history_service.py`),
 en el directorio de datos del usuario, **nunca** junto al ejecutable ni al
-proyecto (ver `services/runtime_paths.py`):
+proyecto (ver `src/services/runtime_paths.py`):
 
 - Linux/macOS: `${XDG_DATA_HOME:-~/.local/share}/calculadora-estadistica/history.db`
 - Windows: `%LOCALAPPDATA%\calculadora-estadistica\history.db`
@@ -62,9 +62,9 @@ corre la app, sin sobrescribir una base nueva que ya exista.
 uv run pytest
 ```
 
-Cubre `services/runtime_paths.py` (resolución de rutas XDG/`LOCALAPPDATA`,
+Cubre `src/services/runtime_paths.py` (resolución de rutas XDG/`LOCALAPPDATA`,
 con `monkeypatch`/`tmp_path`, sin tocar el `HOME` real) y un test de
-integración de `services/history_service.py` que confirma que la base se
+integración de `src/services/history_service.py` que confirma que la base se
 crea en el directorio XDG temporal y no junto al proyecto/ejecutable.
 
 ## Build de distribución (Nuitka)
