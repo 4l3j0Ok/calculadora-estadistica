@@ -16,6 +16,10 @@ Item {
     property bool poblacional: true   // true = población, false = muestra
     property string dataType: "agrupados_valor"
     property string pasteError: ""
+    readonly property bool controllerReady: !!dispersionController
+    readonly property var result: root.controllerReady ? dispersionController.result : ({})
+    readonly property var tableModel: root.controllerReady ? dispersionController.tableModel : []
+    readonly property string controllerError: root.controllerReady ? dispersionController.error : ""
 
     readonly property var tiposDeDatos: [
         {
@@ -182,6 +186,9 @@ Item {
 
     // ── Historial ───────────────────────────────────────────────────────
     readonly property var historyEntries: {
+        if (!historyController)
+            return [];
+
         var todas = historyController.entries;
         var propias = [];
         for (var i = 0; i < todas.length; i++)
@@ -835,9 +842,9 @@ Item {
                 }
 
                 Label {
-                    text: dispersionController.error
+                    text: root.controllerError
                     color: Theme.error_text
-                    visible: dispersionController.error !== ""
+                    visible: root.controllerError !== ""
                     wrapMode: Text.Wrap
                     Layout.fillWidth: true
                     font.pixelSize: 11
@@ -922,7 +929,7 @@ Item {
                     Button {
                         text: "Copiar tabla"
                         implicitHeight: 28
-                        visible: dispersionController.tableModel.length > 0
+                        visible: root.tableModel.length > 0
                         onClicked: root.copiarTabla()
 
                         background: Rectangle {
@@ -944,7 +951,7 @@ Item {
                 Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    visible: dispersionController.tableModel.length === 0
+                    visible: root.tableModel.length === 0
 
                     Label {
                         anchors.centerIn: parent
@@ -959,7 +966,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     spacing: 12
-                    visible: dispersionController.tableModel.length > 0
+                    visible: root.tableModel.length > 0
 
                     Label {
                         text: "Resultados · " + (root.poblacional ? "Población" : "Muestra")
@@ -996,40 +1003,40 @@ Item {
 
                         ResultCard {
                             label: "n"
-                            value: dispersionController.result["n"] !== undefined ? dispersionController.result["n"].toString() : "—"
+                            value: root.result["n"] !== undefined ? root.result["n"].toString() : "—"
                         }
                         ResultCard {
                             label: "Media (x̄)"
-                            value: dispersionController.result["mean"] ?? "—"
+                            value: root.result["mean"] ?? "—"
                         }
                         ResultCard {
                             label: "Rango"
-                            value: dispersionController.result["rango"] ?? "—"
+                            value: root.result["rango"] ?? "—"
                         }
                         ResultCard {
                             label: root.poblacional ? "Varianza (σ²)" : "Varianza (s²)"
-                            value: dispersionController.result["varianza"] ?? "—"
-                            undefined_value: dispersionController.result["statsUndefined"] === true
+                            value: root.result["varianza"] ?? "—"
+                            undefined_value: root.result["statsUndefined"] === true
                         }
                         ResultCard {
                             label: root.poblacional ? "Desvío (σ)" : "Desvío (s)"
-                            value: dispersionController.result["desvio"] ?? "—"
-                            undefined_value: dispersionController.result["statsUndefined"] === true
+                            value: root.result["desvio"] ?? "—"
+                            undefined_value: root.result["statsUndefined"] === true
                         }
                         ResultCard {
                             label: "CV (%)"
-                            value: dispersionController.result["cv"] ?? "—"
-                            undefined_value: dispersionController.result["statsUndefined"] === true
+                            value: root.result["cv"] ?? "—"
+                            undefined_value: root.result["statsUndefined"] === true
                         }
                     }
 
                     DispersionTable {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        dataType: dispersionController.result["dataType"] ?? root.dataType
-                        model: dispersionController.tableModel
-                        sumValue: dispersionController.result["sumFDiffSq"] ?? "—"
-                        totalN: dispersionController.result["n"] !== undefined ? dispersionController.result["n"] : 0
+                        dataType: root.result["dataType"] ?? root.dataType
+                        model: root.tableModel
+                        sumValue: root.result["sumFDiffSq"] ?? "—"
+                        totalN: root.result["n"] !== undefined ? root.result["n"] : 0
                     }
                 }
             }

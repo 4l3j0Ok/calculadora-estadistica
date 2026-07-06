@@ -15,6 +15,10 @@ Item {
 
     property string dataType: "agrupados_valor"
     property string pasteError: ""
+    readonly property bool controllerReady: !!calculadoraController
+    readonly property var result: root.controllerReady ? calculadoraController.result : ({})
+    readonly property var tableModel: root.controllerReady ? calculadoraController.tableModel : []
+    readonly property string controllerError: root.controllerReady ? calculadoraController.error : ""
 
     readonly property var tiposDeDatos: [
         {
@@ -183,6 +187,9 @@ Item {
 
     // ── Historial ───────────────────────────────────────────────────────
     readonly property var historyEntries: {
+        if (!historyController)
+            return [];
+
         var todas = historyController.entries;
         var propias = [];
         for (var i = 0; i < todas.length; i++)
@@ -835,9 +842,9 @@ Item {
                 }
 
                 Label {
-                    text: calculadoraController.error
+                    text: root.controllerError
                     color: Theme.error_text
-                    visible: calculadoraController.error !== ""
+                    visible: root.controllerError !== ""
                     wrapMode: Text.Wrap
                     Layout.fillWidth: true
                     font.pixelSize: 11
@@ -932,7 +939,7 @@ Item {
                     Button {
                         text: "Copiar tabla"
                         implicitHeight: 28
-                        visible: calculadoraController.tableModel.length > 0
+                        visible: root.tableModel.length > 0
                         onClicked: root.copiarTabla()
 
                         background: Rectangle {
@@ -953,7 +960,7 @@ Item {
                 Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    visible: calculadoraController.tableModel.length === 0
+                    visible: root.tableModel.length === 0
 
                     Label {
                         anchors.centerIn: parent
@@ -969,36 +976,36 @@ Item {
                     rowSpacing: 8
                     columnSpacing: 8
                     Layout.fillWidth: true
-                    visible: calculadoraController.tableModel.length > 0
+                    visible: root.tableModel.length > 0
 
                     ResultCard {
                         label: "n"
-                        value: calculadoraController.result["n"] !== undefined ? calculadoraController.result["n"].toString() : "—"
+                        value: root.result["n"] !== undefined ? root.result["n"].toString() : "—"
                     }
                     ResultCard {
                         label: "Media (x̄)"
-                        value: calculadoraController.result["mean"] ?? "—"
+                        value: root.result["mean"] ?? "—"
                     }
                     ResultCard {
                         label: "Rango"
-                        value: calculadoraController.result["rango"] ?? "—"
+                        value: root.result["rango"] ?? "—"
                     }
                     ResultCard {
                         label: "Mediana (Me)"
-                        value: calculadoraController.result["mediana"] ?? "—"
+                        value: root.result["mediana"] ?? "—"
                     }
                     ResultCard {
                         label: "Moda (Mo)"
-                        value: calculadoraController.result["moda"] ?? "—"
+                        value: root.result["moda"] ?? "—"
                     }
                 }
 
                 Table {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    visible: calculadoraController.tableModel.length > 0
+                    visible: root.tableModel.length > 0
                     dataType: root.dataType
-                    model: calculadoraController.tableModel
+                    model: root.tableModel
                 }
             }
         }
