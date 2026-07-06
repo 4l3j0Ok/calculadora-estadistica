@@ -1,3 +1,17 @@
+# [1.6.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.5.0...1.6.0) (2026-07-06)
+
+
+### Bug Fixes
+
+* **qml:** evitar errores al cerrar controladores ([2c0df42](https://github.com/4l3j0Ok/calculadora-estadistica/commit/2c0df423b7de14db2c013da18e20212d7b2b6f31))
+
+
+### Features
+
+* **markdown:** agregar visor de formulas ([1a958cb](https://github.com/4l3j0Ok/calculadora-estadistica/commit/1a958cb2b2d2f7a3216c874e6f80c13080685f40))
+* **markdown:** cachear formulas renderizadas ([1e50965](https://github.com/4l3j0Ok/calculadora-estadistica/commit/1e50965124ebb1b8f99afca49dee5f03264d035b))
+* **ui:** actualizar icono y enlaces del creador ([0769b95](https://github.com/4l3j0Ok/calculadora-estadistica/commit/0769b95ab1e1772aa59634563388370dba8cc06b))
+
 # [1.5.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.4.0...1.5.0) (2026-07-05)
 
 
