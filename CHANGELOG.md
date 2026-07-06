@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.8.0...1.9.0) (2026-07-06)
+
+
+### Features
+
+* add toast notifications for actions ([00f658d](https://github.com/4l3j0Ok/calculadora-estadistica/commit/00f658d2bf9edcbc0616cda67021b272a74b75ac))
+
 # [1.8.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.7.0...1.8.0) (2026-07-06)
 
 # [1.7.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.6.1...1.7.0) (2026-07-06)
