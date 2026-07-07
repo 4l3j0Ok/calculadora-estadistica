@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.10.1...1.10.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* remove .00 from int numbers ([c5e7357](https://github.com/4l3j0Ok/calculadora-estadistica/commit/c5e73578a5b7d4aaae1f3169bf8d513a29322cb0))
+
 ## [1.10.1](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.10.0...1.10.1) (2026-07-07)
 
 
