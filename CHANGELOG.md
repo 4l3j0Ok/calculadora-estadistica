@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.10.0...1.10.1) (2026-07-07)
+
+
+### Bug Fixes
+
+* add keyboard shortcuts to dispersion inputs ([680c524](https://github.com/4l3j0Ok/calculadora-estadistica/commit/680c524f82d8ef2280d80830c05030ceb7f386b2))
+
 # [1.10.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.9.0...1.10.0) (2026-07-07)
 
 
