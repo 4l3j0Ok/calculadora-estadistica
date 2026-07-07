@@ -2,6 +2,7 @@
   "name": "calculadora-estadistica-release-tooling",
   "private": true,
   "description": "Dependencias de Node solo para ejecutar semantic-release (no forman parte de la app Python).",
+  "packageManager": "pnpm@10.15.1",
   "devDependencies": {
     "semantic-release": "^24.2.3",
     "@semantic-release/changelog": "^6.0.3",

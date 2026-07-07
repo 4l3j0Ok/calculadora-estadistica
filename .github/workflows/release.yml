@@ -45,8 +45,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
-          cache-dependency-path: package-lock.json
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
 
       - name: Install uv
         uses: astral-sh/setup-uv@v8.2.0
@@ -57,12 +60,12 @@ jobs:
             pyproject.toml
 
       - name: Install release tooling
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx --no-install semantic-release
+        run: pnpm exec semantic-release
 
       - name: Detectar si se publicó una release
         id: detect
