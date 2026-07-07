@@ -22,6 +22,12 @@ jobs:
   build:
     name: Build standalone (Windows x86_64)
     runs-on: windows-2022
+
+    env:
+      CCACHE_DIR: ${{ runner.temp }}\ccache
+      CCACHE_MAXSIZE: 2G
+      CCACHE_COMPRESS: "true"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,13 +38,28 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.14"
-          cache: "pip"
 
       - name: Install uv
-        run: python -m pip install --upgrade pip uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
 
-      - name: Install project dependencies (incl. dev group)
-        run: uv sync --group dev
+      - name: Restore Nuitka compiler cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}\ccache
+            ~\AppData\Local\Nuitka
+          key: nuitka-windows-${{ runner.os }}-python314-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            nuitka-windows-${{ runner.os }}-python314-${{ github.ref_name }}-
+            nuitka-windows-${{ runner.os }}-python314-
+
+      - name: Install project dependencies
+        run: uv sync --group dev --frozen
 
       - name: Run unit/integration tests
         run: uv run pytest
@@ -49,17 +70,50 @@ jobs:
           APP_VERSION: ${{ inputs.app_version }}
         run: ./scripts/build-windows.ps1
 
+      - name: Show Nuitka cache information
+        if: always()
+        shell: pwsh
+        run: |
+          Write-Host "Nuitka cache:"
+          Get-ChildItem "$env:LOCALAPPDATA\Nuitka" -Recurse -ErrorAction SilentlyContinue |
+            Measure-Object -Property Length -Sum |
+            ForEach-Object {
+              $sizeMB = [math]::Round($_.Sum / 1MB, 2)
+              Write-Host "Total: $sizeMB MB"
+            }
+
+          Write-Host "Compiler cache:"
+          if (Test-Path $env:CCACHE_DIR) {
+            Get-ChildItem $env:CCACHE_DIR -Recurse -ErrorAction SilentlyContinue |
+              Measure-Object -Property Length -Sum |
+              ForEach-Object {
+                $sizeMB = [math]::Round($_.Sum / 1MB, 2)
+                Write-Host "Total: $sizeMB MB"
+              }
+          } else {
+            Write-Host "No se creó CCACHE_DIR."
+          }
+
       - name: Locate release artifact
         id: artifact
         shell: pwsh
         run: |
-          $zip = Get-ChildItem -Path "dist/releases" -Filter "*.zip" | Select-Object -First 1
+          $zip = Get-ChildItem `
+            -Path "dist/releases" `
+            -Filter "*.zip" `
+            -File |
+            Select-Object -First 1
+
           if (-not $zip) {
-            Write-Error "No se encontro ningun ZIP en dist/releases"
+            Write-Error "No se encontró ningún ZIP en dist/releases"
             exit 1
           }
-          "path=$($zip.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          "name=$($zip.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+          "path=$($zip.FullName)" |
+            Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          "name=$($zip.Name)" |
+            Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

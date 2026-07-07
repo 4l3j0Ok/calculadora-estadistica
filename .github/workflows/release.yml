@@ -1,10 +1,9 @@
 name: Release
 
 # semantic-release analiza los commits de `main` (Conventional Commits),
-# decide la proxima version, genera el CHANGELOG, taggea (formato "X.Y.Z",
-# ver .releaserc.json) y crea el GitHub Release. Si hubo release nuevo,
-# dispara los builds de Windows y Linux para adjuntar sus artefactos a
-# ese release.
+# decide la próxima versión, genera el CHANGELOG, crea el tag y publica
+# el GitHub Release. Si hubo una nueva release, ejecuta los builds de
+# Windows y Linux y adjunta sus artefactos.
 
 on:
   push:
@@ -12,7 +11,6 @@ on:
       - main
   workflow_dispatch: {}
 
-# Evita corridas de release solapadas sobre la misma rama.
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
@@ -26,12 +24,17 @@ jobs:
   release:
     name: semantic-release
     runs-on: ubuntu-22.04
-    # No correr sobre el commit de release generado por semantic-release
-    # (evita loops; el mensaje de commit incluye "[skip ci]").
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    # Evita volver a ejecutar semantic-release sobre el commit generado
+    # por @semantic-release/git.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      !contains(github.event.head_commit.message, '[skip ci]')
+
     outputs:
       released: ${{ steps.detect.outputs.released }}
       version: ${{ steps.detect.outputs.version }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,20 +45,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: Install uv (usado por el plugin @semantic-release/exec)
+      - name: Install uv
         uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
 
-      - name: Install release tooling (semantic-release + plugins)
-        run: npm install
+      - name: Install release tooling
+        run: npm ci
 
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: npx --no-install semantic-release
 
-      - name: Detectar si se publico una release
+      - name: Detectar si se publicó una release
         id: detect
+        shell: bash
         run: |
           if version="$(git describe --tags --exact-match HEAD 2>/dev/null)"; then
             echo "==> Nueva release: ${version}"
@@ -64,6 +75,7 @@ jobs:
           else
             echo "==> No hubo cambios que ameriten una nueva release."
             echo "released=false" >> "$GITHUB_OUTPUT"
+            echo "version=" >> "$GITHUB_OUTPUT"
           fi
 
   build-windows:
