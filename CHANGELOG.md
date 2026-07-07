@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.9.0...1.10.0) (2026-07-07)
+
+
+### Features
+
+* add exam mode ([c1de9ac](https://github.com/4l3j0Ok/calculadora-estadistica/commit/c1de9ac8c1a69ced2fde412aac0bba709f6d7382))
+
 # [1.9.0](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.8.0...1.9.0) (2026-07-06)
 
 
