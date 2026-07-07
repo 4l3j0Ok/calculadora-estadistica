@@ -196,7 +196,6 @@ ApplicationWindow {
                     id: frecuenciasPage
                     anchors.fill: parent
                     visible: root.currentPage === 0
-                    examMode: root.examMode
                     onToastRequested: (message, error) => toast.show(message, error)
                 }
 
@@ -204,7 +203,6 @@ ApplicationWindow {
                     id: dispersionPage
                     anchors.fill: parent
                     visible: root.currentPage === 1
-                    examMode: root.examMode
                     onToastRequested: (message, error) => toast.show(message, error)
                 }
 

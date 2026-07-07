@@ -15,7 +15,6 @@ Item {
 
     property string dataType: "agrupados_valor"
     property string pasteError: ""
-    property bool examMode: false
     readonly property bool controllerReady: !!calculadoraController
     readonly property var result: root.controllerReady ? calculadoraController.result : ({})
     readonly property var tableModel: root.controllerReady ? calculadoraController.tableModel : []
@@ -1002,7 +1001,7 @@ Item {
                     rowSpacing: 8
                     columnSpacing: 8
                     Layout.fillWidth: true
-                    visible: root.tableModel.length > 0 && !root.examMode
+                    visible: root.tableModel.length > 0
 
                     ResultCard {
                         label: "n"
