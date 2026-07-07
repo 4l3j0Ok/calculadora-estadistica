@@ -15,9 +15,18 @@ ApplicationWindow {
     // ── Estado de la sidebar ──────────────────────────────────────────────
     property int currentPage: 0
     property bool sidebarExpanded: true
+    property bool examMode: false
+    property int aboutClickCount: 0
 
     readonly property int sidebarExpandedWidth: 190
     readonly property int sidebarCollapsedWidth: 50
+
+    function toggleExamMode() {
+        root.examMode = !root.examMode;
+        if (root.examMode && root.currentPage === 2)
+            root.currentPage = 0;
+        toast.show(root.examMode ? "Modo exámen habilitado" : "Modo exámen deshabilitado", false);
+    }
 
     // ── Layout principal ──────────────────────────────────────────────────
     ColumnLayout {
@@ -139,6 +148,8 @@ ApplicationWindow {
                         label: "Fórmulas"
                         active: root.currentPage === 2
                         expanded: root.sidebarExpanded
+                        visible: !root.examMode
+                        Layout.preferredHeight: visible ? implicitHeight : 0
                         onActivated: root.currentPage = 2
                     }
 
@@ -157,7 +168,14 @@ ApplicationWindow {
                         label: "Acerca de"
                         active: root.currentPage === 3
                         expanded: root.sidebarExpanded
-                        onActivated: root.currentPage = 3
+                        onActivated: {
+                            root.currentPage = 3;
+                            root.aboutClickCount += 1;
+                            if (root.aboutClickCount >= 5) {
+                                root.aboutClickCount = 0;
+                                root.toggleExamMode();
+                            }
+                        }
                     }
                 }
             }
@@ -178,6 +196,7 @@ ApplicationWindow {
                     id: frecuenciasPage
                     anchors.fill: parent
                     visible: root.currentPage === 0
+                    examMode: root.examMode
                     onToastRequested: (message, error) => toast.show(message, error)
                 }
 
@@ -185,6 +204,7 @@ ApplicationWindow {
                     id: dispersionPage
                     anchors.fill: parent
                     visible: root.currentPage === 1
+                    examMode: root.examMode
                     onToastRequested: (message, error) => toast.show(message, error)
                 }
 

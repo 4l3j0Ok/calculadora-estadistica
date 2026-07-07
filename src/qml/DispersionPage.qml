@@ -16,6 +16,7 @@ Item {
     property bool poblacional: true   // true = población, false = muestra
     property string dataType: "agrupados_valor"
     property string pasteError: ""
+    property bool examMode: false
     readonly property bool controllerReady: !!dispersionController
     readonly property var result: root.controllerReady ? dispersionController.result : ({})
     readonly property var tableModel: root.controllerReady ? dispersionController.tableModel : []
@@ -1004,6 +1005,7 @@ Item {
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 2
+                        visible: !root.examMode
 
                         Text {
                             text: root.formulaMedia()
@@ -1025,6 +1027,7 @@ Item {
                         rowSpacing: 8
                         columnSpacing: 8
                         Layout.fillWidth: true
+                        visible: !root.examMode
 
                         ResultCard {
                             label: "n"
