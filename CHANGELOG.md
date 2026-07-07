@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.10.2...1.10.3) (2026-07-07)
+
+
+### Bug Fixes
+
+* keep result cards in exam mode ([7e44305](https://github.com/4l3j0Ok/calculadora-estadistica/commit/7e4430519e073989c5833c15349767a7d53d70c9))
+
 ## [1.10.2](https://github.com/4l3j0Ok/calculadora-estadistica/compare/1.10.1...1.10.2) (2026-07-07)
 
 
