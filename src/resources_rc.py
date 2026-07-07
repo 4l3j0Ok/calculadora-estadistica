@@ -10032,506 +10032,1313 @@ ediana (Me):** {\
 oda (Mo):** {{ m\
 oda }}\x0a**Rango:*\
 * {{ rango }}\x0a\
-\x00\x00\x1f\x1e\
+\x00\x00Q\x81\
 #\
  F\xc3\xb3rmulas pr\xc3\xa1c\
-ticas de Estad\xc3\xad\
-stica\x0a\x0a## \xc3\x8dndic\
-e\x0a\x0a1. [Notaci\xc3\xb3n\
- b\xc3\xa1sica](#1-not\
-aci\xc3\xb3n-b\xc3\xa1sica)\x0a\
-2. [Tabla de fre\
-cuencias](#2-tab\
-la-de-frecuencia\
-s)\x0a3. [Datos no \
-agrupados](#3-da\
-tos-no-agrupados\
-)\x0a4. [Datos agru\
-pados por valor]\
-(#4-datos-agrupa\
-dos-por-valor)\x0a5\
-. [Datos agrupad\
-os por intervalo\
-s](#5-datos-agru\
-pados-por-interv\
-alos)\x0a6. [Rango]\
-(#6-rango)\x0a7. [V\
-arianza](#7-vari\
-anza)\x0a8. [Desv\xc3\xad\
-o est\xc3\xa1ndar](#8-\
-desv\xc3\xado-est\xc3\xa1nda\
-r)\x0a9. [Coeficien\
-te de variaci\xc3\xb3n\
-](#9-coeficiente\
--de-variaci\xc3\xb3n)\x0a\
-10. [Representat\
-ividad del prome\
-dio](#10-represe\
-ntatividad-del-p\
-romedio)\x0a11. [Cu\
-artiles, deciles\
- y percentiles](\
-#11-cuartiles-de\
-ciles-y-percenti\
-les)\x0a12. [Tablas\
- auxiliares](#12\
--tablas-auxiliar\
-es)\x0a\x0a---\x0a\x0a## 1. \
-Notaci\xc3\xb3n b\xc3\xa1sic\
-a\x0a\x0a| S\xc3\xadmbolo | \
-Significado |\x0a|-\
---|---|\x0a| \x5c(x_i\x5c\
-) | Valor observ\
-ado |\x0a| \x5c(x_i^\x5ca\
-st\x5c) | Marca de \
-clase |\x0a| \x5c(f_i\x5c\
-) | Frecuencia a\
-bsoluta |\x0a| \x5c(f_\
-{r_i}\x5c) | Frecue\
-ncia relativa |\x0a\
-| \x5c(F_i\x5c) | Frec\
-uencia absoluta \
-acumulada |\x0a| \x5c(\
-f_i\x5c%\x5c) | Frecue\
-ncia porcentual \
-|\x0a| \x5c(F_i\x5c%\x5c) | \
-Frecuencia porce\
-ntual acumulada \
-|\x0a| \x5c(n\x5c) | Tama\
-\xc3\xb1o de la muestr\
-a |\x0a| \x5c(N\x5c) | Ta\
-ma\xc3\xb1o de la pobl\
-aci\xc3\xb3n |\x0a| \x5c(\x5cba\
-r{x}\x5c) | Media m\
-uestral |\x0a| \x5c(\x5cm\
-u\x5c) | Media pobl\
-acional |\x0a| \x5c(s^\
-2\x5c) | Varianza m\
-uestral |\x0a| \x5c(\x5cs\
-igma^2\x5c) | Varia\
-nza poblacional \
-|\x0a| \x5c(s\x5c) | Desv\
-\xc3\xado est\xc3\xa1ndar mu\
-estral |\x0a| \x5c(\x5csi\
-gma\x5c) | Desv\xc3\xado \
-est\xc3\xa1ndar poblac\
-ional |\x0a| \x5c(CV\x5c)\
- | Coeficiente d\
-e variaci\xc3\xb3n |\x0a|\
- \x5c(L_i\x5c) | L\xc3\xadmi\
-te inferior del \
-intervalo |\x0a| \x5c(\
-L_s\x5c) | L\xc3\xadmite \
-superior del int\
-ervalo |\x0a| \x5c(c\x5c)\
- | Amplitud del \
-intervalo |\x0a\x0a###\
- Total de datos\x0a\
-\x0aMuestra:\x0a\x0a\x5c[\x0an=\
-\x5csum f_i\x0a\x5c]\x0a\x0aPob\
-laci\xc3\xb3n:\x0a\x0a\x5c[\x0aN=\x5c\
-sum f_i\x0a\x5c]\x0a\x0a---\x0a\
-\x0a## 2. Tabla de \
+ticas de Probabi\
+lidad y Estad\xc3\xads\
+tica\x0a\x0a## \xc3\x8dndice\
+ general\x0a\x0a### Pa\
+rte I \xe2\x80\x94 Estad\xc3\
+\xadstica\x0a\x0a1. [Nota\
+ci\xc3\xb3n b\xc3\xa1sica](#\
+1-notaci\xc3\xb3n-b\xc3\xa1s\
+ica)\x0a2. [Tabla d\
+e frecuencias](#\
+2-tabla-de-frecu\
+encias)\x0a3. [Dato\
+s no agrupados](\
+#3-datos-no-agru\
+pados)\x0a4. [Datos\
+ agrupados por v\
+alor](#4-datos-a\
+grupados-por-val\
+or)\x0a5. [Datos ag\
+rupados por inte\
+rvalos](#5-datos\
+-agrupados-por-i\
+ntervalos)\x0a6. [R\
+ango](#6-rango)\x0a\
+7. [Varianza](#7\
+-varianza)\x0a8. [D\
+esv\xc3\xado est\xc3\xa1ndar\
+](#8-desv\xc3\xado-est\
+\xc3\xa1ndar)\x0a9. [Coef\
+iciente de varia\
+ci\xc3\xb3n](#9-coefic\
+iente-de-variaci\
+\xc3\xb3n)\x0a10. [Repres\
+entatividad del \
+promedio](#10-re\
+presentatividad-\
+del-promedio)\x0a11\
+. [Cuartiles, de\
+ciles y percenti\
+les](#11-cuartil\
+es-deciles-y-per\
+centiles)\x0a12. [T\
+ablas auxiliares\
+](#12-tablas-aux\
+iliares)\x0a13. [Re\
+sumen r\xc3\xa1pido](#\
+resumen-r\xc3\xa1pido)\
+\x0a\x0a### Parte II \xe2\
+\x80\x94 Probabilidad\x0a\
+\x0a1. [Notaci\xc3\xb3n b\
+\xc3\xa1sica de probab\
+ilidad](#1-notac\
+i\xc3\xb3n-b\xc3\xa1sica-de-\
+probabilidad)\x0a2.\
+ [Reglas b\xc3\xa1sica\
+s](#2-reglas-b\xc3\xa1\
+sicas)\x0a3. [Regla\
+ de Laplace](#3-\
+regla-de-laplace\
+)\x0a4. [Complement\
+o](#4-complement\
+o)\x0a5. [Uni\xc3\xb3n: \xe2\
+\x80\x9cA o B\xe2\x80\x9d](#5-u\
+ni\xc3\xb3n-a-o-b)\x0a6. \
+[Regiones de un \
+diagrama de Venn\
+](#6-regiones-de\
+-un-diagrama-de-\
+venn)\x0a7. [Probab\
+ilidad condicion\
+al](#7-probabili\
+dad-condicional)\
+\x0a8. [Regla del p\
+roducto: \xe2\x80\x9cA y \
+B\xe2\x80\x9d](#8-regla-d\
+el-producto-a-y-\
+b)\x0a9. [Independe\
+ncia](#9-indepen\
+dencia)\x0a10. [Ext\
+racciones con y \
+sin reposici\xc3\xb3n]\
+(#10-extraccione\
+s-con-y-sin-repo\
+sici\xc3\xb3n)\x0a11. [Pr\
+obabilidad total\
+](#11-probabilid\
+ad-total)\x0a12. [T\
+eorema de Bayes]\
+(#12-teorema-de-\
+bayes)\x0a13. [Tabl\
+as de contingenc\
+ia](#13-tablas-d\
+e-contingencia)\x0a\
+14. [Conteo para\
+ varios elemento\
+s](#14-conteo-pa\
+ra-varios-elemen\
+tos)\x0a15. [Distri\
+buci\xc3\xb3n de proba\
+bilidad de una v\
+ariable aleatori\
+a discreta](#15-\
+distribuci\xc3\xb3n-de\
+-probabilidad-de\
+-una-variable-al\
+eatoria-discreta\
+)\x0a16. [Traducci\xc3\
+\xb3n r\xc3\xa1pida del l\
+enguaje cotidian\
+o](#16-traducci\xc3\
+\xb3n-r\xc3\xa1pida-del-l\
+enguaje-cotidian\
+o)\x0a17. [Procedim\
+iento de resoluc\
+i\xc3\xb3n recomendado\
+](#17-procedimie\
+nto-de-resoluci\xc3\
+\xb3n-recomendado)\x0a\
+18. [Resumen ult\
+rarr\xc3\xa1pido de pr\
+obabilidad](#res\
+umen-ultrarr\xc3\xa1pi\
+do-de-probabilid\
+ad)\x0a\x0a---\x0a\x0a## Par\
+te I \xe2\x80\x94 Estad\xc3\xad\
+stica\x0a\x0a### 1. No\
+taci\xc3\xb3n b\xc3\xa1sica\x0a\
+\x0a| S\xc3\xadmbolo | Si\
+gnificado |\x0a|---\
+|---|\x0a| \x5c(x_i\x5c) \
+| Valor observad\
+o |\x0a| \x5c(x_i^\x5cast\
+\x5c) | Marca de cl\
+ase |\x0a| \x5c(f_i\x5c) \
+| Frecuencia abs\
+oluta |\x0a| \x5c(f_{r\
+_i}\x5c) | Frecuenc\
+ia relativa |\x0a| \
+\x5c(F_i\x5c) | Frecue\
+ncia absoluta ac\
+umulada |\x0a| \x5c(f_\
+i\x5c%\x5c) | Frecuenc\
+ia porcentual |\x0a\
+| \x5c(F_i\x5c%\x5c) | Fr\
+ecuencia porcent\
+ual acumulada |\x0a\
+| \x5c(n\x5c) | Tama\xc3\xb1\
+o de la muestra \
+|\x0a| \x5c(N\x5c) | Tama\
+\xc3\xb1o de la poblac\
+i\xc3\xb3n |\x0a| \x5c(\x5cbar{\
+x}\x5c) | Media mue\
+stral |\x0a| \x5c(\x5cmu\x5c\
+) | Media poblac\
+ional |\x0a| \x5c(s^2\x5c\
+) | Varianza mue\
+stral |\x0a| \x5c(\x5csig\
+ma^2\x5c) | Varianz\
+a poblacional |\x0a\
+| \x5c(s\x5c) | Desv\xc3\xad\
+o est\xc3\xa1ndar mues\
+tral |\x0a| \x5c(\x5csigm\
+a\x5c) | Desv\xc3\xado es\
+t\xc3\xa1ndar poblacio\
+nal |\x0a| \x5c(CV\x5c) |\
+ Coeficiente de \
+variaci\xc3\xb3n |\x0a| \x5c\
+(L_i\x5c) | L\xc3\xadmite\
+ inferior del in\
+tervalo |\x0a| \x5c(L_\
+s\x5c) | L\xc3\xadmite su\
+perior del inter\
+valo |\x0a| \x5c(c\x5c) |\
+ Amplitud del in\
+tervalo |\x0a\x0a#### \
+Total de datos\x0a\x0a\
+Muestra:\x0a\x0a\x5c[\x0an=\x5c\
+sum f_i\x0a\x5c]\x0a\x0aPobl\
+aci\xc3\xb3n:\x0a\x0a\x5c[\x0aN=\x5cs\
+um f_i\x0a\x5c]\x0a\x0a---\x0a\x0a\
+### 2. Tabla de \
 frecuencias\x0a\x0a###\
- Frecuencia rela\
-tiva\x0a\x0a\x5c[\x0af_{r_i}\
-=\x5cfrac{f_i}{n}\x0a\x5c\
-]\x0a\x0a### Frecuenci\
-a porcentual\x0a\x0a\x5c[\
-\x0af_i\x5c%=f_{r_i}\x5cc\
-dot100\x0a\x5c]\x0a\x0a### F\
-recuencia absolu\
-ta acumulada\x0a\x0a\x5c[\
-\x0aF_i=\x5csum_{j=1}^\
-{i}f_j\x0a\x5c]\x0a\x0a### F\
-recuencia porcen\
-tual acumulada\x0a\x0a\
-\x5c[\x0aF_i\x5c%=\x5csum_{j\
-=1}^{i}f_j\x5c%\x0a\x5c]\x0a\
-\x0a### Tabla base\x0a\
-\x0a| \x5c(x_i\x5c) | \x5c(f\
-_i\x5c) | \x5c(f_{r_i}\
-\x5c) | \x5c(F_i\x5c) | \x5c\
-(f_i\x5c%\x5c) | \x5c(F_i\
-\x5c%\x5c) |\x0a|---:|---\
+# Frecuencia rel\
+ativa\x0a\x0a\x5c[\x0af_{r_i\
+}=\x5cfrac{f_i}{n}\x0a\
+\x5c]\x0a\x0a#### Frecuen\
+cia porcentual\x0a\x0a\
+\x5c[\x0af_i\x5c%=f_{r_i}\
+\x5ccdot100\x0a\x5c]\x0a\x0a###\
+# Frecuencia abs\
+oluta acumulada\x0a\
+\x0a\x5c[\x0aF_i=\x5csum_{j=\
+1}^{i}f_j\x0a\x5c]\x0a\x0a##\
+## Frecuencia po\
+rcentual acumula\
+da\x0a\x0a\x5c[\x0aF_i\x5c%=\x5csu\
+m_{j=1}^{i}f_j\x5c%\
+\x0a\x5c]\x0a\x0a#### Tabla \
+base\x0a\x0a| \x5c(x_i\x5c) \
+| \x5c(f_i\x5c) | \x5c(f_\
+{r_i}\x5c) | \x5c(F_i\x5c\
+) | \x5c(f_i\x5c%\x5c) | \
+\x5c(F_i\x5c%\x5c) |\x0a|---\
 :|---:|---:|---:\
-|---:|\x0a\x0a---\x0a\x0a## \
-3. Datos no agru\
-pados\x0a\x0aEjemplo:\x0a\
-\x0a```text\x0a3, 6, 4\
-, 6, 2, 5\x0a```\x0a\x0a#\
-## Media muestra\
-l\x0a\x0a\x5c[\x0a\x5cbar{x}=\x5cf\
-rac{\x5csum x_i}{n}\
-\x0a\x5c]\x0a\x0a### Media p\
+|---:|---:|\x0a\x0a---\
+\x0a\x0a### 3. Datos n\
+o agrupados\x0a\x0aEje\
+mplo:\x0a\x0a```text\x0a3\
+, 6, 4, 6, 2, 5\x0a\
+```\x0a\x0a#### Media \
+muestral\x0a\x0a\x5c[\x0a\x5cba\
+r{x}=\x5cfrac{\x5csum \
+x_i}{n}\x0a\x5c]\x0a\x0a####\
+ Media poblacion\
+al\x0a\x0a\x5c[\x0a\x5cmu=\x5cfrac\
+{\x5csum x_i}{N}\x0a\x5c]\
+\x0a\x0a#### Mediana\x0a\x0a\
+Primero se orden\
+an los datos.\x0a\x0aC\
+antidad impar:\x0a\x0a\
+\x5c[\x0aMe=x_{\x5cleft(\x5c\
+frac{n+1}{2}\x5crig\
+ht)}\x0a\x5c]\x0a\x0aCantida\
+d par:\x0a\x0a\x5c[\x0aMe=\x0a\x5c\
+frac{x_{\x5cleft(\x5cf\
+rac{n}{2}\x5cright)\
+}\x0a+x_{\x5cleft(\x5cfra\
+c{n}{2}+1\x5cright)\
+}}{2}\x0a\x5c]\x0a\x0a#### M\
+oda\x0a\x0aLa moda es \
+el valor con may\
+or frecuencia.\x0a\x0a\
+\x5c[\x0aMo=x_i \x5cquad \
+\x5ctext{tal que } \
+f_i=\x5cmax(f)\x0a\x5c]\x0a\x0a\
+Puede ser:\x0a\x0a- un\
+imodal;\x0a- bimoda\
+l;\x0a- multimodal;\
+\x0a- sin moda.\x0a\x0a##\
+## Varianza mues\
+tral\x0a\x0a\x5c[\x0as^2=\x5cfr\
+ac{\x5csum(x_i-\x5cbar\
+{x})^2}{n-1}\x0a\x5c]\x0a\
+\x0a#### Varianza p\
 oblacional\x0a\x0a\x5c[\x0a\x5c\
-mu=\x5cfrac{\x5csum x_\
-i}{N}\x0a\x5c]\x0a\x0a### Me\
-diana\x0a\x0aPrimero s\
-e ordenan los da\
-tos.\x0a\x0aCantidad i\
-mpar:\x0a\x0a\x5c[\x0aMe=x_{\
-\x5cleft(\x5cfrac{n+1}\
-{2}\x5cright)}\x0a\x5c]\x0a\x0a\
-Cantidad par:\x0a\x0a\x5c\
-[\x0aMe=\x0a\x5cfrac{x_{\x5c\
-left(\x5cfrac{n}{2}\
-\x5cright)}\x0a+x_{\x5cle\
-ft(\x5cfrac{n}{2}+1\
-\x5cright)}}{2}\x0a\x5c]\x0a\
-\x0a### Moda\x0a\x0aLa mo\
-da es el valor c\
-on mayor frecuen\
-cia.\x0a\x0a\x5c[\x0aMo=x_i \
-\x5cquad \x5ctext{tal \
-que } f_i=\x5cmax(f\
-)\x0a\x5c]\x0a\x0aPuede ser:\
-\x0a\x0a- unimodal;\x0a- \
-bimodal;\x0a- multi\
-modal;\x0a- sin mod\
-a.\x0a\x0a### Varianza\
- muestral\x0a\x0a\x5c[\x0as^\
-2=\x5cfrac{\x5csum(x_i\
--\x5cbar{x})^2}{n-1\
-}\x0a\x5c]\x0a\x0a### Varian\
-za poblacional\x0a\x0a\
-\x5c[\x0a\x5csigma^2=\x5cfra\
-c{\x5csum(x_i-\x5cmu)^\
-2}{N}\x0a\x5c]\x0a\x0a---\x0a\x0a#\
-# 4. Datos agrup\
-ados por valor\x0a\x0a\
-Ejemplo:\x0a\x0a| \x5c(x_\
-i\x5c) | \x5c(f_i\x5c) |\x0a\
-|---:|---:|\x0a| 70\
-0 | 5 |\x0a| 800 | \
-5 |\x0a| 1200 | 4 |\
-\x0a\x0a### Media\x0a\x0a\x5c[\x0a\
-\x5cbar{x}=\x0a\x5cfrac{\x5c\
-sum x_i f_i}{\x5csu\
-m f_i}\x0a\x5c]\x0a\x0a### M\
-ediana\x0a\x0aCalcular\
-:\x0a\x0a\x5c[\x0a\x5cfrac{n}{2\
-}\x0a\x5c]\x0a\x0aLuego busc\
-ar esa posici\xc3\xb3n\
- en la frecuenci\
-a acumulada.\x0a\x0aSi\
- las dos posicio\
-nes centrales pe\
-rtenecen a valor\
-es distintos:\x0a\x0a\x5c\
-[\x0aMe=\x0a\x5cfrac{x_{\x5c\
-frac{n}{2}}+x_{\x5c\
-frac{n}{2}+1}}{2\
-}\x0a\x5c]\x0a\x0a### Moda\x0a\x0a\
+sigma^2=\x5cfrac{\x5cs\
+um(x_i-\x5cmu)^2}{N\
+}\x0a\x5c]\x0a\x0a---\x0a\x0a### 4\
+. Datos agrupado\
+s por valor\x0a\x0aEje\
+mplo:\x0a\x0a| \x5c(x_i\x5c)\
+ | \x5c(f_i\x5c) |\x0a|--\
+-:|---:|\x0a| 700 |\
+ 5 |\x0a| 800 | 5 |\
+\x0a| 1200 | 4 |\x0a\x0a#\
+### Media\x0a\x0a\x5c[\x0a\x5cb\
+ar{x}=\x0a\x5cfrac{\x5csu\
+m x_i f_i}{\x5csum \
+f_i}\x0a\x5c]\x0a\x0a#### Me\
+diana\x0a\x0aCalcular:\
+\x0a\x0a\x5c[\x0a\x5cfrac{n}{2}\
+\x0a\x5c]\x0a\x0aLuego busca\
+r esa posici\xc3\xb3n \
+en la frecuencia\
+ acumulada.\x0a\x0aSi \
+las dos posicion\
+es centrales per\
+tenecen a valore\
+s distintos:\x0a\x0a\x5c[\
+\x0aMe=\x0a\x5cfrac{x_{\x5cf\
+rac{n}{2}}+x_{\x5cf\
+rac{n}{2}+1}}{2}\
+\x0a\x5c]\x0a\x0a#### Moda\x0a\x0a\
 El valor \x5c(x_i\x5c)\
  cuya frecuencia\
  \x5c(f_i\x5c) sea la \
 mayor.\x0a\x0a\x5c[\x0aMo=x_\
 i \x5cquad \x5ctext{ta\
 l que } f_i=\x5cmax\
-(f)\x0a\x5c]\x0a\x0a### Vari\
-anza muestral\x0a\x0a\x5c\
-[\x0as^2=\x0a\x5cfrac{\x5csu\
-m f_i(x_i-\x5cbar{x\
-})^2}{n-1}\x0a\x5c]\x0a\x0a#\
-## Varianza pobl\
-acional\x0a\x0a\x5c[\x0a\x5csig\
-ma^2=\x0a\x5cfrac{\x5csum\
- f_i(x_i-\x5cmu)^2}\
-{N}\x0a\x5c]\x0a\x0a---\x0a\x0a## \
-5. Datos agrupad\
-os por intervalo\
-s\x0a\x0aEjemplo:\x0a\x0a| I\
-ntervalo | \x5c(f_i\
-\x5c) |\x0a|---|---:|\x0a\
-| \x5c([0,20)\x5c) | 1\
-5 |\x0a| \x5c([20,40)\x5c\
-) | 25 |\x0a| \x5c([40\
-,60)\x5c) | 60 |\x0a\x0a#\
-## Marca de clas\
-e\x0a\x0a\x5c[\x0ax_i^\x5cast=\x5c\
-frac{L_i+L_s}{2}\
-\x0a\x5c]\x0a\x0a### Amplitu\
-d\x0a\x0a\x5c[\x0ac=L_s-L_i\x0a\
-\x5c]\x0a\x0a### Media ap\
-roximada\x0a\x0a\x5c[\x0a\x5cba\
-r{x}\x5capprox\x0a\x5cfra\
-c{\x5csum x_i^\x5cast \
-f_i}{\x5csum f_i}\x0a\x5c\
-]\x0a\x0aEl resultado \
-es aproximado po\
-rque todos los v\
-alores del inter\
-valo se represen\
-tan mediante la \
-marca de clase.\x0a\
-\x0a### Mediana apr\
-oximada\x0a\x0a\x5c[\x0aMe=L\
-_i+\x0a\x5cleft(\x0a\x5cfrac\
-{\x5cfrac{n}{2}-F_{\
-\x5ctext{anterior}}\
-}{f_m}\x0a\x5cright)c\x0a\
-\x5c]\x0a\x0aDonde:\x0a\x0a- \x5c(\
-L_i\x5c): l\xc3\xadmite i\
-nferior de la cl\
-ase mediana;\x0a- \x5c\
-(F_{\x5ctext{anteri\
-or}}\x5c): frecuenc\
-ia acumulada ant\
-erior;\x0a- \x5c(f_m\x5c)\
-: frecuencia de \
-la clase mediana\
-;\x0a- \x5c(c\x5c): ampli\
-tud.\x0a\x0a### Moda a\
-proximada\x0a\x0a\x5c[\x0aMo\
-=L_i+\x0a\x5cfrac{f_m-\
-f_{\x5ctext{anterio\
-r}}}\x0a{(f_m-f_{\x5ct\
-ext{anterior}})\x0a\
-+(f_m-f_{\x5ctext{s\
-iguiente}})}\x0a\x5ccd\
-ot c\x0a\x5c]\x0a\x0aDonde:\x0a\
-\x0a- \x5c(L_i\x5c): l\xc3\xadm\
-ite inferior de \
-la clase modal;\x0a\
-- \x5c(f_m\x5c): frecu\
-encia de la clas\
-e modal;\x0a- \x5c(f_{\
-\x5ctext{anterior}}\
-\x5c): frecuencia a\
-nterior;\x0a- \x5c(f_{\
-\x5ctext{siguiente}\
-}\x5c): frecuencia \
-siguiente;\x0a- \x5c(c\
-\x5c): amplitud.\x0a\x0a#\
-## Varianza mues\
-tral aproximada\x0a\
-\x0a\x5c[\x0as^2\x5capprox\x0a\x5c\
-frac{\x5csum f_i(x_\
-i^\x5cast-\x5cbar{x})^\
-2}{n-1}\x0a\x5c]\x0a\x0a### \
-Varianza poblaci\
-onal aproximada\x0a\
-\x0a\x5c[\x0a\x5csigma^2\x5capp\
-rox\x0a\x5cfrac{\x5csum f\
-_i(x_i^\x5cast-\x5cmu)\
-^2}{N}\x0a\x5c]\x0a\x0a---\x0a\x0a\
-## 6. Rango\x0a\x0a###\
- Datos no agrupa\
-dos o agrupados \
-por valor\x0a\x0a\x5c[\x0aR=\
-x_{\x5cmax}-x_{\x5cmin\
-}\x0a\x5c]\x0a\x0a### Datos \
-agrupados por in\
-tervalos\x0a\x0a\x5c[\x0aR=\x0a\
-L_{\x5ctext{superio\
-r final}}\x0a-\x0aL_{\x5c\
-text{inferior in\
-icial}}\x0a\x5c]\x0a\x0a---\x0a\
-\x0a## 7. Varianza\x0a\
-\x0aLa varianza mid\
-e cu\xc3\xa1nto se dis\
-persan los datos\
- respecto de la \
-media.\x0a\x0a### Resu\
-men\x0a\x0a| Tipo de d\
-atos | Muestra |\
- Poblaci\xc3\xb3n |\x0a|-\
---|---|---|\x0a| No\
- agrupados | \x5c(\x5c\
-displaystyle s^2\
-=\x5cfrac{\x5csum(x_i-\
-\x5cbar{x})^2}{n-1}\
-\x5c) | \x5c(\x5cdisplays\
-tyle \x5csigma^2=\x5cf\
-rac{\x5csum(x_i-\x5cmu\
-)^2}{N}\x5c) |\x0a| Ag\
-rupados por valo\
-r | \x5c(\x5cdisplayst\
-yle s^2=\x5cfrac{\x5cs\
+(f)\x0a\x5c]\x0a\x0a#### Var\
+ianza muestral\x0a\x0a\
+\x5c[\x0as^2=\x0a\x5cfrac{\x5cs\
 um f_i(x_i-\x5cbar{\
-x})^2}{n-1}\x5c) | \
-\x5c(\x5cdisplaystyle \
-\x5csigma^2=\x5cfrac{\x5c\
-sum f_i(x_i-\x5cmu)\
-^2}{N}\x5c) |\x0a| Agr\
-upados por inter\
-valos | \x5c(\x5cdispl\
-aystyle s^2\x5cappr\
-ox\x5cfrac{\x5csum f_i\
-(x_i^\x5cast-\x5cbar{x\
-})^2}{n-1}\x5c) | \x5c\
-(\x5cdisplaystyle \x5c\
-sigma^2\x5capprox\x5cf\
+x})^2}{n-1}\x0a\x5c]\x0a\x0a\
+#### Varianza po\
+blacional\x0a\x0a\x5c[\x0a\x5cs\
+igma^2=\x0a\x5cfrac{\x5cs\
+um f_i(x_i-\x5cmu)^\
+2}{N}\x0a\x5c]\x0a\x0a---\x0a\x0a#\
+## 5. Datos agru\
+pados por interv\
+alos\x0a\x0aEjemplo:\x0a\x0a\
+| Intervalo | \x5c(\
+f_i\x5c) |\x0a|---|---\
+:|\x0a| \x5c([0,20)\x5c) \
+| 15 |\x0a| \x5c([20,4\
+0)\x5c) | 25 |\x0a| \x5c(\
+[40,60)\x5c) | 60 |\
+\x0a\x0a#### Marca de \
+clase\x0a\x0a\x5c[\x0ax_i^\x5ca\
+st=\x5cfrac{L_i+L_s\
+}{2}\x0a\x5c]\x0a\x0a#### Am\
+plitud\x0a\x0a\x5c[\x0ac=L_s\
+-L_i\x0a\x5c]\x0a\x0a#### Me\
+dia aproximada\x0a\x0a\
+\x5c[\x0a\x5cbar{x}\x5cappro\
+x\x0a\x5cfrac{\x5csum x_i\
+^\x5cast f_i}{\x5csum \
+f_i}\x0a\x5c]\x0a\x0aEl resu\
+ltado es aproxim\
+ado porque todos\
+ los valores del\
+ intervalo se re\
+presentan median\
+te la marca de c\
+lase.\x0a\x0a#### Medi\
+ana aproximada\x0a\x0a\
+\x5c[\x0aMe=L_i+\x0a\x5cleft\
+(\x0a\x5cfrac{\x5cfrac{n}\
+{2}-F_{\x5ctext{ant\
+erior}}}{f_m}\x0a\x5cr\
+ight)c\x0a\x5c]\x0a\x0aDonde\
+:\x0a\x0a- \x5c(L_i\x5c): l\xc3\
+\xadmite inferior d\
+e la clase media\
+na;\x0a- \x5c(F_{\x5ctext\
+{anterior}}\x5c): f\
+recuencia acumul\
+ada anterior;\x0a- \
+\x5c(f_m\x5c): frecuen\
+cia de la clase \
+mediana;\x0a- \x5c(c\x5c)\
+: amplitud.\x0a\x0a###\
+# Moda aproximad\
+a\x0a\x0a\x5c[\x0aMo=L_i+\x0a\x5cf\
+rac{f_m-f_{\x5ctext\
+{anterior}}}\x0a{(f\
+_m-f_{\x5ctext{ante\
+rior}})\x0a+(f_m-f_\
+{\x5ctext{siguiente\
+}})}\x0a\x5ccdot c\x0a\x5c]\x0a\
+\x0aDonde:\x0a\x0a- \x5c(L_i\
+\x5c): l\xc3\xadmite infe\
+rior de la clase\
+ modal;\x0a- \x5c(f_m\x5c\
+): frecuencia de\
+ la clase modal;\
+\x0a- \x5c(f_{\x5ctext{an\
+terior}}\x5c): frec\
+uencia anterior;\
+\x0a- \x5c(f_{\x5ctext{si\
+guiente}}\x5c): fre\
+cuencia siguient\
+e;\x0a- \x5c(c\x5c): ampl\
+itud.\x0a\x0a#### Vari\
+anza muestral ap\
+roximada\x0a\x0a\x5c[\x0as^2\
+\x5capprox\x0a\x5cfrac{\x5cs\
+um f_i(x_i^\x5cast-\
+\x5cbar{x})^2}{n-1}\
+\x0a\x5c]\x0a\x0a#### Varian\
+za poblacional a\
+proximada\x0a\x0a\x5c[\x0a\x5cs\
+igma^2\x5capprox\x0a\x5cf\
 rac{\x5csum f_i(x_i\
 ^\x5cast-\x5cmu)^2}{N}\
-\x5c) |\x0a\x0a---\x0a\x0a## 8.\
+\x0a\x5c]\x0a\x0a---\x0a\x0a### 6.\
+ Rango\x0a\x0a#### Dat\
+os no agrupados \
+o agrupados por \
+valor\x0a\x0a\x5c[\x0aR=x_{\x5c\
+max}-x_{\x5cmin}\x0a\x5c]\
+\x0a\x0a#### Datos agr\
+upados por inter\
+valos\x0a\x0a\x5c[\x0aR=\x0aL_{\
+\x5ctext{superior f\
+inal}}\x0a-\x0aL_{\x5ctex\
+t{inferior inici\
+al}}\x0a\x5c]\x0a\x0a---\x0a\x0a##\
+# 7. Varianza\x0a\x0aL\
+a varianza mide \
+cu\xc3\xa1nto se dispe\
+rsan los datos r\
+especto de la me\
+dia.\x0a\x0a#### Resum\
+en\x0a\x0a| Tipo de da\
+tos | Muestra | \
+Poblaci\xc3\xb3n |\x0a|--\
+-|---|---|\x0a| No \
+agrupados | \x5c(\x5cd\
+isplaystyle s^2=\
+\x5cfrac{\x5csum(x_i-\x5c\
+bar{x})^2}{n-1}\x5c\
+) | \x5c(\x5cdisplayst\
+yle \x5csigma^2=\x5cfr\
+ac{\x5csum(x_i-\x5cmu)\
+^2}{N}\x5c) |\x0a| Agr\
+upados por valor\
+ | \x5c(\x5cdisplaysty\
+le s^2=\x5cfrac{\x5csu\
+m f_i(x_i-\x5cbar{x\
+})^2}{n-1}\x5c) | \x5c\
+(\x5cdisplaystyle \x5c\
+sigma^2=\x5cfrac{\x5cs\
+um f_i(x_i-\x5cmu)^\
+2}{N}\x5c) |\x0a| Agru\
+pados por interv\
+alos | \x5c(\x5cdispla\
+ystyle s^2\x5cappro\
+x\x5cfrac{\x5csum f_i(\
+x_i^\x5cast-\x5cbar{x}\
+)^2}{n-1}\x5c) | \x5c(\
+\x5cdisplaystyle \x5cs\
+igma^2\x5capprox\x5cfr\
+ac{\x5csum f_i(x_i^\
+\x5cast-\x5cmu)^2}{N}\x5c\
+) |\x0a\x0a---\x0a\x0a### 8.\
  Desv\xc3\xado est\xc3\xa1nd\
-ar\x0a\x0a### Muestra\x0a\
-\x0a\x5c[\x0as=\x5csqrt{s^2}\
-\x0a\x5c]\x0a\x0a### Poblaci\
-\xc3\xb3n\x0a\x0a\x5c[\x0a\x5csigma=\x5c\
-sqrt{\x5csigma^2}\x0a\x5c\
-]\x0a\x0aEl desv\xc3\xado es\
-t\xc3\xa1ndar indica c\
-u\xc3\xa1nto se separa\
-n los datos resp\
-ecto de la media\
- y se expresa en\
- la misma unidad\
- que los datos.\x0a\
-\x0a---\x0a\x0a## 9. Coef\
-iciente de varia\
-ci\xc3\xb3n\x0a\x0a### Muest\
-ra\x0a\x0a\x5c[\x0aCV=\x5cfrac{\
-s}{|\x5cbar{x}|}\x5ccd\
-ot100\x0a\x5c]\x0a\x0a### Po\
-blaci\xc3\xb3n\x0a\x0a\x5c[\x0aCV=\
-\x5cfrac{\x5csigma}{|\x5c\
-mu|}\x5ccdot100\x0a\x5c]\x0a\
-\x0a### Interpretac\
-i\xc3\xb3n orientativa\
-\x0a\x0a| CV | Interpr\
-etaci\xc3\xb3n |\x0a|---:\
-|---|\x0a| Menor qu\
-e 10% | Muy homo\
-g\xc3\xa9neo |\x0a| Entre\
- 10% y 20% | Hom\
-og\xc3\xa9neo |\x0a| Entr\
-e 20% y 30% | Di\
-spersi\xc3\xb3n modera\
-da |\x0a| Mayor que\
- 30% | Heterog\xc3\xa9\
-neo |\x0a\x0aEstos l\xc3\xad\
-mites son orient\
-ativos y pueden \
-variar seg\xc3\xban la\
- materia o el co\
-ntexto.\x0a\x0a---\x0a\x0a##\
- 10. Representat\
-ividad del prome\
-dio\x0a\x0aRegla pr\xc3\xa1c\
-tica:\x0a\x0a- CV bajo\
-: los datos est\xc3\
-\xa1n cerca de la m\
-edia y el promed\
-io suele ser rep\
-resentativo.\x0a- C\
-V alto: los dato\
-s est\xc3\xa1n dispers\
-os y el promedio\
- puede no ser re\
-presentativo.\x0a- \
-Los valores extr\
-emos tambi\xc3\xa9n pu\
-eden deformar la\
- media.\x0a- Una di\
-stribuci\xc3\xb3n asim\
-\xc3\xa9trica puede ha\
-cer que la media\
- sea poco repres\
-entativa.\x0a- Cuan\
-do la media no r\
-epresenta bien a\
-l conjunto, conv\
-iene revisar la \
-mediana.\x0a\x0aEl CV \
-no es el \xc3\xbanico \
-criterio, pero e\
-s una herramient\
-a \xc3\xbatil para eva\
-luar la represen\
-tatividad.\x0a\x0a---\x0a\
-\x0a## 11. Cuartile\
-s, deciles y per\
-centiles\x0a\x0a### Cu\
-artil con interv\
-alos\x0a\x0a\x5c[\x0aQ_k=L_i\
-+\x0a\x5cleft(\x0a\x5cfrac{\x5c\
-frac{kn}{4}-F_{\x5c\
+ar\x0a\x0a#### Muestra\
+\x0a\x0a\x5c[\x0as=\x5csqrt{s^2\
+}\x0a\x5c]\x0a\x0a#### Pobla\
+ci\xc3\xb3n\x0a\x0a\x5c[\x0a\x5csigma\
+=\x5csqrt{\x5csigma^2}\
+\x0a\x5c]\x0a\x0aEl desv\xc3\xado \
+est\xc3\xa1ndar indica\
+ cu\xc3\xa1nto se sepa\
+ran los datos re\
+specto de la med\
+ia y se expresa \
+en la misma unid\
+ad que los datos\
+.\x0a\x0a---\x0a\x0a### 9. C\
+oeficiente de va\
+riaci\xc3\xb3n\x0a\x0a#### M\
+uestra\x0a\x0a\x5c[\x0aCV=\x5cf\
+rac{s}{|\x5cbar{x}|\
+}\x5ccdot100\x0a\x5c]\x0a\x0a##\
+## Poblaci\xc3\xb3n\x0a\x0a\x5c\
+[\x0aCV=\x5cfrac{\x5csigm\
+a}{|\x5cmu|}\x5ccdot10\
+0\x0a\x5c]\x0a\x0a#### Inter\
+pretaci\xc3\xb3n orien\
+tativa\x0a\x0a| CV | I\
+nterpretaci\xc3\xb3n |\
+\x0a|---:|---|\x0a| Me\
+nor que 10% | Mu\
+y homog\xc3\xa9neo |\x0a|\
+ Entre 10% y 20%\
+ | Homog\xc3\xa9neo |\x0a\
+| Entre 20% y 30\
+% | Dispersi\xc3\xb3n \
+moderada |\x0a| May\
+or que 30% | Het\
+erog\xc3\xa9neo |\x0a\x0aEst\
+os l\xc3\xadmites son \
+orientativos y p\
+ueden variar seg\
+\xc3\xban la materia o\
+ el contexto.\x0a\x0a-\
+--\x0a\x0a### 10. Repr\
+esentatividad de\
+l promedio\x0a\x0aRegl\
+a pr\xc3\xa1ctica:\x0a\x0a- \
+CV bajo: los dat\
+os est\xc3\xa1n cerca \
+de la media y el\
+ promedio suele \
+ser representati\
+vo.\x0a- CV alto: l\
+os datos est\xc3\xa1n \
+dispersos y el p\
+romedio puede no\
+ ser representat\
+ivo.\x0a- Los valor\
+es extremos tamb\
+i\xc3\xa9n pueden defo\
+rmar la media.\x0a-\
+ Una distribuci\xc3\
+\xb3n asim\xc3\xa9trica p\
+uede hacer que l\
+a media sea poco\
+ representativa.\
+\x0a- Cuando la med\
+ia no representa\
+ bien al conjunt\
+o, conviene revi\
+sar la mediana.\x0a\
+\x0aEl CV no es el \
+\xc3\xbanico criterio,\
+ pero es una her\
+ramienta \xc3\xbatil p\
+ara evaluar la r\
+epresentatividad\
+.\x0a\x0a---\x0a\x0a### 11. \
+Cuartiles, decil\
+es y percentiles\
+\x0a\x0a#### Cuartil c\
+on intervalos\x0a\x0a\x5c\
+[\x0aQ_k=L_i+\x0a\x5cleft\
+(\x0a\x5cfrac{\x5cfrac{kn\
+}{4}-F_{\x5ctext{an\
+terior}}}{f_i}\x0a\x5c\
+right)c\x0a\x5c]\x0a\x0a####\
+ Decil con inter\
+valos\x0a\x0a\x5c[\x0aD_k=L_\
+i+\x0a\x5cleft(\x0a\x5cfrac{\
+\x5cfrac{kn}{10}-F_\
+{\x5ctext{anterior}\
+}}{f_i}\x0a\x5cright)c\
+\x0a\x5c]\x0a\x0a#### Percen\
+til con interval\
+os\x0a\x0a\x5c[\x0aP_k=L_i+\x0a\
+\x5cleft(\x0a\x5cfrac{\x5cfr\
+ac{kn}{100}-F_{\x5c\
 text{anterior}}}\
 {f_i}\x0a\x5cright)c\x0a\x5c\
-]\x0a\x0a### Decil con\
- intervalos\x0a\x0a\x5c[\x0a\
-D_k=L_i+\x0a\x5cleft(\x0a\
-\x5cfrac{\x5cfrac{kn}{\
-10}-F_{\x5ctext{ant\
-erior}}}{f_i}\x0a\x5cr\
-ight)c\x0a\x5c]\x0a\x0a### P\
-ercentil con int\
-ervalos\x0a\x0a\x5c[\x0aP_k=\
-L_i+\x0a\x5cleft(\x0a\x5cfra\
-c{\x5cfrac{kn}{100}\
--F_{\x5ctext{anteri\
-or}}}{f_i}\x0a\x5crigh\
-t)c\x0a\x5c]\x0a\x0a### Inte\
-rpretaciones \xc3\xbat\
-iles\x0a\x0a- \xe2\x80\x9cSuper\
-ada por el 10%\xe2\x80\
-\x9d corresponde a \
-\x5c(P_{90}\x5c).\x0a- \xe2\x80\
-\x9cEl 25% queda po\
-r debajo\xe2\x80\x9d corr\
-esponde a \x5c(Q_1\x5c\
-).\x0a- \xe2\x80\x9cEl 50% q\
-ueda por debajo\xe2\
-\x80\x9d corresponde a\
- la mediana o \x5c(\
-P_{50}\x5c).\x0a- \xe2\x80\x9cE\
-l 75% queda por \
-debajo\xe2\x80\x9d corres\
-ponde a \x5c(Q_3\x5c).\
-\x0a\x0a---\x0a\x0a## 12. Ta\
-blas auxiliares\x0a\
-\x0a### Frecuencias\
-\x0a\x0a```text\x0axi | f\
-i | fr | Fi | f%\
- | F%\x0a```\x0a\x0a### D\
-ispersi\xc3\xb3n sin f\
-recuencias\x0a\x0a```t\
-ext\x0axi | xi - me\
-dia | (xi - medi\
-a)\xc2\xb2\x0a```\x0a\x0a### Di\
+]\x0a\x0a#### Interpre\
+taciones \xc3\xbatiles\
+\x0a\x0a- \xe2\x80\x9cSuperada \
+por el 10%\xe2\x80\x9d co\
+rresponde a \x5c(P_\
+{90}\x5c).\x0a- \xe2\x80\x9cEl \
+25% queda por de\
+bajo\xe2\x80\x9d correspo\
+nde a \x5c(Q_1\x5c).\x0a-\
+ \xe2\x80\x9cEl 50% queda\
+ por debajo\xe2\x80\x9d c\
+orresponde a la \
+mediana o \x5c(P_{5\
+0}\x5c).\x0a- \xe2\x80\x9cEl 75\
+% queda por deba\
+jo\xe2\x80\x9d correspond\
+e a \x5c(Q_3\x5c).\x0a\x0a--\
+-\x0a\x0a### 12. Tabla\
+s auxiliares\x0a\x0a##\
+## Frecuencias\x0a\x0a\
+```text\x0axi | fi \
+| fr | Fi | f% |\
+ F%\x0a```\x0a\x0a#### Di\
+spersi\xc3\xb3n sin fr\
+ecuencias\x0a\x0a```te\
+xt\x0axi | xi - med\
+ia | (xi - media\
+)\xc2\xb2\x0a```\x0a\x0a#### Di\
 spersi\xc3\xb3n con fr\
 ecuencias\x0a\x0a```te\
 xt\x0axi | fi | xi \
 - media | (xi - \
 media)\xc2\xb2 | fi(xi\
  - media)\xc2\xb2\x0a```\x0a\
-\x0a### Dispersi\xc3\xb3n\
- con intervalos\x0a\
-\x0a```text\x0aInterva\
-lo | marca de cl\
-ase | fi | xi - \
-media | (xi - me\
-dia)\xc2\xb2 | fi(xi -\
- media)\xc2\xb2\x0a```\x0a\x0a-\
---\x0a\x0a## Resumen r\
-\xc3\xa1pido\x0a\x0a### No a\
-grupados\x0a\x0a\x5c[\x0a\x5cba\
-r{x}=\x5cfrac{\x5csum \
-x_i}{n}\x0a\x5c]\x0a\x0a\x5c[\x0as\
-^2=\x5cfrac{\x5csum(x_\
-i-\x5cbar{x})^2}{n-\
-1}\x0a\x5c]\x0a\x0a### Agrup\
-ados por valor\x0a\x0a\
-\x5c[\x0a\x5cbar{x}=\x5cfrac\
-{\x5csum x_if_i}{\x5cs\
-um f_i}\x0a\x5c]\x0a\x0a\x5c[\x0as\
-^2=\x5cfrac{\x5csum f_\
-i(x_i-\x5cbar{x})^2\
-}{n-1}\x0a\x5c]\x0a\x0a### A\
-grupados por int\
-ervalos\x0a\x0a\x5c[\x0ax_i^\
-\x5cast=\x5cfrac{L_i+L\
-_s}{2}\x0a\x5c]\x0a\x0a\x5c[\x0a\x5cb\
-ar{x}\x5capprox\x5cfra\
-c{\x5csum x_i^\x5cast \
-f_i}{\x5csum f_i}\x0a\x5c\
-]\x0a\x0a\x5c[\x0as^2\x5capprox\
-\x0a\x5cfrac{\x5csum f_i(\
-x_i^\x5cast-\x5cbar{x}\
-)^2}{n-1}\x0a\x5c]\x0a\
+\x0a#### Dispersi\xc3\xb3\
+n con intervalos\
+\x0a\x0a```text\x0aInterv\
+alo | marca de c\
+lase | fi | xi -\
+ media | (xi - m\
+edia)\xc2\xb2 | fi(xi \
+- media)\xc2\xb2\x0a```\x0a\x0a\
+---\x0a\x0a### Resumen\
+ r\xc3\xa1pido\x0a\x0a#### N\
+o agrupados\x0a\x0a\x5c[\x0a\
+\x5cbar{x}=\x5cfrac{\x5cs\
+um x_i}{n}\x0a\x5c]\x0a\x0a\x5c\
+[\x0as^2=\x5cfrac{\x5csum\
+(x_i-\x5cbar{x})^2}\
+{n-1}\x0a\x5c]\x0a\x0a#### A\
+grupados por val\
+or\x0a\x0a\x5c[\x0a\x5cbar{x}=\x5c\
+frac{\x5csum x_if_i\
+}{\x5csum f_i}\x0a\x5c]\x0a\x0a\
+\x5c[\x0as^2=\x5cfrac{\x5csu\
+m f_i(x_i-\x5cbar{x\
+})^2}{n-1}\x0a\x5c]\x0a\x0a#\
+### Agrupados po\
+r intervalos\x0a\x0a\x5c[\
+\x0ax_i^\x5cast=\x5cfrac{\
+L_i+L_s}{2}\x0a\x5c]\x0a\x0a\
+\x5c[\x0a\x5cbar{x}\x5cappro\
+x\x5cfrac{\x5csum x_i^\
+\x5cast f_i}{\x5csum f\
+_i}\x0a\x5c]\x0a\x0a\x5c[\x0as^2\x5ca\
+pprox\x0a\x5cfrac{\x5csum\
+ f_i(x_i^\x5cast-\x5cb\
+ar{x})^2}{n-1}\x0a\x5c\
+]\x0a\x0a---\x0a\x0a## Parte\
+ II \xe2\x80\x94 Probabil\
+idad\x0a\x0a### 1. Not\
+aci\xc3\xb3n b\xc3\xa1sica d\
+e probabilidad\x0a\x0a\
+| S\xc3\xadmbolo | Sig\
+nificado |\x0a|---|\
+---|\x0a| \x5c(S\x5c) o \x5c\
+(\x5cOmega\x5c) | Espa\
+cio muestral: to\
+dos los resultad\
+os posibles |\x0a| \
+\x5c(A,B,C\x5c) | Suce\
+sos o eventos |\x0a\
+| \x5c(\x5cvarnothing\x5c\
+) | Suceso impos\
+ible |\x0a| \x5c(A^c\x5c)\
+, \x5c(\x5coverline A\x5c\
+) o \x5c(\x5ctext{No }\
+A\x5c) | Complement\
+o de \x5c(A\x5c) |\x0a| \x5c\
+(A\x5ccup B\x5c) | Uni\
+\xc3\xb3n: ocurre \x5c(A\x5c\
+), \x5c(B\x5c) o ambos\
+ |\x0a| \x5c(A\x5ccap B\x5c)\
+ | Intersecci\xc3\xb3n\
+: ocurren \x5c(A\x5c) \
+y \x5c(B\x5c) |\x0a| \x5c(A-\
+B\x5c) | Ocurre \x5c(A\
+\x5c), pero no \x5c(B\x5c\
+) |\x0a| \x5c(P(A)\x5c) |\
+ Probabilidad de\
+ que ocurra \x5c(A\x5c\
+) |\x0a| \x5c(P(A\x5cmid \
+B)\x5c) | Probabili\
+dad de \x5c(A\x5c) sab\
+iendo que ocurri\
+\xc3\xb3 \x5c(B\x5c) |\x0a| \x5c(n\
+(A)\x5c) | Cantidad\
+ de elementos o \
+casos del suceso\
+ \x5c(A\x5c) |\x0a\x0a#### A\
+yuda de memoria:\
+ s\xc3\xadmbolos y pal\
+abras\x0a\x0a| El enun\
+ciado dice\xe2\x80\xa6 | \
+Se traduce como\xe2\
+\x80\xa6 | Regi\xc3\xb3n de \
+Venn |\x0a|---|---|\
+---|\x0a| \xe2\x80\x9cA o B\xe2\
+\x80\x9d, \xe2\x80\x9calguno de\
+ los dos\xe2\x80\x9d | \x5c(\
+A\x5ccup B\x5c) | Todo\
+ lo que est\xc3\xa9 de\
+ntro de cualquie\
+ra de los c\xc3\xadrcu\
+los |\x0a| \xe2\x80\x9cA y B\
+\xe2\x80\x9d, \xe2\x80\x9cambos\xe2\x80\x9d\
+ | \x5c(A\x5ccap B\x5c) |\
+ La zona compart\
+ida |\x0a| \xe2\x80\x9csolo \
+A\xe2\x80\x9d | \x5c(A-B=A\x5cc\
+ap B^c\x5c) | Parte\
+ exclusiva de \x5c(\
+A\x5c) |\x0a| \xe2\x80\x9cningu\
+no\xe2\x80\x9d | \x5c((A\x5ccup\
+ B)^c\x5c) | Fuera \
+de ambos c\xc3\xadrcul\
+os |\x0a| \xe2\x80\x9cno A\xe2\x80\
+\x9d | \x5c(A^c\x5c) | To\
+do lo que queda \
+fuera de \x5c(A\x5c) |\
+\x0a| \xe2\x80\x9csi ocurri\xc3\
+\xb3 B\xe2\x80\x9d / \xe2\x80\x9cde l\
+os que son B\xe2\x80\x9d \
+| \x5c(P(A\x5cmid B)\x5c)\
+ | El nuevo tota\
+l es solamente \x5c\
+(B\x5c) |\x0a\x0a> **Memo\
+ria principal:**\
+ en probabilidad\
+, **\xe2\x80\x9co\xe2\x80\x9d suel\
+e sumar**, **\xe2\x80\x9c\
+y\xe2\x80\x9d suele multi\
+plicar o buscar \
+una intersecci\xc3\xb3\
+n**, **\xe2\x80\x9cno\xe2\x80\x9d \
+resta a 1** y **\
+\xe2\x80\x9csi sabemos qu\
+e\xe2\x80\xa6\xe2\x80\x9d cambia e\
+l denominador**.\
+\x0a\x0a---\x0a\x0a### 2. Re\
+glas b\xc3\xa1sicas\x0a\x0aT\
+oda probabilidad\
+ cumple:\x0a\x0a\x5c[\x0a0\x5cl\
+e P(A)\x5cle1\x0a\x5c]\x0a\x0a\x5c\
+[\x0aP(S)=1\x0a\x5c]\x0a\x0a\x5c[\x0a\
+P(\x5cvarnothing)=0\
+\x0a\x5c]\x0a\x0aSi se traba\
+ja con porcentaj\
+es:\x0a\x0a\x5c[\x0a100\x5c%=1\x0a\
+\x5c]\x0a\x0aConversi\xc3\xb3n:\
+\x0a\x0a\x5c[\x0aP(A)=\x5cfrac{\
+\x5ctext{porcentaje\
+}}{100}\x0a\x5c]\x0a\x0a\x5c[\x0a\x5c\
+text{Porcentaje}\
+=P(A)\x5ccdot100\x0a\x5c]\
+\x0a\x0a---\x0a\x0a### 3. Re\
+gla de Laplace\x0a\x0a\
+Se usa cuando to\
+dos los resultad\
+os elementales s\
+on **equiprobabl\
+es**.\x0a\x0a\x5c[\x0aP(A)=\x5c\
+frac{n(A)}{n(S)}\
+\x0a=\x5cfrac{\x5ctext{ca\
+sos favorables}}\
+{\x5ctext{casos pos\
+ibles}}\x0a\x5c]\x0a\x0a####\
+ Ayuda de memori\
+a\x0a\x0a- **Abajo:** \
+todo lo que pued\
+e ocurrir.\x0a- **A\
+rriba:** solo lo\
+ que cumple lo p\
+edido.\x0a- \x5c(n(A)\x5c\
+) cuenta casos; \
+\x5c(P(A)\x5c) divide \
+esos casos por e\
+l total.\x0a- No se\
+ divide nuevamen\
+te si ya se est\xc3\
+\xa1 trabajando con\
+ probabilidades \
+dadas.\x0a\x0a---\x0a\x0a###\
+ 4. Complemento\x0a\
+\x0a\x5c[\x0aP(A^c)=1-P(A\
+)\x0a\x5c]\x0a\x0aTambi\xc3\xa9n:\x0a\
+\x0a\x5c[\x0aP(A)+P(A^c)=\
+1\x0a\x5c]\x0a\x0a#### Frase\
+s t\xc3\xadpicas\x0a\x0a- \xe2\x80\
+\x9cNo ocurra \x5c(A\x5c)\
+\xe2\x80\x9d \xe2\x86\x92 \x5c(A^c\x5c).\
+\x0a- \xe2\x80\x9cNinguno de\
+ los dos\xe2\x80\x9d \xe2\x86\x92 \
+\x5c((A\x5ccup B)^c\x5c).\
+\x0a- \xe2\x80\x9cAl menos u\
+no\xe2\x80\x9d suele ser \
+m\xc3\xa1s f\xc3\xa1cil por \
+complemento:\x0a\x0a\x5c[\
+\x0aP(\x5ctext{al meno\
+s uno})=1-P(\x5ctex\
+t{ninguno})\x0a\x5c]\x0a\x0a\
+Para \x5c(n\x5c) inten\
+tos independient\
+es con probabili\
+dad \x5c(p\x5c) de \xc3\xa9x\
+ito:\x0a\x0a\x5c[\x0aP(\x5ctext\
+{al menos un \xc3\xa9x\
+ito})=1-(1-p)^n\x0a\
+\x5c]\x0a\x0a> **Memoria:\
+** \xe2\x80\x9cal menos u\
+no\xe2\x80\x9d = **uno me\
+nos la probabili\
+dad de cero**.\x0a\x0a\
+---\x0a\x0a### 5. Uni\xc3\
+\xb3n: \xe2\x80\x9cA o B\xe2\x80\x9d\x0a\
+\x0a#### Sucesos co\
+mpatibles o no e\
+xcluyentes\x0a\x0aPued\
+en ocurrir simul\
+t\xc3\xa1neamente, por\
+ lo que existe i\
+ntersecci\xc3\xb3n:\x0a\x0a\x5c\
+[\x0aP(A\x5ccup B)=P(A\
+)+P(B)-P(A\x5ccap B\
+)\x0a\x5c]\x0a\x0aSe resta l\
+a intersecci\xc3\xb3n \
+porque fue conta\
+da dos veces.\x0a\x0a#\
+### Sucesos inco\
+mpatibles o mutu\
+amente excluyent\
+es\x0a\x0aNo pueden oc\
+urrir al mismo t\
+iempo:\x0a\x0a\x5c[\x0aA\x5ccap\
+ B=\x5cvarnothing\x0a\x5c\
+]\x0a\x0a\x5c[\x0aP(A\x5ccap B)\
+=0\x0a\x5c]\x0a\x0aEntonces:\
+\x0a\x0a\x5c[\x0aP(A\x5ccup B)=\
+P(A)+P(B)\x0a\x5c]\x0a\x0a> \
+**Memoria Venn:*\
+* si los c\xc3\xadrcul\
+os se pisan, res\
+t\xc3\xa1 el centro. S\
+i est\xc3\xa1n separad\
+os, solo sum\xc3\xa1.\x0a\
+\x0a---\x0a\x0a### 6. Reg\
+iones de un diag\
+rama de Venn\x0a\x0a##\
+## Solo A\x0a\x0a\x5c[\x0aP(\
+A\x5ctext{ solo})=P\
+(A)-P(A\x5ccap B)\x0a\x5c\
+]\x0a\x0a#### Solo B\x0a\x0a\
+\x5c[\x0aP(B\x5ctext{ sol\
+o})=P(B)-P(A\x5ccap\
+ B)\x0a\x5c]\x0a\x0a#### Nin\
+guno\x0a\x0a\x5c[\x0aP(\x5ctext\
+{ninguno})=1-P(A\
+\x5ccup B)\x0a\x5c]\x0a\x0a####\
+ Exactamente uno\
+ de los dos\x0a\x0a\x5c[\x0a\
+P(\x5ctext{exactame\
+nte uno})\x0a=P(A\x5ct\
+ext{ solo})+P(B\x5c\
+text{ solo})\x0a\x5c]\x0a\
+\x0aEquivalente:\x0a\x0a\x5c\
+[\x0aP(\x5ctext{exacta\
+mente uno})\x0a=P(A\
+)+P(B)-2P(A\x5ccap \
+B)\x0a\x5c]\x0a\x0a#### C\xc3\xb3m\
+o completar un V\
+enn de dos conju\
+ntos\x0a\x0a1. Colocar\
+ primero \x5c(A\x5ccap\
+ B\x5c) en el centr\
+o.\x0a2. Calcular l\
+as zonas exclusi\
+vas restando el \
+centro.\x0a3. Sumar\
+ las tres region\
+es internas para\
+ obtener \x5c(A\x5ccup\
+ B\x5c).\x0a4. Restar \
+la uni\xc3\xb3n al tot\
+al para obtener \
+\xe2\x80\x9cninguno\xe2\x80\x9d.\x0a\x0a\
+> **Memoria:** s\
+iempre empezar *\
+*desde el centro\
+ hacia afuera**.\
+\x0a\x0a---\x0a\x0a### 7. Pr\
+obabilidad condi\
+cional\x0a\x0a\x5c[\x0aP(A\x5cm\
+id B)=\x5cfrac{P(A\x5c\
+cap B)}{P(B)}\x0a\x5cq\
+quad P(B)>0\x0a\x5c]\x0a\x0a\
+Con cantidades:\x0a\
+\x0a\x5c[\x0aP(A\x5cmid B)=\x5c\
+frac{n(A\x5ccap B)}\
+{n(B)}\x0a\x5c]\x0a\x0a#### \
+Ayuda de memoria\
+\x0a\x0aEn \x5c(P(A\x5cmid B\
+)\x5c):\x0a\x0a- lo que e\
+st\xc3\xa1 **despu\xc3\xa9s \
+de la barra** es\
+ la condici\xc3\xb3n;\x0a\
+- la condici\xc3\xb3n \
+se convierte en \
+el **nuevo unive\
+rso**;\x0a- por eso\
+ el denominador \
+es \x5c(P(B)\x5c) o \x5c(\
+n(B)\x5c), no el to\
+tal general.\x0a\x0aFr\
+ases t\xc3\xadpicas:\x0a\x0a\
+- \xe2\x80\x9cSi es remot\
+o, \xc2\xbfqu\xc3\xa9 probab\
+ilidad hay de qu\
+e sea frontend?\xe2\
+\x80\x9d\x0a- \xe2\x80\x9cDe quien\
+es sufrieron el \
+problema, \xc2\xbfqu\xc3\xa9\
+ proporci\xc3\xb3n era\
+n desarrolladore\
+s?\xe2\x80\x9d\x0a- \xe2\x80\x9cSabie\
+ndo que ocurri\xc3\xb3\
+ \x5c(B\x5c), calcular\
+ \x5c(A\x5c)\xe2\x80\x9d.\x0a\x0aToda\
+s se leen como \x5c\
+(P(A\x5cmid B)\x5c).\x0a\x0a\
+---\x0a\x0a### 8. Regl\
+a del producto: \
+\xe2\x80\x9cA y B\xe2\x80\x9d\x0a\x0aDes\
+pejando la f\xc3\xb3rm\
+ula condicional:\
+\x0a\x0a\x5c[\x0aP(A\x5ccap B)=\
+P(B)\x5ccdot P(A\x5cmi\
+d B)\x0a\x5c]\x0a\x0aTambi\xc3\xa9\
+n:\x0a\x0a\x5c[\x0aP(A\x5ccap B\
+)=P(A)\x5ccdot P(B\x5c\
+mid A)\x0a\x5c]\x0a\x0a#### \
+Extracciones suc\
+esivas\x0a\x0a\x5c[\x0aP(A_1\
+\x5ccap A_2\x5ccap\x5ccdo\
+ts\x5ccap A_n)\x0a=P(A\
+_1)P(A_2\x5cmid A_1\
+)\x5ccdots P(A_n\x5cmi\
+d A_1\x5ccap\x5ccdots\x5c\
+cap A_{n-1})\x0a\x5c]\x0a\
+\x0a> **Memoria:** \
+en un \xc3\xa1rbol, pa\
+ra avanzar por u\
+na misma rama se\
+ **multiplica**;\
+ para reunir ram\
+as alternativas \
+se **suma**.\x0a\x0a--\
+-\x0a\x0a### 9. Indepe\
+ndencia\x0a\x0aDos suc\
+esos son indepen\
+dientes cuando s\
+aber que ocurri\xc3\
+\xb3 uno no cambia \
+la probabilidad \
+del otro.\x0a\x0aForma\
+s equivalentes:\x0a\
+\x0a\x5c[\x0aP(A\x5cmid B)=P\
+(A)\x0a\x5c]\x0a\x0a\x5c[\x0aP(B\x5cm\
+id A)=P(B)\x0a\x5c]\x0a\x0a\x5c\
+[\x0aP(A\x5ccap B)=P(A\
+)P(B)\x0a\x5c]\x0a\x0aPara d\
+emostrar indepen\
+dencia, alcanza \
+con verificar un\
+a de estas igual\
+dades.\x0a\x0a#### No \
+confundir\x0a\x0a- **I\
+ncompatibles:** \
+no pueden ocurri\
+r juntos, \x5c(P(A\x5c\
+cap B)=0\x5c).\x0a- **\
+Independientes:*\
+* s\xc3\xad pueden ocu\
+rrir juntos, per\
+o uno no afecta \
+al otro.\x0a\x0aSalvo \
+casos de probabi\
+lidad cero, dos \
+sucesos incompat\
+ibles **no** son\
+ independientes.\
+\x0a\x0a> **Memoria:**\
+ incompatibles h\
+abla de **coinci\
+dir**; independi\
+entes habla de *\
+*influir**.\x0a\x0a---\
+\x0a\x0a### 10. Extrac\
+ciones con y sin\
+ reposici\xc3\xb3n\x0a\x0a##\
+## Con reposici\xc3\
+\xb3n\x0a\x0aEl elemento \
+vuelve al conjun\
+to:\x0a\x0a- el total \
+no cambia;\x0a- las\
+ probabilidades \
+suelen manteners\
+e;\x0a- las extracc\
+iones suelen ser\
+ independientes.\
+\x0a\x0aEjemplo genera\
+l:\x0a\x0a\x5c[\x0aP(A\x5ctext{\
+ y luego }B)=P(A\
+)P(B)\x0a\x5c]\x0a\x0a#### S\
+in reposici\xc3\xb3n\x0a\x0a\
+El elemento no v\
+uelve:\x0a\x0a- el tot\
+al disminuye;\x0a- \
+puede cambiar ta\
+mbi\xc3\xa9n la cantid\
+ad de casos favo\
+rables;\x0a- las ex\
+tracciones son d\
+ependientes.\x0a\x0aEj\
+emplo general:\x0a\x0a\
+\x5c[\x0aP(A\x5ctext{ y l\
+uego }B)=P(A)P(B\
+\x5cmid A)\x0a\x5c]\x0a\x0a> **\
+Memoria:** sin r\
+eposici\xc3\xb3n, en l\
+a segunda fracci\
+\xc3\xb3n el denominad\
+or baja en 1.\x0a\x0a-\
+--\x0a\x0a### 11. Prob\
+abilidad total\x0a\x0a\
+Se usa cuando un\
+ suceso \x5c(A\x5c) pu\
+ede ocurrir a tr\
+av\xc3\xa9s de varios \
+grupos o caminos\
+ \x5c(B_1,B_2,\x5cldot\
+s,B_n\x5c), que for\
+man una partici\xc3\
+\xb3n del espacio m\
+uestral.\x0a\x0a\x5c[\x0aP(A\
+)=\x5csum_{i=1}^{n}\
+P(B_i)P(A\x5cmid B_\
+i)\x0a\x5c]\x0a\x0aDesarroll\
+ada:\x0a\x0a\x5c[\x0aP(A)=P(\
+B_1)P(A\x5cmid B_1)\
++P(B_2)P(A\x5cmid B\
+_2)+\x5ccdots+P(B_n\
+)P(A\x5cmid B_n)\x0a\x5c]\
+\x0a\x0a#### Ayuda de \
+memoria\x0a\x0a- Cada \
+producto represe\
+nta una rama com\
+pleta del \xc3\xa1rbol\
+.\x0a- Se multiplic\
+a dentro de cada\
+ rama.\x0a- Se suma\
+n todas las rama\
+s que terminan e\
+n \x5c(A\x5c).\x0a\x0a> **Me\
+moria:** probabi\
+lidad total = **\
+sumar todos los \
+caminos que llev\
+an al mismo resu\
+ltado**.\x0a\x0a---\x0a\x0a#\
+## 12. Teorema d\
+e Bayes\x0a\x0aPermite\
+ invertir una co\
+ndici\xc3\xb3n:\x0a\x0a\x5c[\x0aP(\
+B_j\x5cmid A)=\x0a\x5cfra\
+c{P(B_j)P(A\x5cmid \
+B_j)}{P(A)}\x0a\x5c]\x0a\x0a\
+Usando probabili\
+dad total en el \
+denominador:\x0a\x0a\x5c[\
+\x0aP(B_j\x5cmid A)=\x0a\x5c\
+frac{P(B_j)P(A\x5cm\
+id B_j)}\x0a{\x5csum_{\
+i=1}^{n}P(B_i)P(\
+A\x5cmid B_i)}\x0a\x5c]\x0a\x0a\
+Para dos grupos:\
+\x0a\x0a\x5c[\x0aP(B_1\x5cmid A\
+)=\x0a\x5cfrac{P(B_1)P\
+(A\x5cmid B_1)}\x0a{P(\
+B_1)P(A\x5cmid B_1)\
++P(B_2)P(A\x5cmid B\
+_2)}\x0a\x5c]\x0a\x0a#### Ay\
+uda de memoria\x0a\x0a\
+- Numerador: el \
+camino espec\xc3\xadfi\
+co que interesa.\
+\x0a- Denominador: \
+todos los camino\
+s que producen l\
+a evidencia obse\
+rvada.\x0a- Bayes s\
+uele aparecer co\
+n expresiones co\
+mo \xe2\x80\x9csabiendo q\
+ue dio positivo\xe2\
+\x80\x9d, \xe2\x80\x9csabiendo \
+que ocurri\xc3\xb3 la \
+mejora\xe2\x80\x9d o \xe2\x80\x9cd\
+ado que hubo una\
+ falla\xe2\x80\x9d.\x0a\x0a---\x0a\
+\x0a### 13. Tablas \
+de contingencia\x0a\
+\x0aPara dos caract\
+er\xc3\xadsticas \x5c(A\x5c)\
+ y \x5c(B\x5c):\x0a\x0a|  | \
+\x5c(B\x5c) | \x5c(B^c\x5c) \
+| Total |\x0a|---|-\
+--:|---:|---:|\x0a|\
+ \x5c(A\x5c) | \x5c(A\x5ccap\
+ B\x5c) | \x5c(A\x5ccap B\
+^c\x5c) | \x5c(A\x5c) |\x0a|\
+ \x5c(A^c\x5c) | \x5c(A^c\
+\x5ccap B\x5c) | \x5c(A^c\
+\x5ccap B^c\x5c) | \x5c(A\
+^c\x5c) |\x0a| Total |\
+ \x5c(B\x5c) | \x5c(B^c\x5c)\
+ | \x5c(S\x5c) |\x0a\x0aCon \
+cantidades:\x0a\x0a\x5c[\x0a\
+P(A\x5ccap B)=\x5cfrac\
+{n(A\x5ccap B)}{n(S\
+)}\x0a\x5c]\x0a\x0a\x5c[\x0aP(A\x5cmi\
+d B)=\x5cfrac{n(A\x5cc\
+ap B)}{n(B)}\x0a\x5c]\x0a\
+\x0a#### Ayuda de m\
+emoria\x0a\x0a- Si pre\
+guntan por toda \
+la poblaci\xc3\xb3n, d\
+ividir por el to\
+tal general.\x0a- S\
+i dicen \xe2\x80\x9cde lo\
+s que\xe2\x80\xa6\xe2\x80\x9d, div\
+idir por el tota\
+l de esa fila o \
+columna.\x0a- Una c\
+elda interna sue\
+le representar u\
+na intersecci\xc3\xb3n\
+.\x0a\x0a---\x0a\x0a### 14. \
+Conteo para vari\
+os elementos\x0a\x0a##\
+## Principio mul\
+tiplicativo\x0a\x0aSi \
+una decisi\xc3\xb3n ti\
+ene \x5c(m\x5c) opcion\
+es y otra tiene \
+\x5c(n\x5c), la cantid\
+ad de resultados\
+ posibles es:\x0a\x0a\x5c\
+[\x0am\x5ccdot n\x0a\x5c]\x0a\x0aP\
+ara varias etapa\
+s:\x0a\x0a\x5c[\x0an(S)=n_1n\
+_2\x5ccdots n_k\x0a\x5c]\x0a\
+\x0a#### Factorial\x0a\
+\x0a\x5c[\x0an!=n(n-1)(n-\
+2)\x5ccdots2\x5ccdot1\x0a\
+\x5c]\x0a\x0a\x5c[\x0a0!=1\x0a\x5c]\x0a\x0a\
+#### Permutacion\
+es de \x5c(n\x5c) elem\
+entos\x0a\x0aSe usan t\
+odos y el orden \
+importa:\x0a\x0a\x5c[\x0aP_n\
+=n!\x0a\x5c]\x0a\x0a#### Var\
+iaciones sin rep\
+etici\xc3\xb3n\x0a\x0aSe eli\
+gen \x5c(r\x5c) elemen\
+tos de \x5c(n\x5c) y e\
+l orden importa:\
+\x0a\x0a\x5c[\x0aV_{n,r}=\x5cfr\
+ac{n!}{(n-r)!}\x0a\x5c\
+]\x0a\x0a#### Combinac\
+iones\x0a\x0aSe eligen\
+ \x5c(r\x5c) elementos\
+ de \x5c(n\x5c) y el o\
+rden no importa:\
+\x0a\x0a\x5c[\x0a\x5cbinom nr=\x5c\
+frac{n!}{r!(n-r)\
+!}\x0a\x5c]\x0a\x0a> **Memor\
+ia:** si cambiar\
+ el orden crea u\
+n resultado dist\
+into, el orden i\
+mporta. Si el gr\
+upo sigue siendo\
+ el mismo, usar \
+combinaciones.\x0a\x0a\
+---\x0a\x0a### 15. Dis\
+tribuci\xc3\xb3n de pr\
+obabilidad de un\
+a variable aleat\
+oria discreta\x0a\x0aU\
+na distribuci\xc3\xb3n\
+ es v\xc3\xa1lida si:\x0a\
+\x0a\x5c[\x0a0\x5cle P(X=x_i\
+)\x5cle1\x0a\x5c]\x0a\x0apara c\
+ada valor, y:\x0a\x0a\x5c\
+[\x0a\x5csum_i P(X=x_i\
+)=1\x0a\x5c]\x0a\x0aTabla ba\
+se:\x0a\x0a| \x5c(x_i\x5c) |\
+ \x5c(P(X=x_i)\x5c) | \
+\x5c(x_iP(X=x_i)\x5c) \
+| \x5c(x_i^2P(X=x_i\
+)\x5c) |\x0a|---:|---:\
+|---:|---:|\x0a\x0a###\
+# Esperanza mate\
+m\xc3\xa1tica o valor \
+esperado\x0a\x0a\x5c[\x0aE(X\
+)=\x5cmu_X=\x5csum_i x\
+_iP(X=x_i)\x0a\x5c]\x0a\x0aI\
+nterpretaci\xc3\xb3n: \
+valor promedio e\
+sperado a largo \
+plazo; no tiene \
+que ser un resul\
+tado posible de \
+un \xc3\xbanico experi\
+mento.\x0a\x0a#### Seg\
+undo momento\x0a\x0a\x5c[\
+\x0aE(X^2)=\x5csum_i x\
+_i^2P(X=x_i)\x0a\x5c]\x0a\
+\x0a#### Varianza\x0a\x0a\
+Forma directa:\x0a\x0a\
+\x5c[\x0a\x5coperatorname\
+{Var}(X)=\x5csigma_\
+X^2\x0a=\x5csum_i (x_i\
+-\x5cmu_X)^2P(X=x_i\
+)\x0a\x5c]\x0a\x0aForma abre\
+viada:\x0a\x0a\x5c[\x0a\x5coper\
+atorname{Var}(X)\
+=E(X^2)-[E(X)]^2\
+\x0a\x5c]\x0a\x0a#### Desv\xc3\xad\
+o est\xc3\xa1ndar\x0a\x0a\x5c[\x0a\
+\x5csigma_X=\x5csqrt{\x5c\
+operatorname{Var\
+}(X)}\x0a\x5c]\x0a\x0a#### C\
+oeficiente de va\
+riaci\xc3\xb3n\x0a\x0a\x5c[\x0aCV=\
+\x5cfrac{\x5csigma_X}{\
+|E(X)|}\x5ccdot100\x0a\
+\x5c]\x0a\x0a#### Ayuda d\
+e memoria para l\
+a tabla\x0a\x0a1. Veri\
+ficar que las pr\
+obabilidades sum\
+en 1.\x0a2. Multipl\
+icar \x5c(x_i\x5c) por\
+ su probabilidad\
+ y sumar para ob\
+tener la esperan\
+za.\x0a3. Para la v\
+arianza r\xc3\xa1pida,\
+ sumar \x5c(x_i^2P(\
+x_i)\x5c) y restar \
+\x5c([E(X)]^2\x5c).\x0a4.\
+ Sacar ra\xc3\xadz par\
+a obtener el des\
+v\xc3\xado.\x0a5. Dividir\
+ el desv\xc3\xado por \
+la esperanza y m\
+ultiplicar por 1\
+00 para obtener \
+el CV.\x0a\x0a---\x0a\x0a###\
+ 16. Traducci\xc3\xb3n\
+ r\xc3\xa1pida del len\
+guaje cotidiano\x0a\
+\x0a| Expresi\xc3\xb3n | \
+Traducci\xc3\xb3n mate\
+m\xc3\xa1tica |\x0a|---|-\
+--|\x0a| exactament\
+e \x5c(k\x5c) | \x5c(X=k\x5c\
+) |\x0a| m\xc3\xa1s de \x5c(\
+k\x5c) | \x5c(X>k\x5c) |\x0a\
+| menos de \x5c(k\x5c)\
+ | \x5c(X<k\x5c) |\x0a| c\
+omo m\xc3\xa1ximo \x5c(k\x5c\
+) | \x5c(X\x5cle k\x5c) |\
+\x0a| a lo sumo \x5c(k\
+\x5c) | \x5c(X\x5cle k\x5c) \
+|\x0a| hasta \x5c(k\x5c) \
+| \x5c(X\x5cle k\x5c) |\x0a|\
+ como m\xc3\xadnimo \x5c(\
+k\x5c) | \x5c(X\x5cge k\x5c)\
+ |\x0a| por lo meno\
+s \x5c(k\x5c) | \x5c(X\x5cge\
+ k\x5c) |\x0a| al meno\
+s \x5c(k\x5c) | \x5c(X\x5cge\
+ k\x5c) |\x0a| entre \x5c\
+(a\x5c) y \x5c(b\x5c), in\
+clusive | \x5c(a\x5cle\
+ X\x5cle b\x5c) |\x0a\x0aPar\
+a una distribuci\
+\xc3\xb3n discreta, se\
+ suman las proba\
+bilidades de tod\
+os los valores q\
+ue cumplen la co\
+ndici\xc3\xb3n:\x0a\x0a\x5c[\x0aP(\
+X\x5cge k)=\x5csum_{x_\
+i\x5cge k}P(X=x_i)\x0a\
+\x5c]\x0a\x0a---\x0a\x0a### 17.\
+ Procedimiento d\
+e resoluci\xc3\xb3n re\
+comendado\x0a\x0a1. De\
+finir claramente\
+ los sucesos con\
+ letras.\x0a2. Dibu\
+jar un diagrama \
+de Venn cuando h\
+aya dos conjunto\
+s o caracter\xc3\xadst\
+icas.\x0a3. Traduci\
+r las palabras c\
+lave: \xe2\x80\x9co\xe2\x80\x9d, \xe2\
+\x80\x9cy\xe2\x80\x9d, \xe2\x80\x9csolo\xe2\
+\x80\x9d, \xe2\x80\x9cninguno\xe2\x80\
+\x9d, \xe2\x80\x9csi\xe2\x80\xa6\xe2\x80\x9d.\x0a\
+4. Colocar prime\
+ro la intersecci\
+\xc3\xb3n en el Venn.\x0a\
+5. Decidir cu\xc3\xa1l\
+ es el denominad\
+or correcto: tot\
+al general o gru\
+po condicionado.\
+\x0a6. Elegir la f\xc3\
+\xb3rmula reci\xc3\xa9n d\
+espu\xc3\xa9s de organ\
+izar los datos.\x0a\
+7. Verificar que\
+ el resultado es\
+t\xc3\xa9 entre 0 y 1,\
+ o entre 0% y 10\
+0%.\x0a\x0a---\x0a\x0a## Res\
+umen ultrarr\xc3\xa1pi\
+do de probabilid\
+ad\x0a\x0a\x5c[\x0aP(A)=\x5cfra\
+c{n(A)}{n(S)}\x0a\x5c]\
+\x0a\x0a\x5c[\x0aP(A^c)=1-P(\
+A)\x0a\x5c]\x0a\x0a\x5c[\x0aP(A\x5ccu\
+p B)=P(A)+P(B)-P\
+(A\x5ccap B)\x0a\x5c]\x0a\x0a\x5c[\
+\x0aP(A\x5cmid B)=\x5cfra\
+c{P(A\x5ccap B)}{P(\
+B)}\x0a\x5c]\x0a\x0a\x5c[\x0aP(A\x5cc\
+ap B)=P(B)P(A\x5cmi\
+d B)\x0a\x5c]\x0a\x0aSi son \
+independientes:\x0a\
+\x0a\x5c[\x0aP(A\x5ccap B)=P\
+(A)P(B)\x0a\x5c]\x0a\x0a\x5c[\x0aP\
+(A)=\x5csum_iP(B_i)\
+P(A\x5cmid B_i)\x0a\x5c]\x0a\
+\x0a\x5c[\x0aP(B_j\x5cmid A)\
+=\x5cfrac{P(B_j)P(A\
+\x5cmid B_j)}{P(A)}\
+\x0a\x5c]\x0a\x0a\x5c[\x0aE(X)=\x5csu\
+m_i x_iP(X=x_i)\x0a\
+\x5c]\x0a\x0a\x5c[\x0a\x5coperator\
+name{Var}(X)=E(X\
+^2)-[E(X)]^2\x0a\x5c]\x0a\
+\
 "
 
 qt_resource_name = b"\
@@ -10649,49 +11456,49 @@ qt_resource_struct = b"\
 \x00\x00\x00\x9a\x00\x02\x00\x00\x00\x01\x00\x00\x00\x18\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x01\xb4\x00\x00\x00\x00\x00\x01\x00\x02g\x22\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x00\xe2\x00\x02\x00\x00\x00\x05\x00\x00\x00\x13\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x00\xc4\x00\x00\x00\x00\x00\x01\x00\x00\x0f\xd6\
-\x00\x00\x01\x9f1g\x18\xb9\
+\x00\x00\x01\x9f5\xda\xb2m\
 \x00\x00\x00\x5c\x00\x00\x00\x00\x00\x01\x00\x00\x0a\xa1\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x00r\x00\x00\x00\x00\x00\x01\x00\x00\x0c/\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x00\x12\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x01\xe2\x00\x00\x00\x00\x00\x01\x00\x02hw\
-\x00\x00\x01\x9f1g\x18\xb9\
+\x00\x00\x01\x9f5\xda\xb2m\
 \x00\x00\x01j\x00\x00\x00\x00\x00\x01\x00\x02`\x82\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2m\
 \x00\x00\x00\xfa\x00\x00\x00\x00\x00\x01\x00\x00\x13\x01\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x01\x22\x00\x00\x00\x00\x00\x01\x00\x00\x14w\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2m\
 \x00\x00\x01\x88\x00\x00\x00\x00\x00\x01\x00\x02c\x02\
-\x00\x00\x01\x9f4\x87\xd3w\
+\x00\x00\x01\x9f5\xda\xb2m\
 \x00\x00\x01H\x00\x00\x00\x00\x00\x01\x00\x00\x15\xf0\
-\x00\x00\x01\x9f.~3o\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x00\xa8\x00\x00\x00\x00\x00\x01\x00\x00\x0d/\
-\x00\x00\x01\x9f4\x9b\x9e\xc0\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x01\xa0\x00\x00\x00\x00\x00\x01\x00\x02eW\
-\x00\x00\x01\x9f4\xd3p<\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x00.\x00\x00\x00\x00\x00\x01\x00\x00\x02\xb8\
-\x00\x00\x01\x9f4\xd4\x9f\xb9\
+\x00\x00\x01\x9f5\xda\xb2n\
 \x00\x00\x00B\x00\x00\x00\x00\x00\x01\x00\x00\x04\xfa\
-\x00\x00\x01\x9f1g\x18\xb9\
+\x00\x00\x01\x9f5\xda\xb2l\
 \x00\x00\x022\x00\x00\x00\x00\x00\x01\x00\x02j\xb7\
-\x00\x00\x01\x9f4\x87\xd3o\
+\x00\x00\x01\x9f5\xda\xb2n\
 \x00\x00\x02\xc6\x00\x00\x00\x00\x00\x01\x00\x02m\xfe\
-\x00\x00\x01\x9f4\x87\xd3o\
+\x00\x00\x01\x9f5\xda\xb2n\
 \x00\x00\x02b\x00\x00\x00\x00\x00\x01\x00\x02kS\
-\x00\x00\x01\x9f4\x87\xd3o\
+\x00\x00\x01\x9f5\xda\xb2n\
 \x00\x00\x01\xf8\x00\x00\x00\x00\x00\x01\x00\x02i\xdb\
-\x00\x00\x01\x9f4\x87\xd3o\
+\x00\x00\x01\x9f5\xda\xb2m\
 \x00\x00\x02\x9c\x00\x00\x00\x00\x00\x01\x00\x02m\xbc\
-\x00\x00\x01\x9f4\x87\xd3o\
+\x00\x00\x01\x9f5\xda\xb2n\
 \x00\x00\x03\x02\x00\x00\x00\x00\x00\x01\x00\x02o\xd1\
-\x00\x00\x01\x9f4\x9c<:\
+\x00\x00\x01\x9f;]\xb5&\
 "
 
 def qInitResources():
