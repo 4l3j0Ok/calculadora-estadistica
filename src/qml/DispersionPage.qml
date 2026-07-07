@@ -17,6 +17,8 @@ Item {
     property string dataType: "agrupados_valor"
     property string pasteError: ""
     property bool examMode: false
+    property bool focusNextValorRow: false
+    property bool focusNextIntervaloRow: false
     readonly property bool controllerReady: !!dispersionController
     readonly property var result: root.controllerReady ? dispersionController.result : ({})
     readonly property var tableModel: root.controllerReady ? dispersionController.tableModel : []
@@ -594,12 +596,20 @@ Item {
                                 model: valorModel
 
                                 delegate: RowLayout {
+                                    id: valorRow
                                     width: parent ? parent.width : 0
                                     spacing: 8
 
                                     required property string xi
                                     required property string frecuencia
                                     required property int index
+
+                                    Component.onCompleted: {
+                                        if (root.focusNextValorRow && index === valorModel.count - 1) {
+                                            root.focusNextValorRow = false;
+                                            xiField.forceActiveFocus();
+                                        }
+                                    }
 
                                     TextField {
                                         id: xiField
@@ -620,6 +630,7 @@ Item {
                                             border.width: xiField.activeFocus ? 2 : 1
                                         }
                                         onTextChanged: valorModel.setProperty(index, "xi", text)
+                                        onAccepted: root.calcular()
                                     }
 
                                     TextField {
@@ -641,6 +652,17 @@ Item {
                                             border.width: frecuenciaField.activeFocus ? 2 : 1
                                         }
                                         onTextChanged: valorModel.setProperty(index, "frecuencia", text)
+                                        onAccepted: root.calcular()
+                                        Keys.onPressed: event => {
+                                            if (event.key === Qt.Key_Tab && !(event.modifiers & Qt.ShiftModifier) && valorRow.index === valorModel.count - 1) {
+                                                event.accepted = true;
+                                                root.focusNextValorRow = true;
+                                                valorModel.append({
+                                                    xi: "",
+                                                    frecuencia: ""
+                                                });
+                                            }
+                                        }
                                     }
 
                                     Button {
@@ -746,6 +768,7 @@ Item {
                                 model: intervaloModel
 
                                 delegate: RowLayout {
+                                    id: intervaloRow
                                     width: parent ? parent.width : 0
                                     spacing: 8
 
@@ -753,6 +776,13 @@ Item {
                                     required property string upper
                                     required property string frecuencia
                                     required property int index
+
+                                    Component.onCompleted: {
+                                        if (root.focusNextIntervaloRow && index === intervaloModel.count - 1) {
+                                            root.focusNextIntervaloRow = false;
+                                            lowerField.forceActiveFocus();
+                                        }
+                                    }
 
                                     TextField {
                                         id: lowerField
@@ -773,6 +803,7 @@ Item {
                                             border.width: lowerField.activeFocus ? 2 : 1
                                         }
                                         onTextChanged: intervaloModel.setProperty(index, "lower", text)
+                                        onAccepted: root.calcular()
                                     }
 
                                     TextField {
@@ -794,6 +825,7 @@ Item {
                                             border.width: upperField.activeFocus ? 2 : 1
                                         }
                                         onTextChanged: intervaloModel.setProperty(index, "upper", text)
+                                        onAccepted: root.calcular()
                                     }
 
                                     TextField {
@@ -815,6 +847,18 @@ Item {
                                             border.width: freqField.activeFocus ? 2 : 1
                                         }
                                         onTextChanged: intervaloModel.setProperty(index, "frecuencia", text)
+                                        onAccepted: root.calcular()
+                                        Keys.onPressed: event => {
+                                            if (event.key === Qt.Key_Tab && !(event.modifiers & Qt.ShiftModifier) && intervaloRow.index === intervaloModel.count - 1) {
+                                                event.accepted = true;
+                                                root.focusNextIntervaloRow = true;
+                                                intervaloModel.append({
+                                                    lower: "",
+                                                    upper: "",
+                                                    frecuencia: ""
+                                                });
+                                            }
+                                        }
                                     }
 
                                     Button {
