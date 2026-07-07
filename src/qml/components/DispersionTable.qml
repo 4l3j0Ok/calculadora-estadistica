@@ -22,33 +22,33 @@ Item {
     property int totalN: 0
 
     function fmtNum(v: real): string {
-        return (v % 1 === 0) ? v.toFixed(0) : parseFloat(v.toFixed(4)).toString();
+        return parseFloat(v.toFixed(2)).toString();
     }
 
     function rowValues(modelData) {
         if (root.dataType === "no_agrupados") {
             return [
                 root.fmtNum(modelData.xi),
-                modelData.diff.toFixed(2),
-                modelData.diffSq.toFixed(2)
+                root.fmtNum(modelData.diff),
+                root.fmtNum(modelData.diffSq)
             ];
         }
         if (root.dataType === "agrupados_intervalo") {
             return [
-                modelData.lower.toFixed(2) + " – " + modelData.upper.toFixed(2),
+                root.fmtNum(modelData.lower) + " – " + root.fmtNum(modelData.upper),
                 root.fmtNum(modelData.xi),
                 modelData.f.toString(),
-                modelData.diff.toFixed(2),
-                modelData.diffSq.toFixed(2),
-                modelData.fDiffSq.toFixed(2)
+                root.fmtNum(modelData.diff),
+                root.fmtNum(modelData.diffSq),
+                root.fmtNum(modelData.fDiffSq)
             ];
         }
         return [
             root.fmtNum(modelData.xi),
             modelData.f.toString(),
-            modelData.diff.toFixed(2),
-            modelData.diffSq.toFixed(2),
-            modelData.fDiffSq.toFixed(2)
+            root.fmtNum(modelData.diff),
+            root.fmtNum(modelData.diffSq),
+            root.fmtNum(modelData.fDiffSq)
         ];
     }
 

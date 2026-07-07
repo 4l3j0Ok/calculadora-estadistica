@@ -5,10 +5,10 @@ from src.schemas.table import Table, TableItem, TableType
 from src.services import descriptive_stats
 
 
-def format_number(v: float) -> str:
-    """Formatea un número sin decimales innecesarios (ej: 5.0 -> '5')."""
-    v = round(v, 2)
-    return f"{v:.0f}" if v == int(v) else f"{v:g}"
+def format_number(v: float, decimals: int = 2) -> str:
+    """Formatea un número sin decimales innecesarios (ej: 5.00 -> '5')."""
+    formatted = f"{v:.{decimals}f}"
+    return formatted.rstrip("0").rstrip(".")
 
 
 # Alias privado retrocompatible, usado dentro de este módulo.

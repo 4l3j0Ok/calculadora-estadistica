@@ -16,7 +16,7 @@ from src.services.parser import (
 
 def _fmt_bound(v: float) -> str:
     """Formatea un límite de intervalo sin decimales innecesarios."""
-    return f"{v:.0f}" if v == int(v) else f"{v:g}"
+    return format_number(v)
 
 
 class CalculadoraController(QObject):
@@ -213,10 +213,10 @@ class CalculadoraController(QObject):
 
         return {
             "n": n,
-            "mean": f"{mean:.2f}",
-            "mediana": f"{mediana:.2f}",
+            "mean": format_number(mean),
+            "mediana": format_number(mediana),
             "moda": moda,
-            "rango": f"{rango:.2f}",
+            "rango": format_number(rango),
         }
 
     def _set_error(self, mensaje: str) -> None:

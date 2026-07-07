@@ -199,17 +199,17 @@ class DispersionController(QObject):
         def fmt_optional(v: float | None) -> str:
             if v is None:
                 return "—"
-            return f"{v:.2f}"
+            return format_number(v)
 
         return {
             "dataType": res.data_type.value,
             "n": res.n,
-            "mean": f"{res.mean:.2f}",
-            "rango": f"{res.rango:.2f}",
+            "mean": format_number(res.mean),
+            "rango": format_number(res.rango),
             "varianza": fmt_optional(res.varianza),
             "desvio": fmt_optional(res.desvio),
             "cv": "No definido" if res.cv_undefined else fmt_optional(res.cv),
-            "sumFDiffSq": f"{res.sum_f_diff_sq:.2f}",
+            "sumFDiffSq": format_number(res.sum_f_diff_sq),
             "statsUndefined": res.stats_undefined,
         }
 

@@ -28,7 +28,7 @@ Item {
     }
 
     function fmtNum(v: real): string {
-        return (v % 1 === 0) ? v.toFixed(0) : parseFloat(v.toFixed(4)).toString();
+        return parseFloat(v.toFixed(2)).toString();
     }
 
     // ── Definición de encabezados ────────────────────────────────────────
@@ -93,10 +93,10 @@ Item {
         var base = root.showIntervalColumn ? [modelData.intervalo, root.fmtNum(modelData.xi)] : [root.fmtNum(modelData.xi)];
         return base.concat([
             modelData.frecuencia.toString(),
-            modelData.frecuenciaRelativa.toFixed(2),
+            root.fmtNum(modelData.frecuenciaRelativa),
             modelData.frecuenciaAcumulada.toString(),
-            modelData.frecuenciaPorcentual.toFixed(2) + "%",
-            modelData.frecuenciaPorcentualAcumulada.toFixed(2) + "%"
+            root.fmtNum(modelData.frecuenciaPorcentual) + "%",
+            root.fmtNum(modelData.frecuenciaPorcentualAcumulada) + "%"
         ]);
     }
 
